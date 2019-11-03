@@ -1,6 +1,6 @@
 {
 	"name": "webpack-loader",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Webpack configuration plugin",
 	"main": "./index-prod.js",
 	"scripts": {

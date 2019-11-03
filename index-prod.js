@@ -9,7 +9,7 @@ var _Webpack = _interopRequireDefault(require("Webpack"));
 
 var _webpackMerge = _interopRequireDefault(require("webpack-merge"));
 
-var _Server = _interopRequireDefault(require("./node_modules/webpack-dev-server/lib/Server.js"));
+var _webpackDevServer = _interopRequireDefault(require("webpack-dev-server"));
 
 var _colors = _interopRequireDefault(require("colors"));
 
@@ -251,7 +251,7 @@ function () {
     value: function runDevServer(port) {
       if (typeof port !== "number") port = 8080;
       var webpackConfigured = (0, _Webpack["default"])(this._buildConfigs());
-      var devServer = new _Server["default"](webpackConfigured, this.devServerConfig);
+      var devServer = new _webpackDevServer["default"](webpackConfigured, this.devServerConfig);
       devServer.listen(port, "127.0.0.1", function () {
         console.log("Starting server on http://localhost:" + port);
       });
