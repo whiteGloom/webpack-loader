@@ -1,6 +1,6 @@
 import webpack from "Webpack";
 import merge from "webpack-merge";
-import webpackDevServer from "./node_modules/webpack-dev-server/lib/Server.js";
+import webpackDevServer from "webpack-dev-server";
 import colors from "colors";
 
 import makeDefaultConfig from "./src/defaultConfig.js";
