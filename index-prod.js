@@ -194,7 +194,7 @@ function () {
     }
   }, {
     key: "run",
-    value: function run() {
+    value: function run(callback) {
       var webpackConfigured = (0, _Webpack["default"])(this._buildConfigs());
       webpackConfigured.run(handler);
 
@@ -215,7 +215,7 @@ function () {
 
         if (hasErrors !== true) {
           console.log(_colors["default"].green.underline("\n\nCompiled successfully.\n\n"));
-          if (typeof callback == "function") callback(stats);
+          if (typeof callback === "function") callback(stats);
         }
       }
     }

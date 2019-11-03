@@ -118,7 +118,7 @@ class WebpackLoader {
 		return prodConfigs;
 	}
 
-	run() {
+	run(callback) {
 		var webpackConfigured = webpack(this._buildConfigs());
 
 		webpackConfigured.run(handler);
@@ -139,7 +139,7 @@ class WebpackLoader {
 
 			if (hasErrors !== true) {
 				console.log(colors.green.underline("\n\nCompiled successfully.\n\n"));
-				if (typeof callback == "function") callback(stats);
+				if (typeof callback === "function") callback(stats);
 			}
 		}
 	}
