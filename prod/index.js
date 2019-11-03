@@ -13,7 +13,7 @@ var _webpackDevServer = _interopRequireDefault(require("webpack-dev-server"));
 
 var _colors = _interopRequireDefault(require("colors"));
 
-var _defaultConfig = _interopRequireDefault(require("./src/defaultConfig.js"));
+var _defaultConfig = _interopRequireDefault(require("./config/defaultConfig.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 

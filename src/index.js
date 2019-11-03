@@ -3,7 +3,7 @@ import merge from "webpack-merge";
 import webpackDevServer from "webpack-dev-server";
 import colors from "colors";
 
-import makeDefaultConfig from "./src/defaultConfig.js";
+import makeDefaultConfig from "./config/defaultConfig.js";
 
 class WebpackLoader {
 	constructor(options) {
