@@ -33,13 +33,6 @@ class WebpackLoader {
 		]);
 	}
 
-	removeFromConfig(id, prop) {
-		if (typeof id !== "number" && typeof id !== "string") { console.log("Wrong identificator: " + id); return; }
-		if (typeof prop !== "string") { console.log("Wrong prop: " + prop); return; }
-
-		delete this.configs[id][prop];
-	}
-
 	getConfigForEdit(id) {
 		if (typeof id !== "number" && typeof id !== "string") { console.log("Wrong identificator: " + id); return; }
 
@@ -71,12 +64,6 @@ class WebpackLoader {
 		]);
 	}
 
-	removeFromDevServerConfig(prop) {
-		if (typeof prop !== "string") { console.log("Wrong prop: " + prop); return; }
-
-		delete this.devServerConfig[prop];
-	}
-
 	getDevServerConfig() {
 		return Object.assign({}, this.devServerConfig);
 	}
@@ -92,12 +79,6 @@ class WebpackLoader {
 			this.watchConfig,
 			config
 		]);
-	}
-
-	removeFromWatchConfig(prop) {
-		if (typeof prop !== "string") { console.log("Wrong prop: " + prop); return; }
-
-		delete this.watchConfig[prop];
 	}
 
 	getWatchConfig() {

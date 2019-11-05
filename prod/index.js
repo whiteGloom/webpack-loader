@@ -71,21 +71,6 @@ function () {
       this.configs[id] = (0, _webpackMerge["default"])([this.configs[id], config]);
     }
   }, {
-    key: "removeFromConfig",
-    value: function removeFromConfig(id, prop) {
-      if (typeof id !== "number" && typeof id !== "string") {
-        console.log("Wrong identificator: " + id);
-        return;
-      }
-
-      if (typeof prop !== "string") {
-        console.log("Wrong prop: " + prop);
-        return;
-      }
-
-      delete this.configs[id][prop];
-    }
-  }, {
     key: "getConfigForEdit",
     value: function getConfigForEdit(id) {
       if (typeof id !== "number" && typeof id !== "string") {
@@ -131,16 +116,6 @@ function () {
       this.devServerConfig = (0, _webpackMerge["default"])([this.devServerConfig, config]);
     }
   }, {
-    key: "removeFromDevServerConfig",
-    value: function removeFromDevServerConfig(prop) {
-      if (typeof prop !== "string") {
-        console.log("Wrong prop: " + prop);
-        return;
-      }
-
-      delete this.devServerConfig[prop];
-    }
-  }, {
     key: "getDevServerConfig",
     value: function getDevServerConfig() {
       return Object.assign({}, this.devServerConfig);
@@ -159,16 +134,6 @@ function () {
       }
 
       this.watchConfig = (0, _webpackMerge["default"])([this.watchConfig, config]);
-    }
-  }, {
-    key: "removeFromWatchConfig",
-    value: function removeFromWatchConfig(prop) {
-      if (typeof prop !== "string") {
-        console.log("Wrong prop: " + prop);
-        return;
-      }
-
-      delete this.watchConfig[prop];
     }
   }, {
     key: "getWatchConfig",

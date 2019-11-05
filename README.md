@@ -22,17 +22,14 @@
 		- **[Команды](#команды "Команды")**
 			* **[makeNewConfig method](#makeNewConfig-method "makeNewConfig method")**
 			* **[addToConfig method](#addToConfig-method "addToConfig method")**
-			* **[removeFromConfig method](#removeFromConfig-method "removeFromConfig method")**
 			* **[getConfigForEdit method](#getConfigForEdit-method "getConfigForEdit method")**
 			* **[getConfig method](#getConfig-method "getConfig method")**
 			* **[getConfigs method](#getConfigs-method "getConfigs method")**
 			* **[removeConfig method](#removeConfig-method "removeConfig method")**
 			* **[addToDevServerConfig method](#addToDevServerConfig-method "addToDevServerConfig method")**
-			* **[removeFromDevServerConfig method](#removeFromDevServerConfig-method "removeFromDevServerConfig method")**
 			* **[getDevServerConfig method](#getDevServerConfig-method "getDevServerConfig method")**
 			* **[getDevServerConfigForEdit method](#getDevServerConfigForEdit-method "getDevServerConfigForEdit method")**
 			* **[addToWatchConfig method](#addToWatchConfig-method "addToWatchConfig method")**
-			* **[removeFromWatchConfig method](#removeFromWatchConfig-method "removeFromWatchConfig method")**
 			* **[getWatchConfig method](#getWatchConfig-method "getWatchConfig method")**
 			* **[getWatchConfigForEdit method](#getWatchConfigForEdit-method "getWatchConfigForEdit method")**
 			* **[run method](#run-method "run method")**
@@ -112,23 +109,6 @@ new webpackLoader();
 *Arguments:*
 * **id** - type: string. Идентификатор конфига
 * **config** - type: object. Конфиг для встраивания
-
-[↑ К навигации](#навигация "↑ К навигации")
-
-------------
-
-
-#### removeFromConfig method
-
-Удаляет свойство из конфига.
-
-```
-.removeFromConfig(id, prop)
-```
-
-*Arguments:*
-* **id** - type: string. Идентификатор конфига
-* **prop** - type: string. Название свойства
 
 [↑ К навигации](#навигация "↑ К навигации")
 
@@ -221,22 +201,6 @@ new webpackLoader();
 ------------
 
 
-#### removeFromDevServerConfig method
-
-Удаляет свойство из конфига для плагина **webpack-dev-server**.
-
-```
-.removeFromDevServerConfig(prop)
-```
-
-*Arguments:*
-* **prop** - type: string. Свойство для удаления
-
-[↑ К навигации](#навигация "↑ К навигации")
-
-------------
-
-
 #### getDevServerConfig method
 
 Возвращает копию конфига для плагина **webpack-dev-server**.
@@ -279,22 +243,6 @@ new webpackLoader();
 
 *Arguments:*
 * **config** - type: object. Конфиг для расширения
-
-[↑ К навигации](#навигация "↑ К навигации")
-
-------------
-
-
-#### removeFromWatchConfig method
-
-Удаляет свойство из конфига для режима **watch**.
-
-```
-.removeFromWatchConfig(prop)
-```
-
-*Arguments:*
-* **prop** - type: string. Свойство для удаления
 
 [↑ К навигации](#навигация "↑ К навигации")
 
