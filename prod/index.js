@@ -13,7 +13,7 @@ var _webpackDevServer = _interopRequireDefault(require("webpack-dev-server"));
 
 var _colors = _interopRequireDefault(require("colors"));
 
-var _defaultConfig = _interopRequireDefault(require("./config/defaultConfig.js"));
+var _makeDefaultConfig = _interopRequireDefault(require("./config/makeDefaultConfig.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -28,10 +28,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var WebpackLoader =
 /*#__PURE__*/
 function () {
-  function WebpackLoader(options) {
+  function WebpackLoader() {
     _classCallCheck(this, WebpackLoader);
 
-    options = _typeof(options) === "object" ? options : {};
     this.configs = {};
     this.devServerConfig = {};
     this.watchConfig = {};
@@ -54,7 +53,7 @@ function () {
         mode = "development";
       }
 
-      this.configs[id] = (0, _webpackMerge["default"])([(0, _defaultConfig["default"])(mode), config]);
+      this.configs[id] = (0, _webpackMerge["default"])([(0, _makeDefaultConfig["default"])(mode), config]);
     }
   }, {
     key: "addToConfig",
@@ -73,18 +72,18 @@ function () {
     }
   }, {
     key: "removeFromConfig",
-    value: function removeFromConfig(id, config) {
+    value: function removeFromConfig(id, prop) {
       if (typeof id !== "number" && typeof id !== "string") {
         console.log("Wrong identificator: " + id);
         return;
       }
 
-      if (_typeof(config) !== "object") {
-        console.log("Wrong config: " + config);
+      if (typeof prop !== "string") {
+        console.log("Wrong prop: " + prop);
         return;
       }
 
-      delete this.configs[id][config];
+      delete this.configs[id][prop];
     }
   }, {
     key: "getConfigForEdit",
@@ -133,13 +132,13 @@ function () {
     }
   }, {
     key: "removeFromDevServerConfig",
-    value: function removeFromDevServerConfig(config) {
-      if (_typeof(config) !== "object") {
-        console.log("Wrong config: " + config);
+    value: function removeFromDevServerConfig(prop) {
+      if (typeof prop !== "string") {
+        console.log("Wrong prop: " + prop);
         return;
       }
 
-      delete this.devServerConfig[config];
+      delete this.devServerConfig[prop];
     }
   }, {
     key: "getDevServerConfig",
@@ -163,13 +162,13 @@ function () {
     }
   }, {
     key: "removeFromWatchConfig",
-    value: function removeFromWatchConfig(config) {
-      if (_typeof(config) !== "object") {
-        console.log("Wrong config: " + config);
+    value: function removeFromWatchConfig(prop) {
+      if (typeof prop !== "string") {
+        console.log("Wrong prop: " + prop);
         return;
       }
 
-      delete this.watchConfig[config];
+      delete this.watchConfig[prop];
     }
   }, {
     key: "getWatchConfig",

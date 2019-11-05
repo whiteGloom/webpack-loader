@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 
 function makeDefaultConfig(mode) {
-  var config = {
+  return {
     mode: mode,
     entry: {},
     output: {},
@@ -17,7 +17,6 @@ function makeDefaultConfig(mode) {
     optimization: {},
     resolve: {}
   };
-  return config;
 }
 
 ;

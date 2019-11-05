@@ -3,12 +3,10 @@ import merge from "webpack-merge";
 import webpackDevServer from "webpack-dev-server";
 import colors from "colors";
 
-import makeDefaultConfig from "./config/defaultConfig.js";
+import makeDefaultConfig from "./config/makeDefaultConfig.js";
 
 class WebpackLoader {
-	constructor(options) {
-		options = typeof options === "object" ? options : {};
-
+	constructor() {
 		this.configs = {};
 		this.devServerConfig = {};
 		this.watchConfig = {};
@@ -35,11 +33,11 @@ class WebpackLoader {
 		]);
 	}
 
-	removeFromConfig(id, config) {
+	removeFromConfig(id, prop) {
 		if (typeof id !== "number" && typeof id !== "string") { console.log("Wrong identificator: " + id); return; }
-		if (typeof config !== "object") { console.log("Wrong config: " + config); return; }
+		if (typeof prop !== "string") { console.log("Wrong prop: " + prop); return; }
 
-		delete this.configs[id][config];
+		delete this.configs[id][prop];
 	}
 
 	getConfigForEdit(id) {
@@ -73,10 +71,10 @@ class WebpackLoader {
 		]);
 	}
 
-	removeFromDevServerConfig(config) {
-		if (typeof config !== "object") { console.log("Wrong config: " + config); return; }
+	removeFromDevServerConfig(prop) {
+		if (typeof prop !== "string") { console.log("Wrong prop: " + prop); return; }
 
-		delete this.devServerConfig[config];
+		delete this.devServerConfig[prop];
 	}
 
 	getDevServerConfig() {
@@ -96,10 +94,10 @@ class WebpackLoader {
 		]);
 	}
 
-	removeFromWatchConfig(config) {
-		if (typeof config !== "object") { console.log("Wrong config: " + config); return; }
+	removeFromWatchConfig(prop) {
+		if (typeof prop !== "string") { console.log("Wrong prop: " + prop); return; }
 
-		delete this.watchConfig[config];
+		delete this.watchConfig[prop];
 	}
 
 	getWatchConfig() {

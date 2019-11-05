@@ -1,5 +1,5 @@
 function makeDefaultConfig(mode) {
-	var config = {
+	return {
 		mode: mode,
 		entry: {
 		},
@@ -15,8 +15,6 @@ function makeDefaultConfig(mode) {
 		resolve : {
 		}
 	};
-
-	return config;
 };
 
 export default makeDefaultConfig;
