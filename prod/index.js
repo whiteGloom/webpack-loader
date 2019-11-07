@@ -46,8 +46,8 @@ function () {
         return;
       }
 
-      if ((typeof config === "undefined" ? "undefined" : _typeof(config)) !== "object") {
-        console.log("Wrong config: " + config);
+      if (_typeof(newConfigs) !== "object") {
+        console.log("Wrong config: " + newConfigs);
         return;
       }
 

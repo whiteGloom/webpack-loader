@@ -14,7 +14,7 @@ class WebpackLoader {
 
 	makeNewConfig(id, newConfigs, mode) {
 		if (typeof id !== "number" && typeof id !== "string") { console.log("Wrong identificator: " + id); return; }
-		if (typeof config !== "object") { console.log("Wrong config: " + config); return; }
+		if (typeof newConfigs !== "object") { console.log("Wrong config: " + newConfigs); return; }
 		if (typeof mode !== "string") { mode = "development" }
 
 		this.configs[id] = merge([
