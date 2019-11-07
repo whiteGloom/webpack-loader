@@ -18,11 +18,13 @@ class WebpackLoader {
 		if (typeof mode !== "string") { mode = "development" }
 
 		this.configs[id] = merge([
+			this.configs[id],
 			makeDefaultConfig(mode),
 		]);
 
 		newConfigs.forEach(config => {
 			this.configs[id] = merge([
+				this.configs[id],
 				config
 			]);
 		});

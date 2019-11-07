@@ -55,9 +55,9 @@ function () {
         mode = "development";
       }
 
-      this.configs[id] = (0, _webpackMerge["default"])([(0, _makeDefaultConfig["default"])(mode)]);
+      this.configs[id] = (0, _webpackMerge["default"])([this.configs[id], (0, _makeDefaultConfig["default"])(mode)]);
       newConfigs.forEach(function (config) {
-        _this.configs[id] = (0, _webpackMerge["default"])([config]);
+        _this.configs[id] = (0, _webpackMerge["default"])([_this.configs[id], config]);
       });
     }
   }, {
