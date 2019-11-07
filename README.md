@@ -85,12 +85,12 @@ new webpackLoader();
 Создаёт новый конфиг с указанным идентификатором.
 
 ```
-.makeNewConfig(id, config, mode)
+.makeNewConfig(id, configs, mode)
 ```
 
 *Arguments:*
 * **id** - type: string. Идентификатор нового конфига
-* **config** - type: object. Конфиг.
+* **configs** - type: object. Массив с конфигами.
 * **mode** - type: string. Default: "development". Мод конфига
 
 [↑ К навигации](#навигация "↑ К навигации")

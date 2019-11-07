@@ -12,15 +12,20 @@ class WebpackLoader {
 		this.watchConfig = {};
 	}
 
-	makeNewConfig(id, config, mode) {
+	makeNewConfig(id, newConfigs, mode) {
 		if (typeof id !== "number" && typeof id !== "string") { console.log("Wrong identificator: " + id); return; }
 		if (typeof config !== "object") { console.log("Wrong config: " + config); return; }
 		if (typeof mode !== "string") { mode = "development" }
-		
+
 		this.configs[id] = merge([
 			makeDefaultConfig(mode),
-			config
 		]);
+
+		newConfigs.forEach(config => {
+			this.configs[id] = merge([
+				config
+			]);
+		});
 	}
 
 	addToConfig(id, config) {

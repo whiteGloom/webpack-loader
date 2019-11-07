@@ -38,13 +38,15 @@ function () {
 
   _createClass(WebpackLoader, [{
     key: "makeNewConfig",
-    value: function makeNewConfig(id, config, mode) {
+    value: function makeNewConfig(id, newConfigs, mode) {
+      var _this = this;
+
       if (typeof id !== "number" && typeof id !== "string") {
         console.log("Wrong identificator: " + id);
         return;
       }
 
-      if (_typeof(config) !== "object") {
+      if ((typeof config === "undefined" ? "undefined" : _typeof(config)) !== "object") {
         console.log("Wrong config: " + config);
         return;
       }
@@ -53,7 +55,10 @@ function () {
         mode = "development";
       }
 
-      this.configs[id] = (0, _webpackMerge["default"])([(0, _makeDefaultConfig["default"])(mode), config]);
+      this.configs[id] = (0, _webpackMerge["default"])([(0, _makeDefaultConfig["default"])(mode)]);
+      newConfigs.forEach(function (config) {
+        _this.configs[id] = (0, _webpackMerge["default"])([config]);
+      });
     }
   }, {
     key: "addToConfig",
