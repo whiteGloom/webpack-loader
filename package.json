@@ -1,12 +1,14 @@
 {
 	"name": "webpack-loader",
-	"version": "0.1.10",
+	"version": "0.2.0",
 	"description": "Webpack configuration plugin",
 	"main": "./prod/index.js",
 	"scripts": {
 		"build": "babel src --out-dir prod",
 		"start": "babel-node ./src/index.js",
-		"start-compiled": "babel-node ./prod/index.js"
+		"start-compiled": "babel-node ./prod/index.js",
+		"lint": "eslint src",
+		"lint-fix": "eslint --fix src"
 	},
 	"repository": {
 		"type": "git",
@@ -26,7 +28,14 @@
 		"@babel/cli": "^7.6.4",
 		"@babel/core": "^7.6.4",
 		"@babel/node": "^7.6.3",
-		"@babel/preset-env": "^7.6.3"
+		"@babel/preset-env": "^7.6.3",
+		"babel-eslint": "^10.0.3",
+		"eslint": "^6.1.0",
+		"eslint-config-airbnb": "^18.0.1",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-jsx-a11y": "^6.2.3",
+		"eslint-plugin-react": "^7.14.3",
+		"eslint-plugin-react-hooks": "^1.7.0"
 	},
 	"dependencies": {
 		"colors": "^1.4.0",
