@@ -8,6 +8,8 @@ module.exports = {
   'rules': {
   	'no-underscore-dangle': 'off',
     'no-console': 'off',
-    'max-len': ['error', { 'code': 120 }]
+    'max-len': ['error', { 'code': 120 }],
+    'consistent-return': 'off',
+    'no-param-reassign': 'off'
   }
 };
