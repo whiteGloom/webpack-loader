@@ -15,24 +15,26 @@ class WebpackLoader {
 
     this.devServerConfigName = defaults.devServerConfigName;
     this.watchConfigName = defaults.watchConfigName;
+    this.devServer = null;
+    this.watcher = null;
 
     this.serviceConfigs[this.devServerConfigName] = {};
     this.serviceConfigs[this.watchConfigName] = {};
   }
 
-  makeNewConfig(id, newConfigs, mode, force = false) {
+  makeNewConfig(id, newConfigs, mode, isForced = false) {
     if (!Helper.isNumber(id) && !Helper.isString(id)) {
-      console.log(`Wrong type of ID ${id}: ${typeof id}`);
+      console.error(`Wrong type of ID ${id}: ${typeof id}`);
       return;
     }
 
-    if (!force && this._isUsed(id)) {
-      console.log(`ID is already in use: ${id}`);
+    if (!isForced && this._isUsed(id)) {
+      console.error(`ID is already in use: ${id}`);
       return;
     }
 
     if (!Helper.isArr(newConfigs) && !Helper.isObj(newConfigs)) {
-      console.log(`Wrong type of configs: ${typeof newConfigs}`);
+      console.error(`Wrong type of configs: ${typeof newConfigs}`);
       return;
     }
 
@@ -48,21 +50,21 @@ class WebpackLoader {
     });
   }
 
-  addToConfig(id, configs, isService = false, force = false) {
+  addToConfig(id, configs, isService = false, isForced = false) {
     const confsList = !isService ? this.configs : this.serviceConfigs;
     if (!Helper.isNumber(id) && !Helper.isString(id)) {
-      console.log(`Wrong type of ID ${id}: ${typeof id}`);
+      console.error(`Wrong type of ID ${id}: ${typeof id}`);
       return;
     }
 
     if (!Helper.isArr(configs) && !Helper.isObj(configs)) {
-      console.log(`Wrong type of configs: ${typeof configs}`);
+      console.error(`Wrong type of configs: ${typeof configs}`);
       return;
     }
 
     if (!this._isUsed(id, isService)) {
-      if (isService || !force) {
-        console.log(`There is no config with such ID: ${id}`);
+      if (isService || !isForced) {
+        console.error(`There is no config with such ID: ${id}`);
         return;
       }
 
@@ -81,12 +83,12 @@ class WebpackLoader {
 
   getConfig(id, isService = false) {
     if (!Helper.isNumber(id) && !Helper.isString(id)) {
-      console.log(`Wrong type of identificator ${id}: ${typeof id}`);
+      console.error(`Wrong type of identificator ${id}: ${typeof id}`);
       return;
     }
 
     if (!this._isUsed(id)) {
-      console.log(`There is no config with such ID: ${id}`);
+      console.error(`There is no config with such ID: ${id}`);
       return;
     }
 
@@ -96,12 +98,12 @@ class WebpackLoader {
 
   getConfigForEdit(id, isService = false) {
     if (!Helper.isNumber(id) && !Helper.isString(id)) {
-      console.log(`Wrong type of identificator ${id}: ${typeof id}`);
+      console.error(`Wrong type of identificator ${id}: ${typeof id}`);
       return;
     }
 
     if (!this._isUsed(id)) {
-      console.log(`There is no config with such ID: ${id}`);
+      console.error(`There is no config with such ID: ${id}`);
       return;
     }
 
@@ -115,7 +117,7 @@ class WebpackLoader {
 
   resetConfig(id, mode, isService = false) {
     if (!Helper.isNumber(id) && !Helper.isString(id)) {
-      console.log(`Wrong type of identificator ${id}: ${typeof id}`);
+      console.error(`Wrong type of identificator ${id}: ${typeof id}`);
       return;
     }
 
@@ -125,22 +127,22 @@ class WebpackLoader {
 
   removeConfig(id) {
     if (!Helper.isNumber(id) && !Helper.isString(id)) {
-      console.log(`Wrong type of identificator ${id}: ${typeof id}`);
+      console.error(`Wrong type of identificator ${id}: ${typeof id}`);
       return;
     }
 
     if (!this._isUsed(id)) {
-      console.log(`There is no config with such ID: ${id}`);
+      console.error(`There is no config with such ID: ${id}`);
       return;
     }
 
     delete this.configs[id];
   }
 
-  run(identifiers, callback, isWatch = false) {
+  run({ identifiers, callback, port, isWatch = false, isDevServer = false }) {
     const webpackConfigured = webpack(this._buildConfigs(identifiers));
 
-    function handler(err, stats) {
+    function nativeHandler(err, stats) {
       let hasErrors = false;
 
       if (err) {
@@ -167,30 +169,26 @@ class WebpackLoader {
       }
     }
 
-    if (isWatch) {
-      webpackConfigured.run(handler);
-    } else {
-      this.watcher = webpackConfigured.watch(this.serviceConfigs[this.watchConfigName], handler);
-    }
-  }
-
-  runDevServer(identifiers, userPort, callback) {
-    let port = userPort;
-    if (!Helper.isNumber(port)) port = 8080;
-
-    const webpackConfigured = webpack(this._buildConfigs(identifiers));
-    this.devServer = new WebpackDevServer(webpackConfigured, this.serviceConfigs[this.devServerConfigName]);
-
-    this.devServer.listen(port, '127.0.0.1', (err) => {
+    function devServerHandler(err) {
       if (!err) {
-        console.log(`\n\nStarting server on http://localhost:${port}\n\n`);
+        console.log(`\n\nServer opened on http://localhost:${port}\n\n`);
       } else {
-        console.log(err);
+        console.error(err);
         console.log('\n\nDevServer has errors!\n\n');
       }
 
       if (typeof callback === 'function') callback(err);
-    });
+    }
+
+    if (isDevServer) {
+      if (!Helper.isNumber(port)) port = 8080;
+      this.devServer = new WebpackDevServer(webpackConfigured, this.serviceConfigs[this.devServerConfigName]);
+      this.devServer.listen(port, '127.0.0.1', devServerHandler);
+    } else if (isWatch) {
+      this.watcher = webpackConfigured.watch(this.serviceConfigs[this.watchConfigName], nativeHandler);
+    } else {
+      webpackConfigured.run(nativeHandler);
+    }
   }
 
   stop(callback) {
@@ -207,17 +205,17 @@ class WebpackLoader {
   }
 
   _buildConfigs(identifiers) {
-    const result = [];
-    if (identifiers && identifiers.length > 0) {
+    if (!Helper.isArr(identifiers)) identifiers = [].push(identifiers);
+
+    if (!identifiers || !identifiers.length) {
+      return Object.values(this.configs);
+    } else {
+      const result = [];
       identifiers.forEach((id) => {
         if (this.configs[id]) result.push(this.configs[id]);
       });
-    } else {
-      this.configs.forEach((config) => {
-        result.push(config);
-      });
+      return result;
     }
-    return result;
   }
 
   _isUsed(id, isService = false) {
