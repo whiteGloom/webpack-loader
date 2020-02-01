@@ -14,6 +14,11 @@ class Helper {
   static isArr(item) {
     return Array.isArray(item);
   }
+
+  static toArr(item) {
+    if (!Helper.isArr(item)) item = [].push(item);
+    return item;
+  }
 }
 
 export default Helper;

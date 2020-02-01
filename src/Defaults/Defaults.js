@@ -1,55 +1,49 @@
+import colors from 'colors';
 import Helper from '../Helper/Helper';
 
-class Defaults {
-  constructor() {
-    this.devServerConfigName = 'dev';
-    this.watchConfigName = 'watch';
-  }
-
-  getConfigDefaults(mode, isService, id) {
-    if (!isService) {
-      return Defaults._getSimpleConfigDefaults(mode);
-    }
-    if (isService) {
-      switch (id) {
-        case this.devServerConfigName:
-          return Defaults._getServerConfigDefaults();
-        case this.watchConfigName:
-          return Defaults._getWatchConfigDefaults();
-        default:
-          return false;
-      }
-    }
-    return false;
-  }
-
-  static _getSimpleConfigDefaults(mode) {
+const Defaults = {
+  devServerConfigName: 'devServer',
+  watchConfigName: 'watch',
+  getSimpleConfigDefaults(mode) {
     if (!Helper.isString(mode)) mode = 'development';
     return {
       mode,
-      entry: {
-      },
-      output: {
-      },
+      entry: {},
+      output: {},
       module: {
         rules: [],
       },
-      plugins: [
-      ],
-      optimization: {
-      },
-      resolve: {
-      },
+      plugins: [],
+      optimization: {},
+      resolve: {},
     };
-  }
+  },
+  getNativeHandler(callback, err, stats) {
+    let hasErrors = false;
 
-  static _getServerConfigDefaults() {
-    return {};
-  }
+    if (err) {
+      console.error(err.stack || err);
+      if (err.details) console.error(err.details);
+      hasErrors = true;
+    } else {
+      const info = stats.toJson();
 
-  static _getWatchConfigDefaults() {
-    return {};
-  }
-}
+      if (stats.hasWarnings()) console.warn(info.warnings);
+      if (stats.hasErrors()) {
+        console.error(info.errors);
+        hasErrors = true;
+      }
+    }
+
+    if (hasErrors !== true) {
+      console.log(colors.green.underline('\n\nCompiled successfully.\n\n'));
+      if (typeof callback === 'function') callback(stats, true);
+    } else {
+      console.log(colors.red.underline('\n\nCompiled with errors!\n\n'));
+      if (this.watcher) this.watcher = null;
+      if (typeof callback === 'function') callback(stats, false);
+    }
+  },
+};
 
 export default Defaults;
