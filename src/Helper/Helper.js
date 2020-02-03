@@ -1,4 +1,4 @@
-class Helper {
+class helper {
   static isNumber(item) {
     return typeof item === 'number';
   }
@@ -21,4 +21,4 @@ class Helper {
   }
 }
 
-export default Helper;
+export default helper;

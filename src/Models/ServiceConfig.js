@@ -26,7 +26,7 @@ class ServiceConfig extends Config {
   _init({ start, stop }) {
     super._init(arguments);
 
-    const gag = () => {};
+    function gag() {};
     this.setStopFunction(stop || gag);
     this.setStartFunction(start || gag);
   }

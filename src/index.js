@@ -1,10 +1,9 @@
 import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
 
 import Defaults from './Defaults/Defaults';
 import ServiceConfig from './Models/ServiceConfig';
 import Config from './Models/Config';
-import Helper from './Helper/Helper';
+import helper from './helper/helper';
 
 
 class WebpackLoader {
@@ -18,8 +17,9 @@ class WebpackLoader {
     this._init();
   }
 
-  makeNewConfig(id, configs, mode, isForced = false) {
-    if (!Helper.isNumber(id) && !Helper.isString(id)) {
+  makeNewConfig(id, configs, options, serviceOptions) {
+    const { isForced = false } = serviceOptions;
+    if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of ID ${id}: ${typeof id}`);
     }
 
@@ -27,16 +27,17 @@ class WebpackLoader {
       return console.error(`ID is already in use: ${id}`);
     }
 
-    this.configs.simpleConfigs[id] = new Config({ mode, configs });
+    this.configs.simpleConfigs[id] = new Config(null, configs, options);
     return this.configs.simpleConfigs[id];
   }
 
-  addToConfig(id, configs, isService = false, isForced = false) {
-    if (!Helper.isNumber(id) && !Helper.isString(id)) {
+  addToConfig(id, configs, serviceOptions) {
+    const { isService = false, isForced = false } = serviceOptions;
+    if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of ID ${id}: ${typeof id}`);
     }
 
-    if (!Helper.isArr(configs) && !Helper.isObj(configs)) {
+    if (!helper.isArr(configs) && !helper.isObj(configs)) {
       return console.error(`Wrong type of configs: ${typeof configs}`);
     }
 
@@ -48,36 +49,35 @@ class WebpackLoader {
       this.makeNewConfig(id);
     }
 
-    configs = Helper.toArr(configs);
-
     const configsTree = this._selectConfsTree(isService);
     configsTree[id].addToConfig(configs);
   }
 
-  run({ configs, serviceConfigs, options }) {
+  run(configs, serviceConfigs, options) {
     const webpackConfigured = webpack(this._buildConfigs(configs));
 
     if (serviceConfigs && serviceConfigs.length) {
       serviceConfigs.forEach((config) => {
         if (typeof config === 'string' && this.configs.serviceConfigs[config]) {
-          this.configs.serviceConfigs[config].start(options);
+          this.configs.serviceConfigs[config].start(webpackConfigured, options);
         } else if (typeof config === 'object') {
-          config.start(options);
+          config.start(webpackConfigured, options);
         }
       });
     } else {
-      webpackConfigured.run(Helper.getNativeHandler.bind(options.callback));
+      webpackConfigured.run(helper.getNativeHandler(options));
     }
   }
 
   stop(options) {
-    Object.keys(this.serviceConfigs).forEach((config) => {
+    Object.values(this.serviceConfigs).forEach((config) => {
       if (config.handler) config.stop(options);
     });
   }
 
-  getConfig(id, isService = false) {
-    if (!Helper.isNumber(id) && !Helper.isString(id)) {
+  getConfig(id, serviceOptions) {
+    const { isService = false } = serviceOptions;
+    if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
     }
 
@@ -93,17 +93,18 @@ class WebpackLoader {
     return this.configs;
   }
 
-  resetConfig(id, mode, isService = false) {
-    if (!Helper.isNumber(id) && !Helper.isString(id)) {
+  resetConfig(id, options, serviceOptions) {
+    const { isService = false } = serviceOptions;
+    if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
     }
 
     const configsTree = this._selectConfsTree(isService);
-    configsTree[id].resetToDefaults();
+    configsTree[id].resetToDefaults(options);
   }
 
   removeConfig(id) {
-    if (!Helper.isNumber(id) && !Helper.isString(id)) {
+    if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
     }
 
@@ -115,42 +116,15 @@ class WebpackLoader {
   }
 
   _init() {
-    this.configs.serviceConfigs[this.defaults.watchConfigName] = new ServiceConfig({
-      defaults: () => ({}),
-      start: (conf, { port, configured, callback }) => {
-        function devServerHandler(err) {
-          if (!err) {
-            console.log(`\n\nServer opened on http://localhost:${port}\n\n`);
-          } else {
-            console.error(err);
-            console.log('\n\nDevServer has errors!\n\n');
-          }
-          if (typeof callback === 'function') callback(err);
-        }
-        conf.handler = new WebpackDevServer(configured, conf.config);
-        conf.handler.listen(port, '127.0.0.1', devServerHandler);
-      },
-      stop: (conf, { callback }) => {
-        if (typeof callback !== 'function') callback = () => {};
-        conf.handler.stop(callback);
-        conf.handler = null;
-      },
-    });
-    this.configs.serviceConfigs[this.defaults.devServerConfigName] = new ServiceConfig({
-      defaults: () => ({}),
-      start: (conf, { configured, callback }) => {
-        conf.handler = configured.watch(conf.config, Helper.getNativeHandler.bind(callback));
-      },
-      stop: (conf, { callback }) => {
-        if (typeof callback !== 'function') callback = () => {};
-        conf.handler.close(callback);
-        conf.handler = null;
-      },
-    });
+    const makeServConf = (name, config) => {
+      this.configs.serviceConfigs[name] = new ServiceConfig(config);
+    };
+    makeServConf(this.defaults.watchConfigName, this.defaults.getWatchServicePreset());
+    makeServConf(this.defaults.devServerConfigName, this.defaults.getDevServerServicePreset());
   }
 
   _buildConfigs(configs) {
-    if (configs) configs = Helper.toArr(configs);
+    if (configs) configs = helper.toArr(configs);
     let results = [];
 
     if (!configs) {
@@ -173,7 +147,7 @@ class WebpackLoader {
     return !!this._selectConfsTree(isService)[id];
   }
 
-  _selectConfsTree(isService) {
+  _selectConfsTree(isService = false) {
     return !isService ? this.configs.simpleConfigs : this.configs.serviceConfigs;
   }
 }

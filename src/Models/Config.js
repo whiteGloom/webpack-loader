@@ -1,6 +1,6 @@
 import merge from 'webpack-merge';
 import Defaults from '../Defaults/Defaults';
-import Helper from '../Helper/Helper';
+import helper from '../helper/helper';
 
 class Config {
   constructor() {
@@ -16,16 +16,16 @@ class Config {
     this.getDefaults = defaults;
   }
 
-  resetToDefaults() {
-    this.config = this.getDefaults();
+  resetToDefaults(options) {
+    this.config = this.getDefaults(options);
   }
 
   addToConfig(configs) {
-    if (!Helper.isArr(configs) && !Helper.isObj(configs)) {
+    if (!helper.isArr(configs) && !helper.isObj(configs)) {
       return console.error(`Wrong type of configs: ${typeof configs}`);
     }
 
-    configs = Helper.toArr(configs);
+    configs = helper.toArr(configs);
 
     configs.forEach((config) => {
       this.config = merge([
@@ -35,9 +35,9 @@ class Config {
     });
   }
 
-  _init({ defaults, configs }) {
+  _init(defaults, configs, options) {
     this.setDefaults(defaults || this.defaults.getSimpleConfigDefaults);
-    this.resetToDefaults();
+    this.resetToDefaults(options);
     if (configs) this.addToConfig(configs);
   }
 }
