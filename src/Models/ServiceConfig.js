@@ -5,8 +5,8 @@ class ServiceConfig extends Config {
     super(arguments);
 
     this.handler = null;
-    this.stop = null;
-    this.start = null;
+    this.stop = () => {};
+    this.start = () => {};
 
     this._init(arguments);
   }
@@ -26,9 +26,8 @@ class ServiceConfig extends Config {
   _init({ start, stop }) {
     super._init(arguments);
 
-    function gag() {};
-    this.setStopFunction(stop || gag);
-    this.setStartFunction(start || gag);
+    this.setStopFunction(stop);
+    this.setStartFunction(start);
   }
 }
 

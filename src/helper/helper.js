@@ -4,11 +4,11 @@ class helper {
   }
 
   static isString(item) {
-    return typeof item !== 'string';
+    return typeof item === 'string';
   }
 
   static isObj(item) {
-    return typeof item !== 'object';
+    return typeof item === 'object';
   }
 
   static isArr(item) {
@@ -16,8 +16,24 @@ class helper {
   }
 
   static toArr(item) {
-    if (!Helper.isArr(item)) item = [].push(item);
+    if (!helper.isArr(item)) item = [].push(item);
     return item;
+  }
+
+  static hasFlag(arr, flag) {
+    return arr.indexOf(flag) > -1;
+  }
+
+  static flagsToObj(arr) {
+    if (helper.isObj(arr)) return arr;
+
+    const result = {};
+    if (helper.isArr(arr)) {
+      arr.forEach((item) => {
+        result[item] = true;
+      });
+    }
+    return result;
   }
 }
 

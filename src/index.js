@@ -18,7 +18,7 @@ class WebpackLoader {
   }
 
   makeNewConfig(id, configs, options, serviceOptions) {
-    const { isForced = false } = serviceOptions;
+    const { isForced = false } = helper.flagsToObj(serviceOptions);
     if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of ID ${id}: ${typeof id}`);
     }
@@ -27,12 +27,16 @@ class WebpackLoader {
       return console.error(`ID is already in use: ${id}`);
     }
 
-    this.configs.simpleConfigs[id] = new Config(null, configs, options);
+    this.configs.simpleConfigs[id] = new Config({
+      defaults: this.defaults.getSimpleConfigDefaults(),
+      configs,
+      options,
+    });
     return this.configs.simpleConfigs[id];
   }
 
   addToConfig(id, configs, serviceOptions) {
-    const { isService = false, isForced = false } = serviceOptions;
+    const { isService = false, isForced = false } = helper.flagsToObj(serviceOptions);
     if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of ID ${id}: ${typeof id}`);
     }
@@ -76,7 +80,7 @@ class WebpackLoader {
   }
 
   getConfig(id, serviceOptions) {
-    const { isService = false } = serviceOptions;
+    const { isService = false } = helper.flagsToObj(serviceOptions);
     if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
     }
@@ -94,7 +98,7 @@ class WebpackLoader {
   }
 
   resetConfig(id, options, serviceOptions) {
-    const { isService = false } = serviceOptions;
+    const { isService = false } = helper.flagsToObj(serviceOptions);
     if (!helper.isNumber(id) && !helper.isString(id)) {
       return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
     }
@@ -116,11 +120,11 @@ class WebpackLoader {
   }
 
   _init() {
-    const makeServConf = (name, config) => {
-      this.configs.serviceConfigs[name] = new ServiceConfig(config);
+    const makeServiceConf = (id, preset) => {
+      this.configs.serviceConfigs[id] = new ServiceConfig(preset);
     };
-    makeServConf(this.defaults.watchConfigName, this.defaults.getWatchServicePreset());
-    makeServConf(this.defaults.devServerConfigName, this.defaults.getDevServerServicePreset());
+    makeServiceConf(this.defaults.watchConfigId, this.defaults.getWatchServicePreset());
+    makeServiceConf(this.defaults.devServerConfigId, this.defaults.getDevServerServicePreset());
   }
 
   _buildConfigs(configs) {

@@ -1,10 +1,10 @@
+import WebpackDevServer from 'webpack-dev-server';
 import colors from 'colors';
 import helper from '../helper/helper';
-import WebpackDevServer from 'webpack-dev-server';
 
 const Defaults = {
-  devServerConfigName: 'devServer',
-  watchConfigName: 'watch',
+  devServerConfigId: 'devServer',
+  watchConfigId: 'watch',
   getSimpleConfigDefaults({ mode }) {
     if (!helper.isString(mode)) mode = 'development';
     return {
@@ -49,37 +49,35 @@ const Defaults = {
   },
   getWatchServicePreset() {
     return {
-      defaults: () => ({}),
-      start: (conf, configured, { callback }) => {
-        conf.handler = configured.watch(conf.config, helper.getNativeHandler({ callback }));
+      start(configured, { callback }) {
+        this.handler = configured.watch(this.config, helper.getNativeHandler({ callback }));
       },
-      stop: (conf, { callback }) => {
+      stop({ callback }) {
         if (typeof callback !== 'function') callback = () => {};
-        conf.handler.close(callback);
-        conf.handler = null;
+        this.handler.close(callback);
+        this.handler = null;
       },
     };
   },
   getDevServerServicePreset() {
     return {
-      defaults: () => ({}),
-      start: (conf, configured, { port, callback }) => {
+      start(configured, { port, callback }) {
         function devServerHandler(err) {
           if (!err) {
-            console.log(`\n\nServer opened on http://localhost:${port}\n\n`);
+            console.log(colors.green.underline(`\n\nServer opened on http://localhost:${port}\n\n`));
           } else {
             console.error(err);
-            console.log('\n\nDevServer has errors!\n\n');
+            console.log(colors.red.underline('\n\nDevServer has errors!\n\n'));
           }
           if (typeof callback === 'function') callback(err);
         }
-        conf.handler = new WebpackDevServer(configured, conf.config);
-        conf.handler.listen(port, '127.0.0.1', devServerHandler);
+        this.handler = new WebpackDevServer(configured, this.config);
+        this.handler.listen(port, '127.0.0.1', devServerHandler);
       },
-      stop: (conf, { callback }) => {
+      stop({ callback }) {
         if (typeof callback !== 'function') callback = () => {};
-        conf.handler.stop(callback);
-        conf.handler = null;
+        this.handler.stop(callback);
+        this.handler = null;
       },
     };
   },

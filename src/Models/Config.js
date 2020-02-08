@@ -1,19 +1,17 @@
 import merge from 'webpack-merge';
-import Defaults from '../Defaults/Defaults';
 import helper from '../helper/helper';
 
 class Config {
   constructor() {
-    this.defaults = Defaults;
-    this.config = {};
-    this.getDefaults = null;
+    this.config = null;
+    this.getDefaults = () => ({});
 
     this._init(arguments);
   }
 
-  setDefaults(defaults) {
-    if (typeof defaults !== 'object') return;
-    this.getDefaults = defaults;
+  setDefaultsGetter(getDefaults) {
+    if (typeof getDefaults !== 'function') return;
+    this.getDefaults = getDefaults;
   }
 
   resetToDefaults(options) {
@@ -21,9 +19,7 @@ class Config {
   }
 
   addToConfig(configs) {
-    if (!helper.isArr(configs) && !helper.isObj(configs)) {
-      return console.error(`Wrong type of configs: ${typeof configs}`);
-    }
+    if (!helper.isArr(configs) && !helper.isObj(configs)) return;
 
     configs = helper.toArr(configs);
 
@@ -35,10 +31,10 @@ class Config {
     });
   }
 
-  _init(defaults, configs, options) {
-    this.setDefaults(defaults || this.defaults.getSimpleConfigDefaults);
+  _init({ getDefaults, configs, options }) {
+    this.setDefaultsGetter(getDefaults);
     this.resetToDefaults(options);
-    if (configs) this.addToConfig(configs);
+    this.addToConfig(configs);
   }
 }
 
