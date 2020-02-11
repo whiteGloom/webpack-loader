@@ -2,13 +2,12 @@ import WebpackDevServer from 'webpack-dev-server';
 import colors from 'colors';
 import helper from '../helper/helper';
 
-const Defaults = {
+const defaults = {
   devServerConfigId: 'devServer',
   watchConfigId: 'watch',
-  getSimpleConfigDefaults({ mode }) {
-    if (!helper.isString(mode)) mode = 'development';
-    return {
-      mode,
+  getSimpleConfigDefaults() {
+    return () => ({
+      mode: 'development',
       entry: {},
       output: {},
       module: {
@@ -17,9 +16,10 @@ const Defaults = {
       plugins: [],
       optimization: {},
       resolve: {},
-    };
+    });
   },
-  getNativeHandler({ callback }) {
+  getNativeHandler(options = {}) {
+    const { callback } = options;
     return (err, stats) => {
       let hasErrors = false;
 
@@ -49,10 +49,12 @@ const Defaults = {
   },
   getWatchServicePreset() {
     return {
-      start(configured, { callback }) {
+      start(configured, options = {}) {
+        const { callback } = options;
         this.handler = configured.watch(this.config, helper.getNativeHandler({ callback }));
       },
-      stop({ callback }) {
+      stop(options = {}) {
+        let { callback } = options;
         if (typeof callback !== 'function') callback = () => {};
         this.handler.close(callback);
         this.handler = null;
@@ -61,7 +63,8 @@ const Defaults = {
   },
   getDevServerServicePreset() {
     return {
-      start(configured, { port, callback }) {
+      start(configured, options = {}) {
+        const { port = 8080, callback } = options;
         function devServerHandler(err) {
           if (!err) {
             console.log(colors.green.underline(`\n\nServer opened on http://localhost:${port}\n\n`));
@@ -74,7 +77,8 @@ const Defaults = {
         this.handler = new WebpackDevServer(configured, this.config);
         this.handler.listen(port, '127.0.0.1', devServerHandler);
       },
-      stop({ callback }) {
+      stop(options = {}) {
+        let { callback } = options;
         if (typeof callback !== 'function') callback = () => {};
         this.handler.stop(callback);
         this.handler = null;
@@ -83,4 +87,4 @@ const Defaults = {
   },
 };
 
-export default Defaults;
+export default defaults;

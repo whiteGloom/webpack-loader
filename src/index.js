@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 
-import Defaults from './Defaults/Defaults';
+import defaults from './defaults/defaults';
 import ServiceConfig from './Models/ServiceConfig';
 import Config from './Models/Config';
 import helper from './helper/helper';
@@ -8,7 +8,7 @@ import helper from './helper/helper';
 
 class WebpackLoader {
   constructor() {
-    this.defaults = Defaults;
+    this.defaults = defaults;
     this.configs = {
       simpleConfigs: {},
       serviceConfigs: {},
@@ -28,7 +28,7 @@ class WebpackLoader {
     }
 
     this.configs.simpleConfigs[id] = new Config({
-      defaults: this.defaults.getSimpleConfigDefaults(),
+      getDefaults: this.defaults.getSimpleConfigDefaults(),
       configs,
       options,
     });
@@ -53,7 +53,7 @@ class WebpackLoader {
       this.makeNewConfig(id);
     }
 
-    const configsTree = this._selectConfsTree(isService);
+    const configsTree = this._selectConfigsTree(isService);
     configsTree[id].addToConfig(configs);
   }
 
@@ -69,7 +69,7 @@ class WebpackLoader {
         }
       });
     } else {
-      webpackConfigured.run(helper.getNativeHandler(options));
+      webpackConfigured.run(this.defaults.getNativeHandler(options));
     }
   }
 
@@ -82,34 +82,34 @@ class WebpackLoader {
   getConfig(id, serviceOptions) {
     const { isService = false } = helper.flagsToObj(serviceOptions);
     if (!helper.isNumber(id) && !helper.isString(id)) {
-      return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
+      return console.error(`Wrong type of identifier ${id}: ${typeof id}`);
     }
 
     if (!this._isUsed(id)) {
       return console.error(`There is no config with such ID: ${id}`);
     }
 
-    const configsTree = this._selectConfsTree(isService);
-    return configsTree(isService)[id];
+    const configsTree = this._selectConfigsTree(isService);
+    return configsTree[id];
   }
 
   getConfigs() {
     return this.configs;
   }
 
-  resetConfig(id, options, serviceOptions) {
+  resetConfig(id, serviceOptions) {
     const { isService = false } = helper.flagsToObj(serviceOptions);
     if (!helper.isNumber(id) && !helper.isString(id)) {
-      return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
+      return console.error(`Wrong type of identifier ${id}: ${typeof id}`);
     }
 
-    const configsTree = this._selectConfsTree(isService);
-    configsTree[id].resetToDefaults(options);
+    const configsTree = this._selectConfigsTree(isService);
+    configsTree[id].resetToDefaults();
   }
 
   removeConfig(id) {
     if (!helper.isNumber(id) && !helper.isString(id)) {
-      return console.error(`Wrong type of identificator ${id}: ${typeof id}`);
+      return console.error(`Wrong type of identifier ${id}: ${typeof id}`);
     }
 
     if (!this._isUsed(id)) {
@@ -148,10 +148,10 @@ class WebpackLoader {
   }
 
   _isUsed(id, isService = false) {
-    return !!this._selectConfsTree(isService)[id];
+    return !!this._selectConfigsTree(isService)[id];
   }
 
-  _selectConfsTree(isService = false) {
+  _selectConfigsTree(isService = false) {
     return !isService ? this.configs.simpleConfigs : this.configs.serviceConfigs;
   }
 }

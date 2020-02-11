@@ -20,7 +20,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Config =
 /*#__PURE__*/
 function () {
-  function Config() {
+  function Config(options) {
     _classCallCheck(this, Config);
 
     this.config = null;
@@ -29,7 +29,7 @@ function () {
       return {};
     };
 
-    this._init(arguments);
+    this._init(options);
   }
 
   _createClass(Config, [{
@@ -40,8 +40,8 @@ function () {
     }
   }, {
     key: "resetToDefaults",
-    value: function resetToDefaults(options) {
-      this.config = this.getDefaults(options);
+    value: function resetToDefaults() {
+      this.config = this.getDefaults();
     }
   }, {
     key: "addToConfig",
@@ -56,12 +56,12 @@ function () {
     }
   }, {
     key: "_init",
-    value: function _init(_ref) {
-      var getDefaults = _ref.getDefaults,
-          configs = _ref.configs,
-          options = _ref.options;
+    value: function _init() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var getDefaults = options.getDefaults,
+          configs = options.configs;
       this.setDefaultsGetter(getDefaults);
-      this.resetToDefaults(options);
+      this.resetToDefaults();
       this.addToConfig(configs);
     }
   }]);

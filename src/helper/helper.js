@@ -16,7 +16,7 @@ class helper {
   }
 
   static toArr(item) {
-    if (!helper.isArr(item)) item = [].push(item);
+    if (!helper.isArr(item)) item = [item];
     return item;
   }
 

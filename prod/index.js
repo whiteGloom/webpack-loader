@@ -7,7 +7,7 @@ exports["default"] = void 0;
 
 var _webpack = _interopRequireDefault(require("webpack"));
 
-var _Defaults = _interopRequireDefault(require("./Defaults/Defaults"));
+var _defaults = _interopRequireDefault(require("./defaults/defaults"));
 
 var _ServiceConfig = _interopRequireDefault(require("./Models/ServiceConfig"));
 
@@ -31,7 +31,7 @@ function () {
   function WebpackLoader() {
     _classCallCheck(this, WebpackLoader);
 
-    this.defaults = _Defaults["default"];
+    this.defaults = _defaults["default"];
     this.configs = {
       simpleConfigs: {},
       serviceConfigs: {}
@@ -56,7 +56,7 @@ function () {
       }
 
       this.configs.simpleConfigs[id] = new _Config["default"]({
-        defaults: this.defaults.getSimpleConfigDefaults(),
+        getDefaults: this.defaults.getSimpleConfigDefaults(),
         configs: configs,
         options: options
       });
@@ -87,7 +87,7 @@ function () {
         this.makeNewConfig(id);
       }
 
-      var configsTree = this._selectConfsTree(isService);
+      var configsTree = this._selectConfigsTree(isService);
 
       configsTree[id].addToConfig(configs);
     }
@@ -107,7 +107,7 @@ function () {
           }
         });
       } else {
-        webpackConfigured.run(_helper["default"].getNativeHandler(options));
+        webpackConfigured.run(this.defaults.getNativeHandler(options));
       }
     }
   }, {
@@ -125,16 +125,16 @@ function () {
           isService = _helper$flagsToObj3$i === void 0 ? false : _helper$flagsToObj3$i;
 
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of identificator ".concat(id, ": ").concat(_typeof(id)));
+        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
       }
 
       if (!this._isUsed(id)) {
         return console.error("There is no config with such ID: ".concat(id));
       }
 
-      var configsTree = this._selectConfsTree(isService);
+      var configsTree = this._selectConfigsTree(isService);
 
-      return configsTree(isService)[id];
+      return configsTree[id];
     }
   }, {
     key: "getConfigs",
@@ -143,24 +143,24 @@ function () {
     }
   }, {
     key: "resetConfig",
-    value: function resetConfig(id, options, serviceOptions) {
+    value: function resetConfig(id, serviceOptions) {
       var _helper$flagsToObj4 = _helper["default"].flagsToObj(serviceOptions),
           _helper$flagsToObj4$i = _helper$flagsToObj4.isService,
           isService = _helper$flagsToObj4$i === void 0 ? false : _helper$flagsToObj4$i;
 
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of identificator ".concat(id, ": ").concat(_typeof(id)));
+        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
       }
 
-      var configsTree = this._selectConfsTree(isService);
+      var configsTree = this._selectConfigsTree(isService);
 
-      configsTree[id].resetToDefaults(options);
+      configsTree[id].resetToDefaults();
     }
   }, {
     key: "removeConfig",
     value: function removeConfig(id) {
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of identificator ".concat(id, ": ").concat(_typeof(id)));
+        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
       }
 
       if (!this._isUsed(id)) {
@@ -211,11 +211,11 @@ function () {
     key: "_isUsed",
     value: function _isUsed(id) {
       var isService = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      return !!this._selectConfsTree(isService)[id];
+      return !!this._selectConfigsTree(isService)[id];
     }
   }, {
-    key: "_selectConfsTree",
-    value: function _selectConfsTree() {
+    key: "_selectConfigsTree",
+    value: function _selectConfigsTree() {
       var isService = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       return !isService ? this.configs.simpleConfigs : this.configs.serviceConfigs;
     }

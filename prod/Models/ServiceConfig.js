@@ -36,19 +36,19 @@ var ServiceConfig =
 function (_Config) {
   _inherits(ServiceConfig, _Config);
 
-  function ServiceConfig() {
+  function ServiceConfig(options) {
     var _this;
 
     _classCallCheck(this, ServiceConfig);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ServiceConfig).call(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ServiceConfig).call(this, options));
     _this.handler = null;
 
     _this.stop = function () {};
 
     _this.start = function () {};
 
-    _this._init(arguments);
+    _this._init(options);
 
     return _this;
   }
@@ -67,12 +67,13 @@ function (_Config) {
     }
   }, {
     key: "_init",
-    value: function _init(_ref) {
-      var start = _ref.start,
-          stop = _ref.stop;
+    value: function _init() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      _get(_getPrototypeOf(ServiceConfig.prototype), "_init", this).call(this, arguments);
+      _get(_getPrototypeOf(ServiceConfig.prototype), "_init", this).call(this, options);
 
+      var start = options.start,
+          stop = options.stop;
       this.setStopFunction(stop);
       this.setStartFunction(start);
     }

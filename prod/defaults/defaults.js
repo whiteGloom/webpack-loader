@@ -13,28 +13,29 @@ var _helper = _interopRequireDefault(require("../helper/helper"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var Defaults = {
+var defaults = {
   devServerConfigId: 'devServer',
   watchConfigId: 'watch',
-  getSimpleConfigDefaults: function getSimpleConfigDefaults(_ref) {
-    var mode = _ref.mode;
-    if (!_helper["default"].isString(mode)) mode = 'development';
-    return {
-      mode: mode,
-      entry: {},
-      output: {},
-      module: {
-        rules: []
-      },
-      plugins: [],
-      optimization: {},
-      resolve: {}
+  getSimpleConfigDefaults: function getSimpleConfigDefaults() {
+    return function () {
+      return {
+        mode: 'development',
+        entry: {},
+        output: {},
+        module: {
+          rules: []
+        },
+        plugins: [],
+        optimization: {},
+        resolve: {}
+      };
     };
   },
-  getNativeHandler: function getNativeHandler(_ref2) {
+  getNativeHandler: function getNativeHandler() {
     var _this = this;
 
-    var callback = _ref2.callback;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var callback = options.callback;
     return function (err, stats) {
       var hasErrors = false;
 
@@ -64,14 +65,16 @@ var Defaults = {
   },
   getWatchServicePreset: function getWatchServicePreset() {
     return {
-      start: function start(configured, _ref3) {
-        var callback = _ref3.callback;
+      start: function start(configured) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var callback = options.callback;
         this.handler = configured.watch(this.config, _helper["default"].getNativeHandler({
           callback: callback
         }));
       },
-      stop: function stop(_ref4) {
-        var callback = _ref4.callback;
+      stop: function stop() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var callback = options.callback;
         if (typeof callback !== 'function') callback = function callback() {};
         this.handler.close(callback);
         this.handler = null;
@@ -80,9 +83,11 @@ var Defaults = {
   },
   getDevServerServicePreset: function getDevServerServicePreset() {
     return {
-      start: function start(configured, _ref5) {
-        var port = _ref5.port,
-            callback = _ref5.callback;
+      start: function start(configured) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var _options$port = options.port,
+            port = _options$port === void 0 ? 8080 : _options$port,
+            callback = options.callback;
 
         function devServerHandler(err) {
           if (!err) {
@@ -98,8 +103,9 @@ var Defaults = {
         this.handler = new _webpackDevServer["default"](configured, this.config);
         this.handler.listen(port, '127.0.0.1', devServerHandler);
       },
-      stop: function stop(_ref6) {
-        var callback = _ref6.callback;
+      stop: function stop() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var callback = options.callback;
         if (typeof callback !== 'function') callback = function callback() {};
         this.handler.stop(callback);
         this.handler = null;
@@ -107,5 +113,5 @@ var Defaults = {
     };
   }
 };
-var _default = Defaults;
+var _default = defaults;
 exports["default"] = _default;
