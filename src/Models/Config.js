@@ -2,11 +2,11 @@ import merge from 'webpack-merge';
 import helper from '../helper/helper';
 
 class Config {
-  constructor() {
+  constructor(options) {
     this.config = null;
     this.getDefaults = () => ({});
 
-    this._init(arguments);
+    this._init(options);
   }
 
   setDefaultsGetter(getDefaults) {
@@ -14,8 +14,8 @@ class Config {
     this.getDefaults = getDefaults;
   }
 
-  resetToDefaults(options) {
-    this.config = this.getDefaults(options);
+  resetToDefaults() {
+    this.config = this.getDefaults();
   }
 
   addToConfig(configs) {
@@ -31,9 +31,10 @@ class Config {
     });
   }
 
-  _init({ getDefaults, configs, options }) {
+  _init(options = {}) {
+    const { getDefaults, configs } = options;
     this.setDefaultsGetter(getDefaults);
-    this.resetToDefaults(options);
+    this.resetToDefaults();
     this.addToConfig(configs);
   }
 }

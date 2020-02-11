@@ -5,15 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _Webpack = _interopRequireDefault(require("Webpack"));
+var _webpack = _interopRequireDefault(require("webpack"));
 
-var _webpackMerge = _interopRequireDefault(require("webpack-merge"));
+var _defaults = _interopRequireDefault(require("./defaults/defaults"));
 
-var _webpackDevServer = _interopRequireDefault(require("webpack-dev-server"));
+var _ServiceConfig = _interopRequireDefault(require("./Models/ServiceConfig"));
 
-var _colors = _interopRequireDefault(require("colors"));
+var _Config = _interopRequireDefault(require("./Models/Config"));
 
-var _makeDefaultConfig = _interopRequireDefault(require("./config/makeDefaultConfig.js"));
+var _helper = _interopRequireDefault(require("./helper/helper"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -31,199 +31,193 @@ function () {
   function WebpackLoader() {
     _classCallCheck(this, WebpackLoader);
 
-    this.configs = {};
-    this.devServerConfig = {};
-    this.watchConfig = {};
+    this.defaults = _defaults["default"];
+    this.configs = {
+      simpleConfigs: {},
+      serviceConfigs: {}
+    };
+
+    this._init();
   }
 
   _createClass(WebpackLoader, [{
     key: "makeNewConfig",
-    value: function makeNewConfig(id, newConfigs, mode) {
-      var _this = this;
+    value: function makeNewConfig(id, configs, options, serviceOptions) {
+      var _helper$flagsToObj = _helper["default"].flagsToObj(serviceOptions),
+          _helper$flagsToObj$is = _helper$flagsToObj.isForced,
+          isForced = _helper$flagsToObj$is === void 0 ? false : _helper$flagsToObj$is;
 
-      if (typeof id !== "number" && typeof id !== "string") {
-        console.log("Wrong identificator: " + id);
-        return;
+      if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
+        return console.error("Wrong type of ID ".concat(id, ": ").concat(_typeof(id)));
       }
 
-      if (_typeof(newConfigs) !== "object") {
-        console.log("Wrong config: " + newConfigs);
-        return;
+      if (!isForced && this._isUsed(id)) {
+        return console.error("ID is already in use: ".concat(id));
       }
 
-      if (typeof mode !== "string") {
-        mode = "development";
-      }
-
-      this.configs[id] = (0, _webpackMerge["default"])([this.configs[id], (0, _makeDefaultConfig["default"])(mode)]);
-      newConfigs.forEach(function (config) {
-        _this.configs[id] = (0, _webpackMerge["default"])([_this.configs[id], config]);
+      this.configs.simpleConfigs[id] = new _Config["default"]({
+        getDefaults: this.defaults.getSimpleConfigDefaults(),
+        configs: configs,
+        options: options
       });
+      return this.configs.simpleConfigs[id];
     }
   }, {
     key: "addToConfig",
-    value: function addToConfig(id, config) {
-      if (typeof id !== "number" && typeof id !== "string") {
-        console.log("Wrong identificator: " + id);
-        return;
+    value: function addToConfig(id, configs, serviceOptions) {
+      var _helper$flagsToObj2 = _helper["default"].flagsToObj(serviceOptions),
+          _helper$flagsToObj2$i = _helper$flagsToObj2.isService,
+          isService = _helper$flagsToObj2$i === void 0 ? false : _helper$flagsToObj2$i,
+          _helper$flagsToObj2$i2 = _helper$flagsToObj2.isForced,
+          isForced = _helper$flagsToObj2$i2 === void 0 ? false : _helper$flagsToObj2$i2;
+
+      if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
+        return console.error("Wrong type of ID ".concat(id, ": ").concat(_typeof(id)));
       }
 
-      if (_typeof(config) !== "object") {
-        console.log("Wrong config: " + config);
-        return;
+      if (!_helper["default"].isArr(configs) && !_helper["default"].isObj(configs)) {
+        return console.error("Wrong type of configs: ".concat(_typeof(configs)));
       }
 
-      this.configs[id] = (0, _webpackMerge["default"])([this.configs[id], config]);
+      if (!this._isUsed(id, isService)) {
+        if (isService || !isForced) {
+          return console.error("There is no config with such ID: ".concat(id));
+        }
+
+        this.makeNewConfig(id);
+      }
+
+      var configsTree = this._selectConfigsTree(isService);
+
+      configsTree[id].addToConfig(configs);
     }
   }, {
-    key: "getConfigForEdit",
-    value: function getConfigForEdit(id) {
-      if (typeof id !== "number" && typeof id !== "string") {
-        console.log("Wrong identificator: " + id);
-        return;
-      }
+    key: "run",
+    value: function run(configs, serviceConfigs, options) {
+      var _this = this;
 
-      return this.configs[id];
+      var webpackConfigured = (0, _webpack["default"])(this._buildConfigs(configs));
+
+      if (serviceConfigs && serviceConfigs.length) {
+        serviceConfigs.forEach(function (config) {
+          if (typeof config === 'string' && _this.configs.serviceConfigs[config]) {
+            _this.configs.serviceConfigs[config].start(webpackConfigured, options);
+          } else if (_typeof(config) === 'object') {
+            config.start(webpackConfigured, options);
+          }
+        });
+      } else {
+        webpackConfigured.run(this.defaults.getNativeHandler(options));
+      }
+    }
+  }, {
+    key: "stop",
+    value: function stop(options) {
+      Object.values(this.serviceConfigs).forEach(function (config) {
+        if (config.handler) config.stop(options);
+      });
     }
   }, {
     key: "getConfig",
-    value: function getConfig(id) {
-      if (typeof id !== "number" && typeof id !== "string") {
-        console.log("Wrong identificator: " + id);
-        return;
+    value: function getConfig(id, serviceOptions) {
+      var _helper$flagsToObj3 = _helper["default"].flagsToObj(serviceOptions),
+          _helper$flagsToObj3$i = _helper$flagsToObj3.isService,
+          isService = _helper$flagsToObj3$i === void 0 ? false : _helper$flagsToObj3$i;
+
+      if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
+        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
       }
 
-      return Object.assign({}, this.configs[id]);
+      if (!this._isUsed(id)) {
+        return console.error("There is no config with such ID: ".concat(id));
+      }
+
+      var configsTree = this._selectConfigsTree(isService);
+
+      return configsTree[id];
     }
   }, {
     key: "getConfigs",
     value: function getConfigs() {
-      return Object.assign({}, this.configs);
+      return this.configs;
+    }
+  }, {
+    key: "resetConfig",
+    value: function resetConfig(id, serviceOptions) {
+      var _helper$flagsToObj4 = _helper["default"].flagsToObj(serviceOptions),
+          _helper$flagsToObj4$i = _helper$flagsToObj4.isService,
+          isService = _helper$flagsToObj4$i === void 0 ? false : _helper$flagsToObj4$i;
+
+      if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
+        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+      }
+
+      var configsTree = this._selectConfigsTree(isService);
+
+      configsTree[id].resetToDefaults();
     }
   }, {
     key: "removeConfig",
     value: function removeConfig(id) {
-      if (typeof id !== "number" && typeof id !== "string") {
-        console.log("Wrong identificator: " + id);
-        return;
+      if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
+        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
       }
 
-      delete this.configs[id];
-    }
-  }, {
-    key: "addToDevServerConfig",
-    value: function addToDevServerConfig(config) {
-      if (_typeof(config) !== "object") {
-        console.log("Wrong config: " + config);
-        return;
+      if (!this._isUsed(id)) {
+        return console.error("There is no config with such ID: ".concat(id));
       }
 
-      this.devServerConfig = (0, _webpackMerge["default"])([this.devServerConfig, config]);
+      delete this.configs.simpleConfigs[id];
     }
   }, {
-    key: "getDevServerConfig",
-    value: function getDevServerConfig() {
-      return Object.assign({}, this.devServerConfig);
-    }
-  }, {
-    key: "getDevServerConfigForEdit",
-    value: function getDevServerConfigForEdit() {
-      return this.devServerConfig;
-    }
-  }, {
-    key: "addToWatchConfig",
-    value: function addToWatchConfig(config) {
-      if (_typeof(config) !== "object") {
-        console.log("Wrong config: " + config);
-        return;
-      }
+    key: "_init",
+    value: function _init() {
+      var _this2 = this;
 
-      this.watchConfig = (0, _webpackMerge["default"])([this.watchConfig, config]);
-    }
-  }, {
-    key: "getWatchConfig",
-    value: function getWatchConfig() {
-      return Object.assign({}, this.watchConfig);
-    }
-  }, {
-    key: "getWatchConfigForEdit",
-    value: function getWatchConfigForEdit() {
-      return this.watchConfig;
+      var makeServiceConf = function makeServiceConf(id, preset) {
+        _this2.configs.serviceConfigs[id] = new _ServiceConfig["default"](preset);
+      };
+
+      makeServiceConf(this.defaults.watchConfigId, this.defaults.getWatchServicePreset());
+      makeServiceConf(this.defaults.devServerConfigId, this.defaults.getDevServerServicePreset());
     }
   }, {
     key: "_buildConfigs",
-    value: function _buildConfigs() {
-      var prodConfigs = [];
+    value: function _buildConfigs(configs) {
+      var _this3 = this;
 
-      for (var config in this.configs) {
-        prodConfigs.push(this.configs[config]);
+      if (configs) configs = _helper["default"].toArr(configs);
+      var results = [];
+
+      if (!configs) {
+        results = Object.values(this.configs.simpleConfigs).map(function (config) {
+          return config.config;
+        });
+      } else {
+        configs.forEach(function (config) {
+          if (typeof config === 'string' && _this3.configs.simpleConfigs[config]) {
+            results.push(_this3.configs.simpleConfigs[config].config);
+          } else if (config instanceof _Config["default"]) {
+            results.push(config.config);
+          } else if (_typeof(config) === 'object') {
+            results.push(config);
+          }
+        });
       }
 
-      return prodConfigs;
+      return results.length > 1 ? results : results[0];
     }
   }, {
-    key: "run",
-    value: function run(callback) {
-      var webpackConfigured = (0, _Webpack["default"])(this._buildConfigs());
-      webpackConfigured.run(handler);
-
-      function handler(err, stats) {
-        var hasErrors = false;
-
-        if (stats && stats.compilation && stats.compilation.errors.length !== 0) {
-          console.log(stats.compilation.errors);
-          console.log(_colors["default"].red.underline("\n\nCompiled with errors!\n\n"));
-          hasErrors = true;
-        }
-
-        if (err) {
-          console.log(err);
-          console.log(_colors["default"].red.underline("\n\nCompiled with errors!\n\n"));
-          hasErrors = true;
-        }
-
-        if (hasErrors !== true) {
-          console.log(_colors["default"].green.underline("\n\nCompiled successfully.\n\n"));
-          if (typeof callback === "function") callback(stats);
-        }
-      }
+    key: "_isUsed",
+    value: function _isUsed(id) {
+      var isService = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      return !!this._selectConfigsTree(isService)[id];
     }
   }, {
-    key: "runWatch",
-    value: function runWatch() {
-      var webpackConfigured = (0, _Webpack["default"])(this._buildConfigs());
-      webpackConfigured.watch(this.watchConfig, handler);
-
-      function handler(err, stats) {
-        var hasErrors = false;
-
-        if (stats && stats.compilation && stats.compilation.errors.length !== 0) {
-          console.log(stats.compilation.errors);
-          console.log(_colors["default"].red.underline("\n\nCompiled with errors!\n\n"));
-          hasErrors = true;
-        }
-
-        if (err) {
-          console.log(err);
-          console.log(_colors["default"].red.underline("\n\nCompiled with errors!\n\n"));
-          hasErrors = true;
-        }
-
-        if (hasErrors !== true) {
-          console.log(_colors["default"].green.underline("\nCompiled successfully."));
-          if (typeof callback == "function") callback(stats);
-        }
-      }
-    }
-  }, {
-    key: "runDevServer",
-    value: function runDevServer(port) {
-      if (typeof port !== "number") port = 8080;
-      var webpackConfigured = (0, _Webpack["default"])(this._buildConfigs());
-      var devServer = new _webpackDevServer["default"](webpackConfigured, this.devServerConfig);
-      devServer.listen(port, "127.0.0.1", function () {
-        console.log("Starting server on http://localhost:" + port);
-      });
+    key: "_selectConfigsTree",
+    value: function _selectConfigsTree() {
+      var isService = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      return !isService ? this.configs.simpleConfigs : this.configs.serviceConfigs;
     }
   }]);
 

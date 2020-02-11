@@ -1,14 +1,14 @@
 import Config from './Config';
 
 class ServiceConfig extends Config {
-  constructor() {
-    super(arguments);
+  constructor(options) {
+    super(options);
 
     this.handler = null;
     this.stop = () => {};
     this.start = () => {};
 
-    this._init(arguments);
+    this._init(options);
   }
 
   setStartFunction(func) {
@@ -23,8 +23,9 @@ class ServiceConfig extends Config {
     this.stop = func.bind(this);
   }
 
-  _init({ start, stop }) {
-    super._init(arguments);
+  _init(options = {}) {
+    super._init(options);
+    const { start, stop } = options;
 
     this.setStopFunction(stop);
     this.setStartFunction(start);
