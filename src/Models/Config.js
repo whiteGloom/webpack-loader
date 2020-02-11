@@ -26,7 +26,7 @@ class Config {
     configs.forEach((config) => {
       this.config = merge([
         this.config,
-        config,
+        config
       ]);
     });
   }

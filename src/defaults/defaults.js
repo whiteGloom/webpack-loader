@@ -11,11 +11,11 @@ const defaults = {
       entry: {},
       output: {},
       module: {
-        rules: [],
+        rules: []
       },
       plugins: [],
       optimization: {},
-      resolve: {},
+      resolve: {}
     });
   },
   getNativeHandler(options = {}) {
@@ -58,7 +58,7 @@ const defaults = {
         if (typeof callback !== 'function') callback = () => {};
         this.handler.close(callback);
         this.handler = null;
-      },
+      }
     };
   },
   getDevServerServicePreset() {
@@ -82,9 +82,9 @@ const defaults = {
         if (typeof callback !== 'function') callback = () => {};
         this.handler.stop(callback);
         this.handler = null;
-      },
+      }
     };
-  },
+  }
 };
 
 export default defaults;

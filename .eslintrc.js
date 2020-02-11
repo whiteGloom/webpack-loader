@@ -3,7 +3,8 @@ module.exports = {
   'extends': 'airbnb',
   'env': {
     'browser': true,
-    'node': true
+    'node': true,
+    'jasmine': true
   },
   'rules': {
   	'no-underscore-dangle': 'off',
@@ -13,6 +14,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'object-curly-newline': 'off',
     'prefer-rest-params': 'off',
-    'arrow-body-style': 'off'
+    'arrow-body-style': 'off',
+    'comma-dangle': ['error', 'never']
   }
 };

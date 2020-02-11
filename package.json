@@ -1,6 +1,6 @@
 {
 	"name": "webpack-loader",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "Webpack configuration plugin",
 	"main": "./prod/index.js",
 	"scripts": {
@@ -8,7 +8,8 @@
 		"start": "babel-node ./src/index.js",
 		"start-compiled": "babel-node ./prod/index.js",
 		"lint": "eslint src",
-		"lint-fix": "eslint --fix src"
+		"lint-fix": "eslint --fix src",
+		"test": "babel-node spec/runTests.js"
 	},
 	"repository": {
 		"type": "git",
@@ -39,6 +40,7 @@
 	},
 	"dependencies": {
 		"colors": "^1.4.0",
+		"jasmine": "^3.5.0",
 		"webpack": "^4.41.2",
 		"webpack-cli": "^3.3.10",
 		"webpack-dev-server": "^3.9.0",
