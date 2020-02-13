@@ -33,7 +33,7 @@ function () {
   }, {
     key: "isObj",
     value: function isObj(item) {
-      return _typeof(item) === 'object';
+      return _typeof(item) === 'object' && item !== null;
     }
   }, {
     key: "isArr",
@@ -54,7 +54,7 @@ function () {
   }, {
     key: "flagsToObj",
     value: function flagsToObj(arr) {
-      if (helper.isObj(arr)) return arr;
+      if (helper.isObj(arr) && !helper.isArr(arr)) return arr;
       var result = {};
 
       if (helper.isArr(arr)) {

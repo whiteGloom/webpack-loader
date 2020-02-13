@@ -19,7 +19,7 @@ const defaults = {
     });
   },
   getNativeHandler(options = {}) {
-    const { callback } = options;
+    const { callback, logs } = options;
     return (err, stats) => {
       let hasErrors = false;
 

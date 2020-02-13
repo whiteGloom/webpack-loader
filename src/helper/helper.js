@@ -8,7 +8,7 @@ class helper {
   }
 
   static isObj(item) {
-    return typeof item === 'object';
+    return typeof item === 'object' && item !== null;
   }
 
   static isArr(item) {
@@ -25,7 +25,7 @@ class helper {
   }
 
   static flagsToObj(arr) {
-    if (helper.isObj(arr)) return arr;
+    if (helper.isObj(arr) && !helper.isArr(arr)) return arr;
 
     const result = {};
     if (helper.isArr(arr)) {

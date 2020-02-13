@@ -35,7 +35,8 @@ var defaults = {
     var _this = this;
 
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var callback = options.callback;
+    var callback = options.callback,
+        logs = options.logs;
     return function (err, stats) {
       var hasErrors = false;
 

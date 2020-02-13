@@ -42,25 +42,30 @@ function () {
 
   _createClass(WebpackLoader, [{
     key: "makeNewConfig",
-    value: function makeNewConfig(id, configs, options, serviceOptions) {
+    value: function makeNewConfig(id, configs, serviceOptions) {
       var _helper$flagsToObj = _helper["default"].flagsToObj(serviceOptions),
           _helper$flagsToObj$is = _helper$flagsToObj.isForced,
-          isForced = _helper$flagsToObj$is === void 0 ? false : _helper$flagsToObj$is;
+          isForced = _helper$flagsToObj$is === void 0 ? false : _helper$flagsToObj$is,
+          _helper$flagsToObj$is2 = _helper$flagsToObj.isSilent,
+          isSilent = _helper$flagsToObj$is2 === void 0 ? false : _helper$flagsToObj$is2;
 
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of ID ".concat(id, ": ").concat(_typeof(id)));
+        if (!isSilent) console.error("Wrong type of ID ".concat(id, ": ").concat(_typeof(id)));
+        return;
       }
 
       if (!isForced && this._isUsed(id)) {
-        return console.error("ID is already in use: ".concat(id));
+        if (!isSilent) console.error("ID is already in use: ".concat(id));
+        return;
       }
 
-      this.configs.simpleConfigs[id] = new _Config["default"]({
+      var simpleTree = this._selectConfigsTree();
+
+      simpleTree[id] = new _Config["default"]({
         getDefaults: this.defaults.getSimpleConfigDefaults(),
-        configs: configs,
-        options: options
+        configs: configs
       });
-      return this.configs.simpleConfigs[id];
+      return simpleTree[id];
     }
   }, {
     key: "addToConfig",
@@ -69,39 +74,44 @@ function () {
           _helper$flagsToObj2$i = _helper$flagsToObj2.isService,
           isService = _helper$flagsToObj2$i === void 0 ? false : _helper$flagsToObj2$i,
           _helper$flagsToObj2$i2 = _helper$flagsToObj2.isForced,
-          isForced = _helper$flagsToObj2$i2 === void 0 ? false : _helper$flagsToObj2$i2;
+          isForced = _helper$flagsToObj2$i2 === void 0 ? false : _helper$flagsToObj2$i2,
+          _helper$flagsToObj2$i3 = _helper$flagsToObj2.isSilent,
+          isSilent = _helper$flagsToObj2$i3 === void 0 ? false : _helper$flagsToObj2$i3;
 
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of ID ".concat(id, ": ").concat(_typeof(id)));
+        if (!isSilent) console.error("Wrong type of ID ".concat(id, ": ").concat(_typeof(id)));
+        return;
       }
 
       if (!_helper["default"].isArr(configs) && !_helper["default"].isObj(configs)) {
-        return console.error("Wrong type of configs: ".concat(_typeof(configs)));
+        if (!isSilent) console.error("Wrong type of configs: ".concat(_typeof(configs)));
+        return;
       }
 
       if (!this._isUsed(id, isService)) {
         if (isService || !isForced) {
-          return console.error("There is no config with such ID: ".concat(id));
+          if (!isSilent) console.error("There is no config with such ID: ".concat(id));
+          return;
         }
 
         this.makeNewConfig(id);
       }
 
-      var configsTree = this._selectConfigsTree(isService);
+      var tree = this._selectConfigsTree(isService);
 
-      configsTree[id].addToConfig(configs);
+      tree[id].addToConfig(configs);
     }
   }, {
     key: "run",
     value: function run(configs, serviceConfigs, options) {
-      var _this = this;
-
       var webpackConfigured = (0, _webpack["default"])(this._buildConfigs(configs));
 
       if (serviceConfigs && serviceConfigs.length) {
+        var serviceTree = this._selectConfigsTree(true);
+
         serviceConfigs.forEach(function (config) {
-          if (typeof config === 'string' && _this.configs.serviceConfigs[config]) {
-            _this.configs.serviceConfigs[config].start(webpackConfigured, options);
+          if (typeof config === 'string' && serviceTree[config]) {
+            serviceTree[config].start(webpackConfigured, options);
           } else if (_typeof(config) === 'object') {
             config.start(webpackConfigured, options);
           }
@@ -113,7 +123,9 @@ function () {
   }, {
     key: "stop",
     value: function stop(options) {
-      Object.values(this.serviceConfigs).forEach(function (config) {
+      var serviceTree = this._selectConfigsTree(true);
+
+      Object.values(serviceTree).forEach(function (config) {
         if (config.handler) config.stop(options);
       });
     }
@@ -122,19 +134,23 @@ function () {
     value: function getConfig(id, serviceOptions) {
       var _helper$flagsToObj3 = _helper["default"].flagsToObj(serviceOptions),
           _helper$flagsToObj3$i = _helper$flagsToObj3.isService,
-          isService = _helper$flagsToObj3$i === void 0 ? false : _helper$flagsToObj3$i;
+          isService = _helper$flagsToObj3$i === void 0 ? false : _helper$flagsToObj3$i,
+          _helper$flagsToObj3$i2 = _helper$flagsToObj3.isSilent,
+          isSilent = _helper$flagsToObj3$i2 === void 0 ? false : _helper$flagsToObj3$i2;
 
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+        if (!isSilent) console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+        return;
       }
 
       if (!this._isUsed(id)) {
-        return console.error("There is no config with such ID: ".concat(id));
+        if (!isSilent) console.error("There is no config with such ID: ".concat(id));
+        return;
       }
 
-      var configsTree = this._selectConfigsTree(isService);
+      var tree = this._selectConfigsTree(isService);
 
-      return configsTree[id];
+      return tree[id];
     }
   }, {
     key: "getConfigs",
@@ -146,36 +162,56 @@ function () {
     value: function resetConfig(id, serviceOptions) {
       var _helper$flagsToObj4 = _helper["default"].flagsToObj(serviceOptions),
           _helper$flagsToObj4$i = _helper$flagsToObj4.isService,
-          isService = _helper$flagsToObj4$i === void 0 ? false : _helper$flagsToObj4$i;
+          isService = _helper$flagsToObj4$i === void 0 ? false : _helper$flagsToObj4$i,
+          _helper$flagsToObj4$i2 = _helper$flagsToObj4.isSilent,
+          isSilent = _helper$flagsToObj4$i2 === void 0 ? false : _helper$flagsToObj4$i2;
 
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+        if (!isSilent) console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+        return;
       }
 
-      var configsTree = this._selectConfigsTree(isService);
+      var tree = this._selectConfigsTree(isService);
 
-      configsTree[id].resetToDefaults();
+      tree[id].resetToDefaults();
     }
   }, {
     key: "removeConfig",
-    value: function removeConfig(id) {
+    value: function removeConfig(id, serviceOptions) {
+      var _helper$flagsToObj5 = _helper["default"].flagsToObj(serviceOptions),
+          _helper$flagsToObj5$i = _helper$flagsToObj5.isSilent,
+          isSilent = _helper$flagsToObj5$i === void 0 ? false : _helper$flagsToObj5$i;
+
       if (!_helper["default"].isNumber(id) && !_helper["default"].isString(id)) {
-        return console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+        if (!isSilent) console.error("Wrong type of identifier ".concat(id, ": ").concat(_typeof(id)));
+        return;
       }
 
       if (!this._isUsed(id)) {
-        return console.error("There is no config with such ID: ".concat(id));
+        if (!isSilent) console.error("There is no config with such ID: ".concat(id));
+        return;
       }
 
-      delete this.configs.simpleConfigs[id];
+      var simpleTree = this._selectConfigsTree();
+
+      delete simpleTree[id];
+    }
+  }, {
+    key: "removeAllConfigs",
+    value: function removeAllConfigs() {
+      var simpleTree = this._selectConfigsTree();
+
+      Object.keys(simpleTree).forEach(function (id) {
+        delete simpleTree[id];
+      });
     }
   }, {
     key: "_init",
     value: function _init() {
-      var _this2 = this;
+      var serviceTree = this._selectConfigsTree(true);
 
       var makeServiceConf = function makeServiceConf(id, preset) {
-        _this2.configs.serviceConfigs[id] = new _ServiceConfig["default"](preset);
+        serviceTree[id] = new _ServiceConfig["default"](preset);
       };
 
       makeServiceConf(this.defaults.watchConfigId, this.defaults.getWatchServicePreset());
@@ -184,19 +220,19 @@ function () {
   }, {
     key: "_buildConfigs",
     value: function _buildConfigs(configs) {
-      var _this3 = this;
+      var simpleTree = this._selectConfigsTree();
 
       if (configs) configs = _helper["default"].toArr(configs);
       var results = [];
 
       if (!configs) {
-        results = Object.values(this.configs.simpleConfigs).map(function (config) {
+        results = Object.values(simpleTree).map(function (config) {
           return config.config;
         });
       } else {
         configs.forEach(function (config) {
-          if (typeof config === 'string' && _this3.configs.simpleConfigs[config]) {
-            results.push(_this3.configs.simpleConfigs[config].config);
+          if (typeof config === 'string' && simpleTree[config]) {
+            results.push(simpleTree[config].config);
           } else if (config instanceof _Config["default"]) {
             results.push(config.config);
           } else if (_typeof(config) === 'object') {
