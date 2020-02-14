@@ -1,6 +1,6 @@
 class helper {
   static isNumber(item) {
-    return typeof item === 'number';
+    return Number.isFinite(item);
   }
 
   static isString(item) {

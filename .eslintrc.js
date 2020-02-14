@@ -7,7 +7,7 @@ module.exports = {
     'jasmine': true
   },
   'rules': {
-  	'no-underscore-dangle': 'off',
+    'no-underscore-dangle': 'off',
     'no-console': 'off',
     'max-len': ['error', { 'code': 120 }],
     'consistent-return': 'off',
