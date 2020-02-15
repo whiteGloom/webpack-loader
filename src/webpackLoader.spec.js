@@ -1,22 +1,25 @@
 import WebpackLoader from './webpackLoader';
 import Config from './Models/Config';
+import defaults from './defaults/defaults';
 
+const gagName = 'gag.js';
 const additionalConfig = {
   entry: {
-    major: 'gag.js'
+    major: gagName
   }
 };
 
 const anotherAdditionalConfig = {
   entry: {
-    minor: 'gag.js'
+    minor: gagName
   }
 };
 
 const wl = new WebpackLoader();
 
 describe('makeNewConfig method.', () => {
-  describe('Default behavior: ', () => {
+  describe('Default behavior {id, config[s], serviceOptions}: ', () => {
+    const name = 'main';
     beforeEach(() => {
       wl.removeAllConfigs();
     });
@@ -25,26 +28,26 @@ describe('makeNewConfig method.', () => {
       wl.removeAllConfigs();
     });
 
-    it('It makes new config with id "main".', () => {
-      const result = wl.makeNewConfig('main', {});
+    it('It takes "main", then makes new config with id "main".', () => {
+      const result = wl.makeNewConfig(name, {});
       expect(result instanceof Config).toBeTruthy();
-      expect(wl.getConfig('main')).toEqual(result);
+      expect(wl.getConfig(name)).toEqual(result);
     });
 
-    it('It makes config from passed config.', () => {
-      const result = wl.makeNewConfig('main', additionalConfig);
-      expect(result.config.entry.major).toEqual('gag.js');
+    it('It takes config, then makes config from passed config.', () => {
+      const result = wl.makeNewConfig(name, additionalConfig);
+      expect(result.config.entry.major).toEqual(gagName);
     });
 
-    it('It makes config from passed configs array.', () => {
-      const result = wl.makeNewConfig('main', [additionalConfig, anotherAdditionalConfig]);
-      expect(result.config.entry.major).toEqual('gag.js');
-      expect(result.config.entry.minor).toEqual('gag.js');
+    it('It takes array of configs, then makes config from passed configs array.', () => {
+      const result = wl.makeNewConfig(name, [additionalConfig, anotherAdditionalConfig]);
+      expect(result.config.entry.major).toEqual(gagName);
+      expect(result.config.entry.minor).toEqual(gagName);
     });
 
     it('Returns new config.', () => {
-      const result = wl.makeNewConfig('main', {});
-      expect(wl.getConfig('main')).toEqual(result);
+      const result = wl.makeNewConfig(name, {});
+      expect(wl.getConfig(name)).toEqual(result);
     });
   });
 
@@ -77,8 +80,13 @@ describe('makeNewConfig method.', () => {
   });
 
   describe('When the config already exist:', () => {
+    const name = 'main';
     beforeAll(() => {
-      wl.makeNewConfig('main');
+      wl.makeNewConfig(name);
+    });
+
+    beforeEach(() => {
+      wl.resetConfig(name);
     });
 
     afterAll(() => {
@@ -86,48 +94,50 @@ describe('makeNewConfig method.', () => {
     });
 
     it('It returns, if isForced flag is not passed.', () => {
-      const result = wl.makeNewConfig('main', additionalConfig, ['isSilent']);
+      const result = wl.makeNewConfig(name, additionalConfig, ['isSilent']);
       expect(result).toBeUndefined();
-      expect(wl.getConfig('main').config.entry.major).toBeUndefined();
+      expect(wl.getConfig(name).config.entry.major).toBeUndefined();
     });
 
     it('If isForced flag is passed, rewrites the config.', () => {
-      const result = wl.makeNewConfig('main', additionalConfig, ['isForced']);
+      const result = wl.makeNewConfig(name, additionalConfig, ['isForced']);
       expect(result).toBeDefined();
-      expect(result.config.entry.major).toEqual('gag.js');
+      expect(result.config.entry.major).toEqual(gagName);
     });
   });
 });
 
 describe('addToConfig method.', () => {
-  describe('Default behavior:', () => {
+  describe('Default behavior {id, config[s], serviceOptions}:', () => {
+    const name = 'main';
     beforeAll(() => {
-      wl.makeNewConfig('main');
+      wl.makeNewConfig(name);
     });
 
     beforeEach(() => {
-      wl.resetConfig('main');
+      wl.resetConfig(name);
     });
 
     afterAll(() => {
       wl.removeAllConfigs();
     });
 
-    it('It adds config to config.', () => {
-      wl.addToConfig('main', additionalConfig);
-      expect(wl.getConfig('main').config.entry.major).toEqual('gag.js');
+    it('It takes configs, then adds them to config.', () => {
+      wl.addToConfig(name, additionalConfig);
+      expect(wl.getConfig(name).config.entry.major).toEqual(gagName);
     });
 
-    it('It adds configs to config.', () => {
-      wl.addToConfig('main', [additionalConfig, anotherAdditionalConfig]);
-      expect(wl.getConfig('main').config.entry.major).toEqual('gag.js');
-      expect(wl.getConfig('main').config.entry.minor).toEqual('gag.js');
+    it('It takes array of configs, then adds them to config.', () => {
+      wl.addToConfig(name, [additionalConfig, anotherAdditionalConfig]);
+      expect(wl.getConfig(name).config.entry.major).toEqual(gagName);
+      expect(wl.getConfig(name).config.entry.minor).toEqual(gagName);
     });
   });
 
   describe('When you try to pass not number or string as id:', () => {
+    const name = 'main';
     beforeAll(() => {
-      wl.makeNewConfig('main');
+      wl.makeNewConfig(name);
     });
 
     afterAll(() => {
@@ -136,36 +146,42 @@ describe('addToConfig method.', () => {
 
     it('Takes null, returns.', () => {
       wl.addToConfig(NaN, additionalConfig, ['isSilent']);
-      expect(wl.getConfig('main').config.entry.major).toBeUndefined();
+      expect(wl.getConfig(name).config.entry.major).toBeUndefined();
     });
 
     it('Takes object, returns.', () => {
       wl.addToConfig({}, additionalConfig, ['isSilent']);
-      expect(wl.getConfig('main').config.entry.major).toBeUndefined();
+      expect(wl.getConfig(name).config.entry.major).toBeUndefined();
     });
   });
 
-  describe('When you try to pass not object or array as configs to add:', () => {
+  describe('When you try to pass not object or array as configs[1] to add:', () => {
+    const name = 'main';
     beforeAll(() => {
-      wl.makeNewConfig('main');
+      wl.makeNewConfig(name);
+    });
+
+    beforeEach(() => {
+      wl.resetConfig(name);
     });
 
     afterAll(() => {
       wl.removeAllConfigs();
     });
 
-    it('Takes string, returns undefined.', () => {
-      wl.addToConfig('main', 'someString', ['isSilent']);
-      expect(wl.getConfig('main').config.entry.major).toBeUndefined();
+    it('Takes string, returns.', () => {
+      wl.addToConfig(name, 'someString', ['isSilent']);
+      expect(wl.getConfig(name).config.entry.major).toBeUndefined();
     });
 
-    it('Takes null, returns undefined.', () => {
-      wl.addToConfig('main', null, ['isSilent']);
-      expect(wl.getConfig('main').config.entry.major).toBeUndefined();
+    it('Takes null, returns.', () => {
+      wl.addToConfig(name, null, ['isSilent']);
+      expect(wl.getConfig(name).config.entry.major).toBeUndefined();
     });
   });
 
   describe('When there is not config with such id:', () => {
+    const name = 'main';
     beforeEach(() => {
       wl.removeAllConfigs();
     });
@@ -175,18 +191,84 @@ describe('addToConfig method.', () => {
     });
 
     it('If the isForced flag is passed, rewrite config.', () => {
-      wl.addToConfig('main', additionalConfig, ['isSilent', 'isForced']);
-      expect(wl.getConfig('main').config.entry.major).toEqual('gag.js');
+      wl.addToConfig(name, additionalConfig, ['isSilent', 'isForced']);
+      expect(wl.getConfig(name).config.entry.major).toEqual(gagName);
     });
 
     it('If the isForced flag is not passed, returns.', () => {
-      wl.addToConfig('main', additionalConfig, ['isSilent']);
-      expect(wl.getConfig('main', ['isSilent'])).toBeUndefined();
+      wl.addToConfig(name, additionalConfig, ['isSilent']);
+      expect(wl.getConfig(name, ['isSilent'])).toBeUndefined();
     });
 
     it('If the selected config is service, returns.', () => {
-      wl.addToConfig('watch', additionalConfig, ['isSilent']);
-      expect(wl.getConfig('watch', ['isService', 'isSilent'])).toBeUndefined();
+      wl.addToConfig(name, additionalConfig, ['isSilent']);
+      expect(wl.getConfig(name, ['isService', 'isSilent'])).toBeUndefined();
+    });
+  });
+});
+
+describe('getConfig method.', () => {
+  describe('Default behavior {id, serviceOptions}:', () => {
+    const name = 'main';
+    const wName = defaults.watchConfigId;
+    beforeAll(() => {
+      wl.makeNewConfig(name, additionalConfig);
+    });
+
+    it('It returns config with passed id.', () => {
+      const result = wl.getConfig(name);
+      const conf = wl._selectConfigsTree()[name];
+      expect(result).toEqual(conf);
+    });
+
+    it('If the isService flag passed, returns service config.', () => {
+      const result = wl.getConfig(wName, ['isService']);
+      const conf = wl._selectConfigsTree(true)[wName];
+      expect(result).toEqual(conf);
+    });
+  });
+
+  describe('When you try to pass not number or string as id:', () => {
+    afterAll(() => {
+      wl.removeAllConfigs();
+    });
+
+    it('Takes null, returns.', () => {
+      const result = wl.getConfig(NaN, ['isSilent']);
+      expect(result).toBeUndefined();
+    });
+
+    it('Takes object, returns.', () => {
+      const result = wl.getConfig({}, ['isSilent']);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('When there is not config with such id:', () => {
+    beforeAll(() => {
+      wl.removeAllConfigs();
+    });
+
+    afterAll(() => {
+      wl.removeAllConfigs();
+    });
+
+    it('It returns.', () => {
+      const result = wl.getConfig('abrakadabra', ['isSilent']);
+      expect(result).toBeUndefined();
+    });
+  });
+});
+
+describe('getConfigs method.', () => {
+  afterAll(() => {
+    wl.removeAllConfigs();
+  });
+
+  describe('Default behavior:', () => {
+    it('Reruns object of configs.', () => {
+      const result = wl.getConfigs();
+      expect(result).toEqual(wl.configs);
     });
   });
 });

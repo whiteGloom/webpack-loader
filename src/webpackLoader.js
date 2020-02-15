@@ -94,7 +94,7 @@ class WebpackLoader {
       return;
     }
 
-    if (!this._isUsed(id)) {
+    if (!this._isUsed(id, isService)) {
       if (!isSilent) console.error(`There is no config with such ID: ${id}`);
       return;
     }

@@ -7,6 +7,6 @@
     "helpers/**/*.js"
   ],
   "stopSpecOnExpectationFailure": false,
-  "random": false,
+  "random": true,
   "junitreport": true
 }
