@@ -131,7 +131,6 @@ class WebpackLoader {
     }
 
     const simpleTree = this._selectConfigsTree();
-
     delete simpleTree[id];
   }
 
