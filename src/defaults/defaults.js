@@ -51,7 +51,7 @@ const defaults = {
     return {
       start(configured, options = {}) {
         const { callback } = options;
-        this.handler = configured.watch(this.config, helper.getNativeHandler({ callback }));
+        this.handler = configured.watch(this.config, defaults.getNativeHandler({ callback }));
       },
       stop(options = {}) {
         let { callback } = options;

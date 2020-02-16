@@ -71,7 +71,7 @@ class WebpackLoader {
       serviceConfigs.forEach((config) => {
         if (typeof config === 'string' && serviceTree[config]) {
           serviceTree[config].start(webpackConfigured, options);
-        } else if (typeof config === 'object') {
+        } else if (config instanceof ServiceConfig) {
           config.start(webpackConfigured, options);
         }
       });

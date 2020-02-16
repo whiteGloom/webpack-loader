@@ -1,6 +1,6 @@
 {
 	"name": "webpack-loader",
-	"version": "0.6.4",
+	"version": "0.6.5",
 	"description": "Webpack configuration plugin",
 	"main": "./prod/webpackLoader.js",
 	"scripts": {
@@ -9,7 +9,8 @@
 		"start-prod": "babel-node ./prod/webpackLoader.js",
 		"lint": "eslint src",
 		"lint-fix": "eslint --fix src",
-		"test": "babel-node specConfigs/runTests.js"
+		"test": "babel-node specConfig/runTests.js",
+		"manual-test": "babel-node src/spec/manualTests/runTest.js"
 	},
 	"repository": {
 		"type": "git",
