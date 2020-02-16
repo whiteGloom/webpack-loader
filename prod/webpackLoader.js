@@ -112,7 +112,7 @@ function () {
         serviceConfigs.forEach(function (config) {
           if (typeof config === 'string' && serviceTree[config]) {
             serviceTree[config].start(webpackConfigured, options);
-          } else if (_typeof(config) === 'object') {
+          } else if (config instanceof _ServiceConfig["default"]) {
             config.start(webpackConfigured, options);
           }
         });
