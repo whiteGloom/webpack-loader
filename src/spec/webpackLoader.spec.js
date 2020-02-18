@@ -1,5 +1,5 @@
 import WebpackLoader from '../webpackLoader';
-import Config from '../Models/Config';
+import models from '../models/models';
 import defaults from '../defaults/defaults';
 
 const gagName = 'gag.js';
@@ -30,17 +30,17 @@ describe('makeNewConfig method {id, config[s], serviceOptions}.', () => {
 
     it('it takes "main" as id, then makes new config with id "main".', () => {
       const result = wl.makeNewConfig(name, {});
-      expect(result instanceof Config).toBeTruthy();
+      expect(result instanceof models.getModel(false)).toBeTruthy();
       expect(wl.getConfig(name)).toEqual(result);
     });
 
     it('it takes object config as config, then makes config from passed config.', () => {
-      const result = wl.makeNewConfig(name, additionalConfig);
+      const result = wl.makeNewConfig(name, { configs: additionalConfig });
       expect(result.config.entry.major).toEqual(gagName);
     });
 
     it('it takes array of configs as config, then makes config from passed configs array.', () => {
-      const result = wl.makeNewConfig(name, [additionalConfig, anotherAdditionalConfig]);
+      const result = wl.makeNewConfig(name, { configs: [additionalConfig, anotherAdditionalConfig] });
       expect(result.config.entry.major).toEqual(gagName);
       expect(result.config.entry.minor).toEqual(gagName);
     });
@@ -94,13 +94,13 @@ describe('makeNewConfig method {id, config[s], serviceOptions}.', () => {
     });
 
     it('if isForced flag passed in serviceOptions, it rewrites the config.', () => {
-      const result = wl.makeNewConfig(name, additionalConfig, ['isForced']);
+      const result = wl.makeNewConfig(name, { configs: additionalConfig }, ['isForced']);
       expect(result).toBeDefined();
       expect(result.config.entry.major).toEqual(gagName);
     });
 
     it('it returns undefined.', () => {
-      const result = wl.makeNewConfig(name, additionalConfig, ['isSilent']);
+      const result = wl.makeNewConfig(name, { configs: additionalConfig }, ['isSilent']);
       expect(result).toBeUndefined();
       expect(wl.getConfig(name).config.entry.major).toBeUndefined();
     });
@@ -210,9 +210,9 @@ describe('addToConfig method {id, config[s], serviceOptions}.', () => {
 describe('getConfig method {id, serviceOptions}.', () => {
   describe('Default behavior:', () => {
     const name = 'main';
-    const wName = defaults.watchConfigId;
+    const wName = defaults.ids.watchConfigId;
     beforeAll(() => {
-      wl.makeNewConfig(name, additionalConfig);
+      wl.makeNewConfig(name, { configs: additionalConfig });
     });
 
     afterAll(() => {
@@ -258,7 +258,7 @@ describe('getConfig method {id, serviceOptions}.', () => {
     });
 
     it('it returns undefined.', () => {
-      const result = wl.getConfig('abrakadabra', ['isSilent']);
+      const result = wl.getConfig('London', ['isSilent']);
       expect(result).toBeUndefined();
     });
   });
@@ -365,8 +365,8 @@ describe('removeConfig method {id, serviceOptions}.', () => {
     });
 
     it('it takes "main" as id, returns.', () => {
-      wl.removeConfig('abrakadabra', ['isSilent']);
-      expect('da ti che, wot eto proverka').not.toEqual('horoshaya speka, nos otvalivaetsya. Chego smotrish?');
+      wl.removeConfig('London', ['isSilent']);
+      expect('Some very good comparison').not.toEqual('Da best unit test in da world');
     });
   });
 });

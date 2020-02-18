@@ -22,8 +22,8 @@ const additionalCustomConfig = {
 };
 
 const wl = new WebpackLoader();
-wl.makeNewConfig(name, customConfig);
-wl.makeNewConfig(addName, [customConfig, additionalCustomConfig]);
+wl.makeNewConfig(name, { configs: customConfig });
+wl.makeNewConfig(addName, { configs: [customConfig, additionalCustomConfig] });
 wl.addToConfig('devServer', { stats: 'errors-only' }, ['isService']);
 
 try {
@@ -40,7 +40,7 @@ if (npmArguments.includes('run')) {
   } else if (npmArguments.includes('byClass')) {
     const config = wl.getConfig(name);
     wl.run(config);
-  } if (npmArguments.includes('multi')) {
+  } else if (npmArguments.includes('multi')) {
     wl.run([name, addName], [], { callback: () => console.log('Done!') });
   } else {
     wl.run([name], [], { callback: () => console.log('Done!') });
