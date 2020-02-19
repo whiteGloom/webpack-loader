@@ -17,21 +17,28 @@ const anotherAdditionalConfig = {
 
 const wl = new WebpackLoader();
 
-describe('makeNewConfig method {id, config[s], serviceOptions}.', () => {
+describe('makeNewConfig method {id, options, serviceOptions}.', () => {
   describe('Default behavior: ', () => {
     const name = 'main';
+    const serviceName = 'service';
     beforeEach(() => {
       wl.removeAllConfigs();
     });
 
     afterAll(() => {
       wl.removeAllConfigs();
+      wl.removeConfig(serviceName, ['isService', 'isSilent']);
     });
 
     it('it takes "main" as id, then makes new config with id "main".', () => {
       const result = wl.makeNewConfig(name, {});
       expect(result instanceof models.getModel(false)).toBeTruthy();
       expect(wl.getConfig(name)).toEqual(result);
+    });
+
+    it('it takes flag "isService" in serviceOptions, then creates service config.', () => {
+      const result = wl.makeNewConfig(serviceName, {}, ['isService']);
+      expect(result instanceof models.getModel(true)).toBeTruthy();
     });
 
     it('it takes object config as config, then makes config from passed config.', () => {
@@ -81,6 +88,7 @@ describe('makeNewConfig method {id, config[s], serviceOptions}.', () => {
 
   describe('When the config already exist:', () => {
     const name = 'main';
+    const serviceName = 'service';
     beforeAll(() => {
       wl.makeNewConfig(name);
     });
@@ -91,6 +99,14 @@ describe('makeNewConfig method {id, config[s], serviceOptions}.', () => {
 
     afterAll(() => {
       wl.removeAllConfigs();
+      wl.removeConfig(serviceName, ['isService', 'isSilent']);
+    });
+
+    it('it takes flag "isService" in serviceOptions, then returns.', () => {
+      const gag = () => console.log('123');
+      wl.makeNewConfig(serviceName, {}, ['isService', 'isSilent']);
+      wl.makeNewConfig(serviceName, { stop: gag }, ['isService', 'isSilent']);
+      expect(wl.getConfig(serviceName, ['isService', 'isSilent']).stop).not.toEqual(gag);
     });
 
     it('if isForced flag passed in serviceOptions, it rewrites the config.', () => {
@@ -107,7 +123,7 @@ describe('makeNewConfig method {id, config[s], serviceOptions}.', () => {
   });
 });
 
-describe('addToConfig method {id, config[s], serviceOptions}.', () => {
+describe('addToConfig method {id, options, serviceOptions}.', () => {
   describe('Default behavior:', () => {
     const name = 'main';
     beforeAll(() => {
