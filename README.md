@@ -13,7 +13,7 @@
 
 * **[Шо ита? [RU]](#шо-ита-ru 'Шо ита? [RU]')**
     * **Навигация**
-    * **[Wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**
+    * _**[Wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**_
     * **[Краткая инструкция](#краткая-инструкция 'Краткая инструкция')**
         * **[Установка](#установка 'Установка')**
         * **[Импорт](#импорт 'Импорт')**
@@ -65,7 +65,7 @@ new WebpackLoader();
 
 ------------
 
-### Примеры
+## Примеры
 
 ```js
 const workspace = process.cwd();
