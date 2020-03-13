@@ -42,18 +42,62 @@ function (_Config) {
     _classCallCheck(this, ServiceConfig);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ServiceConfig).call(this, options));
+    var startDefaults = options.startDefaults,
+        stopDefaults = options.stopDefaults,
+        start = options.start,
+        stop = options.stop;
     _this.handler = null;
+    _this.start = null;
+    _this.stop = null;
 
-    _this.stop = function () {};
+    _this.startDefaults = function () {};
 
-    _this.start = function () {};
+    _this.stopDefaults = function () {};
 
-    _this._init(options);
+    if (startDefaults) _this.setStartDefaults(startDefaults);
+    if (stopDefaults) _this.setStopDefaults(stopDefaults);
 
+    _this.resetStartFunction();
+
+    _this.resetStopFunction();
+
+    if (start) _this.setStartFunction(start);
+    if (stop) _this.setStopFunction(stop);
     return _this;
   }
 
   _createClass(ServiceConfig, [{
+    key: "resetToDefaults",
+    value: function resetToDefaults() {
+      _get(_getPrototypeOf(ServiceConfig.prototype), "resetToDefaults", this).call(this);
+
+      this.handler = null;
+      this.resetStartFunction();
+      this.resetStopFunction();
+    }
+  }, {
+    key: "resetStartFunction",
+    value: function resetStartFunction() {
+      this.start = this.startDefaults;
+    }
+  }, {
+    key: "resetStopFunction",
+    value: function resetStopFunction() {
+      this.stop = this.stopDefaults;
+    }
+  }, {
+    key: "setStartDefaults",
+    value: function setStartDefaults(func) {
+      if (typeof func !== 'function') return;
+      this.startDefaults = func.bind(this);
+    }
+  }, {
+    key: "setStopDefaults",
+    value: function setStopDefaults(func) {
+      if (typeof func !== 'function') return;
+      this.stopDefaults = func.bind(this);
+    }
+  }, {
     key: "setStartFunction",
     value: function setStartFunction(func) {
       if (typeof func !== 'function') return;
@@ -64,18 +108,6 @@ function (_Config) {
     value: function setStopFunction(func) {
       if (typeof func !== 'function') return;
       this.stop = func.bind(this);
-    }
-  }, {
-    key: "_init",
-    value: function _init() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _get(_getPrototypeOf(ServiceConfig.prototype), "_init", this).call(this, options);
-
-      var start = options.start,
-          stop = options.stop;
-      this.setStopFunction(stop);
-      this.setStartFunction(start);
     }
   }]);
 

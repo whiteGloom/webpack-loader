@@ -3,19 +3,23 @@ import helper from '../helper/helper';
 
 class Config {
   constructor(options) {
+    const { configDefaults, configs } = options;
+
     this.config = null;
-    this.getDefaults = () => ({});
+    this.getConfigDefaults = () => ({});
 
-    this._init(options);
+    if (configDefaults) this.setConfigDefaults(configDefaults);
+    this.resetConfig();
+    if (configs) this.addToConfig(configs);
   }
 
-  setDefaultsGetter(getDefaults) {
-    if (typeof getDefaults !== 'function') return;
-    this.getDefaults = getDefaults;
+  setConfigDefaults(func) {
+    if (typeof func !== 'function') return;
+    this.getConfigDefaults = func.bind(this);
   }
 
-  resetToDefaults() {
-    this.config = this.getDefaults();
+  resetConfig() {
+    this.config = this.getConfigDefaults();
   }
 
   addToConfig(configs) {
@@ -31,11 +35,8 @@ class Config {
     });
   }
 
-  _init(options = {}) {
-    const { getDefaults, configs } = options;
-    this.setDefaultsGetter(getDefaults);
-    this.resetToDefaults();
-    this.addToConfig(configs);
+  resetToDefaults() {
+    this.resetConfig();
   }
 }
 

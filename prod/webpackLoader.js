@@ -36,12 +36,13 @@ function () {
     _classCallCheck(this, WebpackLoader);
 
     this.defaults = _defaults["default"];
+    this.models = _models["default"];
     this.configs = {
       simpleConfigs: {},
       serviceConfigs: {}
     };
-
-    this._init();
+    this.makeNewConfig(this.defaults.ids.watchConfigId, {}, ['isService']);
+    this.makeNewConfig(this.defaults.ids.devServerConfigId, {}, ['isService']);
   }
 
   _createClass(WebpackLoader, [{
@@ -66,7 +67,7 @@ function () {
         return;
       }
 
-      var Class = _models["default"].getModel(isService);
+      var Class = this.models.getModel(isService);
 
       var tree = this._selectConfigsTree(isService);
 
@@ -113,6 +114,8 @@ function () {
   }, {
     key: "run",
     value: function run(configs, serviceConfigs, options) {
+      var _this = this;
+
       var webpackConfigured = (0, _webpack["default"])(this._buildConfigs(configs));
 
       if (serviceConfigs && serviceConfigs.length) {
@@ -121,7 +124,7 @@ function () {
         serviceConfigs.forEach(function (config) {
           if (typeof config === 'string' && serviceTree[config]) {
             serviceTree[config].start(webpackConfigured, options);
-          } else if (config instanceof _models["default"].getModel(true)) {
+          } else if (config instanceof _this.models.getModel(true)) {
             config.start(webpackConfigured, options);
           }
         });
@@ -216,14 +219,20 @@ function () {
       });
     }
   }, {
-    key: "_init",
-    value: function _init() {
-      this.makeNewConfig(this.defaults.ids.watchConfigId, {}, ['isService']);
-      this.makeNewConfig(this.defaults.ids.devServerConfigId, {}, ['isService']);
+    key: "getDefaults",
+    value: function getDefaults() {
+      return this.defaults;
+    }
+  }, {
+    key: "getModels",
+    value: function getModels() {
+      return this.models;
     }
   }, {
     key: "_buildConfigs",
     value: function _buildConfigs(configs) {
+      var _this2 = this;
+
       var simpleTree = this._selectConfigsTree();
 
       var results = [];
@@ -237,7 +246,7 @@ function () {
         configs.forEach(function (config) {
           if (typeof config === 'string' && simpleTree[config]) {
             results.push(simpleTree[config].config);
-          } else if (config instanceof _models["default"].getModel(false)) {
+          } else if (config instanceof _this2.models.getModel(false)) {
             results.push(config.config);
           } else if (_typeof(config) === 'object') {
             results.push(config);

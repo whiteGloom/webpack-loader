@@ -23,25 +23,34 @@ function () {
   function Config(options) {
     _classCallCheck(this, Config);
 
+    var configDefaults = options.configDefaults,
+        configs = options.configs;
     this.config = null;
 
-    this.getDefaults = function () {
+    this.getConfigDefaults = function () {
       return {};
     };
 
-    this._init(options);
+    if (configDefaults) this.setConfigDefaults(configDefaults);
+    this.resetConfig();
+    if (configs) this.addToConfig(configs);
   }
 
   _createClass(Config, [{
-    key: "setDefaultsGetter",
-    value: function setDefaultsGetter(getDefaults) {
-      if (typeof getDefaults !== 'function') return;
-      this.getDefaults = getDefaults;
-    }
-  }, {
     key: "resetToDefaults",
     value: function resetToDefaults() {
-      this.config = this.getDefaults();
+      this.resetConfig();
+    }
+  }, {
+    key: "resetConfig",
+    value: function resetConfig() {
+      this.config = this.getConfigDefaults();
+    }
+  }, {
+    key: "setConfigDefaults",
+    value: function setConfigDefaults(func) {
+      if (typeof func !== 'function') return;
+      this.getConfigDefaults = func.bind(this);
     }
   }, {
     key: "addToConfig",
@@ -53,16 +62,6 @@ function () {
       configs.forEach(function (config) {
         _this.config = (0, _webpackMerge["default"])([_this.config, config]);
       });
-    }
-  }, {
-    key: "_init",
-    value: function _init() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var getDefaults = options.getDefaults,
-          configs = options.configs;
-      this.setDefaultsGetter(getDefaults);
-      this.resetToDefaults();
-      this.addToConfig(configs);
     }
   }]);
 

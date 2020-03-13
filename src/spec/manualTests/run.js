@@ -33,17 +33,17 @@ try {
 }
 
 // Run method tests
-if (npmArguments.includes('run')) {
+if (npmArguments.includes('start')) {
   if (npmArguments.includes('byObject')) {
     const { config } = wl.getConfig(name);
-    wl.run(config);
+    wl.start(config);
   } else if (npmArguments.includes('byClass')) {
     const config = wl.getConfig(name);
-    wl.run(config);
+    wl.start(config);
   } else if (npmArguments.includes('multi')) {
-    wl.run([name, addName], [], { callback: () => console.log('Done!') });
+    wl.start([name, addName], [], { callback: () => console.log('Done!') });
   } else {
-    wl.run([name], [], { callback: () => console.log('Done!') });
+    wl.start([name], [], { callback: () => console.log('Done!') });
   }
 }
 
@@ -52,11 +52,11 @@ if (npmArguments.includes('watch')) {
   if (npmArguments.includes('byClass')) {
     const config = wl.getConfig(name);
     const serviceConfig = wl.getConfig('watch', ['isService']);
-    wl.run([config], [serviceConfig], { callback: () => console.log('Done!') });
+    wl.start([config], [serviceConfig], { callback: () => console.log('Done!') });
   } else if (npmArguments.includes('multi')) {
-    wl.run([name, addName], ['watch'], { callback: () => console.log('Done!') });
+    wl.start([name, addName], ['watch'], { callback: () => console.log('Done!') });
   } else {
-    wl.run([name], ['watch'], { callback: () => console.log('Done!') });
+    wl.start([name], ['watch'], { callback: () => console.log('Done!') });
   }
 
   if (npmArguments.includes('stop')) {
@@ -71,11 +71,11 @@ if (npmArguments.includes('devServer')) {
   if (npmArguments.includes('byClass')) {
     const config = wl.getConfig(name);
     const serviceConfig = wl.getConfig('devServer', ['isService']);
-    wl.run([config], [serviceConfig], { callback: () => console.log('Done!') });
+    wl.start([config], [serviceConfig], { callback: () => console.log('Done!') });
   } else if (npmArguments.includes('multi')) {
-    wl.run([name, addName], ['devServer'], { callback: () => console.log('Done!') });
+    wl.start([name, addName], ['devServer'], { callback: () => console.log('Done!') });
   } else {
-    wl.run([name], ['devServer'], { callback: () => console.log('Done!') });
+    wl.start([name], ['devServer'], { callback: () => console.log('Done!') });
   }
 
   if (npmArguments.includes('stop')) {

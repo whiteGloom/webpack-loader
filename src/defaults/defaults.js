@@ -8,7 +8,7 @@ const defaults = {
   },
   handlers: {
     getNativeHandler(options = {}) {
-      const { callback, processName = 'Webpack' } = options;
+      const { callback, processName = 'Webpack builder' } = options;
       return (err, stats) => {
         let hasErrors = false;
         let hasWarnings = false;
@@ -48,7 +48,7 @@ const defaults = {
   presets: {
     simple: {
       default: {
-        getDefaults() {
+        configDefaults() {
           return {
             mode: 'development',
             entry: {},
@@ -65,8 +65,8 @@ const defaults = {
     },
     service: {
       default: {
-        start() {},
-        stop() {}
+        startDefaults() {},
+        stopDefaults() {}
       }
     }
   },
@@ -77,14 +77,14 @@ const defaults = {
 };
 
 defaults.presets.service[defaults.ids.watchConfigId] = {
-  start(configured, options = {}) {
+  startDefaults(configured, options = {}) {
     const { callback } = options;
     this.handler = configured.watch(this.config, defaults.handlers.getNativeHandler({
-      processName: defaults.watchConfigId,
+      processName: defaults.ids.watchConfigId,
       callback
     }));
   },
-  stop(options = {}) {
+  stopDefaults(options = {}) {
     let { callback } = options;
     if (typeof callback !== 'function') callback = () => {};
     this.handler.close(callback);
@@ -92,8 +92,9 @@ defaults.presets.service[defaults.ids.watchConfigId] = {
     this.handler = null;
   }
 };
+
 defaults.presets.service[defaults.ids.devServerConfigId] = {
-  start(configured, options = {}) {
+  startDefaults(configured, options = {}) {
     const { port = 8080, callback } = options;
     function devServerHandler(err) {
       if (!err) {
@@ -107,7 +108,7 @@ defaults.presets.service[defaults.ids.devServerConfigId] = {
     this.handler = new WebpackDevServer(configured, this.config);
     this.handler.listen(port, '127.0.0.1', devServerHandler);
   },
-  stop(options = {}) {
+  stopDefaults(options = {}) {
     let { callback } = options;
     if (typeof callback !== 'function') callback = () => {};
     this.handler.close(callback);

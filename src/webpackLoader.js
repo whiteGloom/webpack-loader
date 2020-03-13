@@ -8,12 +8,14 @@ import helper from './helper/helper';
 class WebpackLoader {
   constructor() {
     this.defaults = defaults;
+    this.models = models;
     this.configs = {
       simpleConfigs: {},
       serviceConfigs: {}
     };
 
-    this._init();
+    this.makeNewConfig(this.defaults.ids.watchConfigId, {}, ['isService']);
+    this.makeNewConfig(this.defaults.ids.devServerConfigId, {}, ['isService']);
   }
 
   makeNewConfig(id, options, serviceOptions) {
@@ -30,7 +32,7 @@ class WebpackLoader {
       return;
     }
 
-    const Class = models.getModel(isService);
+    const Class = this.models.getModel(isService);
     const tree = this._selectConfigsTree(isService);
     tree[id] = new Class({ ...defaults.getPreset(id, isService), ...options });
     return tree[id];
@@ -60,30 +62,6 @@ class WebpackLoader {
 
     const tree = this._selectConfigsTree(isService);
     tree[id].addToConfig(configs);
-  }
-
-  run(configs, serviceConfigs, options) {
-    const webpackConfigured = webpack(this._buildConfigs(configs));
-
-    if (serviceConfigs && serviceConfigs.length) {
-      const serviceTree = this._selectConfigsTree(true);
-      serviceConfigs.forEach((config) => {
-        if (typeof config === 'string' && serviceTree[config]) {
-          serviceTree[config].start(webpackConfigured, options);
-        } else if (config instanceof models.getModel(true)) {
-          config.start(webpackConfigured, options);
-        }
-      });
-    } else {
-      webpackConfigured.run(this.defaults.handlers.getNativeHandler(options));
-    }
-  }
-
-  stop(options) {
-    const serviceTree = this._selectConfigsTree(true);
-    Object.values(serviceTree).forEach((config) => {
-      if (config.handler) config.stop(options);
-    });
   }
 
   getConfig(id, serviceOptions) {
@@ -140,9 +118,36 @@ class WebpackLoader {
     });
   }
 
-  _init() {
-    this.makeNewConfig(this.defaults.ids.watchConfigId, {}, ['isService']);
-    this.makeNewConfig(this.defaults.ids.devServerConfigId, {}, ['isService']);
+  start(configs, serviceConfigs, options) {
+    const webpackConfigured = webpack(this._buildConfigs(configs));
+
+    if (serviceConfigs && serviceConfigs.length) {
+      const serviceTree = this._selectConfigsTree(true);
+      serviceConfigs.forEach((config) => {
+        if (typeof config === 'string' && serviceTree[config]) {
+          serviceTree[config].start(webpackConfigured, options);
+        } else if (config instanceof this.models.getModel(true)) {
+          config.start(webpackConfigured, options);
+        }
+      });
+    } else {
+      webpackConfigured.run(this.defaults.handlers.getNativeHandler(options));
+    }
+  }
+
+  stop(options) {
+    const serviceTree = this._selectConfigsTree(true);
+    Object.values(serviceTree).forEach((config) => {
+      if (config.handler) config.stop(options);
+    });
+  }
+
+  getDefaults() {
+    return this.defaults;
+  }
+
+  getModels() {
+    return this.models;
   }
 
   _buildConfigs(configs) {
@@ -156,7 +161,7 @@ class WebpackLoader {
       configs.forEach((config) => {
         if (typeof config === 'string' && simpleTree[config]) {
           results.push(simpleTree[config].config);
-        } else if (config instanceof models.getModel(false)) {
+        } else if (config instanceof this.models.getModel(false)) {
           results.push(config.config);
         } else if (typeof config === 'object') {
           results.push(config);

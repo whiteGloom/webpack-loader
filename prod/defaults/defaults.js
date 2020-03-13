@@ -82,8 +82,8 @@ var defaults = {
     },
     service: {
       "default": {
-        start: function start() {},
-        stop: function stop() {}
+        startDefaults: function startDefaults() {},
+        stopDefaults: function stopDefaults() {}
       }
     }
   },
@@ -93,7 +93,7 @@ var defaults = {
   }
 };
 defaults.presets.service[defaults.ids.watchConfigId] = {
-  start: function start(configured) {
+  startDefaults: function startDefaults(configured) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var callback = options.callback;
     this.handler = configured.watch(this.config, defaults.handlers.getNativeHandler({
@@ -101,7 +101,7 @@ defaults.presets.service[defaults.ids.watchConfigId] = {
       callback: callback
     }));
   },
-  stop: function stop() {
+  stopDefaults: function stopDefaults() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var callback = options.callback;
     if (typeof callback !== 'function') callback = function callback() {};
@@ -111,7 +111,7 @@ defaults.presets.service[defaults.ids.watchConfigId] = {
   }
 };
 defaults.presets.service[defaults.ids.devServerConfigId] = {
-  start: function start(configured) {
+  startDefaults: function startDefaults(configured) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$port = options.port,
         port = _options$port === void 0 ? 8080 : _options$port,
@@ -131,7 +131,7 @@ defaults.presets.service[defaults.ids.devServerConfigId] = {
     this.handler = new _webpackDevServer["default"](configured, this.config);
     this.handler.listen(port, '127.0.0.1', devServerHandler);
   },
-  stop: function stop() {
+  stopDefaults: function stopDefaults() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var callback = options.callback;
     if (typeof callback !== 'function') callback = function callback() {};
