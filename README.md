@@ -11,12 +11,12 @@
 
 **Webpack-loader** — the plugin for organizing work with [Webpack](https://webpack.js.org/ 'Webpack').
 
-**Note:** For more information check the **[wiki](https://github.com/whiteGloom/webpack-loader/wiki/Home/_edit 'Wiki')**.
+**Note:** For more information check the **[wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**.
 
 <h2 id='navigation-en'>Navigation</h2>
 
 * **[What is it? [EN]](#what-is-it-en 'What is it? [EN]')**
-    * _**[Wiki](https://github.com/whiteGloom/webpack-loader/wiki/Home/_edit 'Wiki')**_
+    * _**[Wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**_
     * **Navigation**
     * **[Short instruction](#short-instruction-en 'Short instruction')**
         * **[Installation](#installation-en 'Installation')**
@@ -112,12 +112,12 @@ wl.start(['major, minor'], ['devServer'])
 
 **Webpack-loader** — это плагин для организации работы с [Webpack](https://webpack.js.org/ 'Webpack').
 
-**Note:** более подробная информация находится на **[wiki](https://github.com/whiteGloom/webpack-loader/wiki/Home/_edit 'Wiki')**<sup>[eng]</sup>.
+**Note:** более подробная информация находится на **[wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**<sup>[eng]</sup>.
 
 <h2 id='navigation-ru'>Навигация</h2>
 
 * **[Шо ита? [RU]](#what-is-it-ru 'Шо ита? [RU]')**
-    * _**[Wiki [EN]](https://github.com/whiteGloom/webpack-loader/wiki/Home/_edit 'Wiki [EN]')**_
+    * _**[Wiki [EN]](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki [EN]')**_
     * **Навигация**
     * **[Краткая инструкция](#short-instruction-ru 'Краткая инструкция')**
         * **[Установка](#installation-ru 'Установка')**
