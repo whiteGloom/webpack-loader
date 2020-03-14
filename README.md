@@ -18,7 +18,7 @@
 * **[What is it? [EN]](#what-is-it-en 'What is it? [EN]')**
     * _**[Wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**_
     * **Navigation**
-    * **[Short instruction](#short-instruction-en 'Short instruction')**
+    * **Short instruction:**
         * **[Installation](#installation-en 'Installation')**
         * **[Import](#import-en 'Import')**
         * **[Usage](#usage-en 'Usage')**
@@ -119,7 +119,7 @@ wl.start(['major, minor'], ['devServer'])
 * **[Шо ита? [RU]](#what-is-it-ru 'Шо ита? [RU]')**
     * _**[Wiki [EN]](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki [EN]')**_
     * **Навигация**
-    * **[Краткая инструкция](#short-instruction-ru 'Краткая инструкция')**
+    * **Краткая инструкция:**
         * **[Установка](#installation-ru 'Установка')**
         * **[Импорт](#import-ru 'Импорт')**
         * **[Использование](#usage-ru 'Использование')**
