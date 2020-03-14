@@ -102,7 +102,7 @@ wl.start(['major, minor'], ['devServer'])
 
 ***
 
-<h2 id="end-en">End. <a href='#navigation-ru'>To navigation ↑</a></h2>
+<h2 id="end-en">End. <a href='#navigation-en'>To navigation ↑</a></h2>
 
 ***
 
