@@ -5,18 +5,20 @@
 
 ***
 
+***
+
 <h1 id='what-is-it-en'>What is it? [EN]</h1>
 
 [↓ To navigation](#navigation-en '↓ To navigation-en') | **[↑ To languages](#languages '↑ To languages')**
 
-**Webpack-loader** — the plugin for organizing work with [Webpack](https://webpack.js.org/ 'Webpack').
+**Webpack-loader** — the plugin for organizing work with [Webpack &#10150;](https://webpack.js.org/ 'Webpack').
 
-**Note:** For more information check the **[wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**.
+**Note:** For more information check the **[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**.
 
 <h2 id='navigation-en'>Navigation</h2>
 
 * **[What is it? [EN]](#what-is-it-en 'What is it? [EN]')**
-    * _**[Wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**_
+    * _**[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**_
     * **Navigation**
     * **Short instruction:**
         * **[Installation](#installation-en 'Installation')**
@@ -100,9 +102,10 @@ wl.start(['major, minor'], ['devServer'])
 
 **[↑ To navigation](#navigation-en '↑ To navigation')** 
 
-***
 
-<h2 id="end-en">End. <a href='#navigation-en'>To navigation ↑</a></h2>
+<h2 id="end-en">End.</h2>
+
+***
 
 ***
 
@@ -110,14 +113,14 @@ wl.start(['major, minor'], ['devServer'])
 
 [↓ К навигации](#navigation-ru '↓ К навигации') | **[↑ To languages](#languages '↑ To languages')** 
 
-**Webpack-loader** — это плагин для организации работы с [Webpack](https://webpack.js.org/ 'Webpack').
+**Webpack-loader** — это плагин для организации работы с [Webpack &#10150;](https://webpack.js.org/ 'Webpack').
 
-**Note:** более подробная информация находится на **[wiki](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**<sup>[eng]</sup>.
+**Note:** более подробная информация находится на **[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**<sup>[eng]</sup>.
 
 <h2 id='navigation-ru'>Навигация</h2>
 
 * **[Шо ита? [RU]](#what-is-it-ru 'Шо ита? [RU]')**
-    * _**[Wiki [EN]](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki [EN]')**_
+    * _**[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki [EN]')<sup>[eng]</sup>**_
     * **Навигация**
     * **Краткая инструкция:**
         * **[Установка](#installation-ru 'Установка')**
@@ -201,6 +204,4 @@ wl.start(['major, minor'], ['devServer'])
 
 **[↑ К навигации](#navigation-ru '↑ К навигации')**
 
-***
-
-<h2 id="end-ru">Всё. <a href='#navigation-ru'>К навигации ↑</a></h2>
+<h2 id="end-ru">Всё.</h2>
