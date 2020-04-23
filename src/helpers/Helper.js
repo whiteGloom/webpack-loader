@@ -1,4 +1,4 @@
-class helper {
+class Helper {
   static isNumber(item) {
     return Number.isFinite(item);
   }
@@ -16,7 +16,7 @@ class helper {
   }
 
   static toArr(item) {
-    if (!helper.isArr(item)) item = [item];
+    if (!Helper.isArr(item)) item = [item];
     return item;
   }
 
@@ -25,10 +25,10 @@ class helper {
   }
 
   static flagsToObj(arr) {
-    if (helper.isObj(arr) && !helper.isArr(arr)) return arr;
+    if (Helper.isObj(arr) && !Helper.isArr(arr)) return arr;
 
     const result = {};
-    if (helper.isArr(arr)) {
+    if (Helper.isArr(arr)) {
       arr.forEach((item) => {
         result[item] = true;
       });
@@ -37,4 +37,4 @@ class helper {
   }
 }
 
-export default helper;
+export default Helper;

@@ -9,7 +9,7 @@ var _Config2 = _interopRequireDefault(require("./Config"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -31,9 +31,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var ServiceConfig =
-/*#__PURE__*/
-function (_Config) {
+var ServiceConfig = /*#__PURE__*/function (_Config) {
   _inherits(ServiceConfig, _Config);
 
   function ServiceConfig(options) {
@@ -67,23 +65,16 @@ function (_Config) {
   }
 
   _createClass(ServiceConfig, [{
-    key: "resetToDefaults",
-    value: function resetToDefaults() {
-      _get(_getPrototypeOf(ServiceConfig.prototype), "resetToDefaults", this).call(this);
-
-      this.handler = null;
-      this.resetStartFunction();
-      this.resetStopFunction();
+    key: "setStartFunction",
+    value: function setStartFunction(func) {
+      if (typeof func !== 'function') return;
+      this.start = func.bind(this);
     }
   }, {
-    key: "resetStartFunction",
-    value: function resetStartFunction() {
-      this.start = this.startDefaults;
-    }
-  }, {
-    key: "resetStopFunction",
-    value: function resetStopFunction() {
-      this.stop = this.stopDefaults;
+    key: "setStopFunction",
+    value: function setStopFunction(func) {
+      if (typeof func !== 'function') return;
+      this.stop = func.bind(this);
     }
   }, {
     key: "setStartDefaults",
@@ -98,16 +89,23 @@ function (_Config) {
       this.stopDefaults = func.bind(this);
     }
   }, {
-    key: "setStartFunction",
-    value: function setStartFunction(func) {
-      if (typeof func !== 'function') return;
-      this.start = func.bind(this);
+    key: "resetStartFunction",
+    value: function resetStartFunction() {
+      this.start = this.startDefaults;
     }
   }, {
-    key: "setStopFunction",
-    value: function setStopFunction(func) {
-      if (typeof func !== 'function') return;
-      this.stop = func.bind(this);
+    key: "resetStopFunction",
+    value: function resetStopFunction() {
+      this.stop = this.stopDefaults;
+    }
+  }, {
+    key: "resetToDefaults",
+    value: function resetToDefaults() {
+      _get(_getPrototypeOf(ServiceConfig.prototype), "resetToDefaults", this).call(this);
+
+      this.handler = null;
+      this.resetStartFunction();
+      this.resetStopFunction();
     }
   }]);
 

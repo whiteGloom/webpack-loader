@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -13,14 +13,12 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var helper =
-/*#__PURE__*/
-function () {
-  function helper() {
-    _classCallCheck(this, helper);
+var Helper = /*#__PURE__*/function () {
+  function Helper() {
+    _classCallCheck(this, Helper);
   }
 
-  _createClass(helper, null, [{
+  _createClass(Helper, null, [{
     key: "isNumber",
     value: function isNumber(item) {
       return Number.isFinite(item);
@@ -43,7 +41,7 @@ function () {
   }, {
     key: "toArr",
     value: function toArr(item) {
-      if (!helper.isArr(item)) item = [item];
+      if (!Helper.isArr(item)) item = [item];
       return item;
     }
   }, {
@@ -54,10 +52,10 @@ function () {
   }, {
     key: "flagsToObj",
     value: function flagsToObj(arr) {
-      if (helper.isObj(arr) && !helper.isArr(arr)) return arr;
+      if (Helper.isObj(arr) && !Helper.isArr(arr)) return arr;
       var result = {};
 
-      if (helper.isArr(arr)) {
+      if (Helper.isArr(arr)) {
         arr.forEach(function (item) {
           result[item] = true;
         });
@@ -67,8 +65,8 @@ function () {
     }
   }]);
 
-  return helper;
+  return Helper;
 }();
 
-var _default = helper;
+var _default = Helper;
 exports["default"] = _default;

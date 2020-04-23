@@ -7,7 +7,7 @@ exports["default"] = void 0;
 
 var _webpackMerge = _interopRequireDefault(require("webpack-merge"));
 
-var _helper = _interopRequireDefault(require("../helper/helper"));
+var _Helper = _interopRequireDefault(require("../helpers/Helper"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -17,9 +17,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Config =
-/*#__PURE__*/
-function () {
+var Config = /*#__PURE__*/function () {
   function Config(options) {
     _classCallCheck(this, Config);
 
@@ -37,9 +35,10 @@ function () {
   }
 
   _createClass(Config, [{
-    key: "resetToDefaults",
-    value: function resetToDefaults() {
-      this.resetConfig();
+    key: "setConfigDefaults",
+    value: function setConfigDefaults(func) {
+      if (typeof func !== 'function') return;
+      this.getConfigDefaults = func.bind(this);
     }
   }, {
     key: "resetConfig",
@@ -47,21 +46,20 @@ function () {
       this.config = this.getConfigDefaults();
     }
   }, {
-    key: "setConfigDefaults",
-    value: function setConfigDefaults(func) {
-      if (typeof func !== 'function') return;
-      this.getConfigDefaults = func.bind(this);
-    }
-  }, {
     key: "addToConfig",
     value: function addToConfig(configs) {
       var _this = this;
 
-      if (!_helper["default"].isArr(configs) && !_helper["default"].isObj(configs)) return;
-      configs = _helper["default"].toArr(configs);
+      if (!_Helper["default"].isArr(configs) && !_Helper["default"].isObj(configs)) return;
+      configs = _Helper["default"].toArr(configs);
       configs.forEach(function (config) {
         _this.config = (0, _webpackMerge["default"])([_this.config, config]);
       });
+    }
+  }, {
+    key: "resetToDefaults",
+    value: function resetToDefaults() {
+      this.resetConfig();
     }
   }]);
 

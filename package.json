@@ -1,12 +1,10 @@
 {
 	"name": "webpack-loader",
-	"version": "1.0.7",
+	"version": "1.1.0",
 	"description": "Webpack configuration plugin",
-	"main": "./prod/webpackLoader.js",
+	"main": "./prod/models/webpackLoader.js",
 	"scripts": {
 		"build": "babel src --out-dir prod --ignore \"**/spec/*\"",
-		"start": "babel-node src/webpackLoader.js",
-		"start-prod": "babel-node ./prod/webpackLoader.js",
 		"lint": "eslint src",
 		"lint-fix": "eslint --fix src",
 		"test": "babel-node specConfig/runTests.js",

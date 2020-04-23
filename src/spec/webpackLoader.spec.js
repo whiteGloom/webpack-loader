@@ -1,6 +1,6 @@
-import WebpackLoader from '../webpackLoader';
-import models from '../models/models';
-import defaults from '../defaults/defaults';
+import WebpackLoader from '../models/WebpackLoader';
+import models from '../service/Models';
+import defaults from '../service/Defaults';
 
 const gagName = 'gag.js';
 const additionalConfig = {
