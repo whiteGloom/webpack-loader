@@ -1,5 +1,5 @@
 import merge from 'webpack-merge';
-import Helper from '../helpers/Helper';
+import Helper from '../Helper';
 
 class Config {
   constructor(options) {
@@ -10,6 +10,7 @@ class Config {
 
     if (configDefaults) this.setConfigDefaults(configDefaults);
     this.resetConfig();
+
     if (configs) this.addToConfig(configs);
   }
 
@@ -26,14 +27,7 @@ class Config {
   addToConfig(configs) {
     if (!Helper.isArr(configs) && !Helper.isObj(configs)) return;
 
-    configs = Helper.toArr(configs);
-
-    configs.forEach((config) => {
-      this.config = merge([
-        this.config,
-        config
-      ]);
-    });
+    this.config = merge([this.config, ...Helper.toArr(configs)]);
   }
 
   resetToDefaults() {

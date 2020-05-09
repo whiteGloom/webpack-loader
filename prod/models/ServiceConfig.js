@@ -44,6 +44,7 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
         stopDefaults = options.stopDefaults,
         start = options.start,
         stop = options.stop;
+    _this.isRunning = false;
     _this.handler = null;
     _this.start = null;
     _this.stop = null;
@@ -101,11 +102,11 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
   }, {
     key: "resetToDefaults",
     value: function resetToDefaults() {
-      _get(_getPrototypeOf(ServiceConfig.prototype), "resetToDefaults", this).call(this);
-
-      this.handler = null;
+      this.stop();
       this.resetStartFunction();
       this.resetStopFunction();
+
+      _get(_getPrototypeOf(ServiceConfig.prototype), "resetToDefaults", this).call(this);
     }
   }]);
 

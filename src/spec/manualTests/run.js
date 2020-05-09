@@ -1,5 +1,5 @@
 import fs from 'fs';
-import WebpackLoader from '../../models/WebpackLoader';
+import WebpackLoader from '../../WebpackLoader';
 
 const npmArguments = process.argv.slice(2);
 const workspace = process.cwd();

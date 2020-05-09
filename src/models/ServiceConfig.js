@@ -5,6 +5,7 @@ class ServiceConfig extends Config {
     super(options);
     const { startDefaults, stopDefaults, start, stop } = options;
 
+    this.isRunning = false;
     this.handler = null;
     this.start = null;
     this.stop = null;
@@ -50,11 +51,11 @@ class ServiceConfig extends Config {
   }
 
   resetToDefaults() {
-    super.resetToDefaults();
-
-    this.handler = null;
+    this.stop();
     this.resetStartFunction();
     this.resetStopFunction();
+
+    super.resetToDefaults();
   }
 }
 
