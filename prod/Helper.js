@@ -49,20 +49,6 @@ var Helper = /*#__PURE__*/function () {
     value: function hasFlag(arr, flag) {
       return arr.indexOf(flag) > -1;
     }
-  }, {
-    key: "flagsToObj",
-    value: function flagsToObj(arr) {
-      if (Helper.isObj(arr) && !Helper.isArr(arr)) return arr;
-      var result = {};
-
-      if (Helper.isArr(arr)) {
-        arr.forEach(function (item) {
-          result[item] = true;
-        });
-      }
-
-      return result;
-    }
   }]);
 
   return Helper;

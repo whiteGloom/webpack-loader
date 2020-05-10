@@ -23,18 +23,6 @@ class Helper {
   static hasFlag(arr, flag) {
     return arr.indexOf(flag) > -1;
   }
-
-  static flagsToObj(arr) {
-    if (Helper.isObj(arr) && !Helper.isArr(arr)) return arr;
-
-    const result = {};
-    if (Helper.isArr(arr)) {
-      arr.forEach((item) => {
-        result[item] = true;
-      });
-    }
-    return result;
-  }
 }
 
 export default Helper;

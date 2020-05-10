@@ -53,14 +53,11 @@ var WebpackLoader = /*#__PURE__*/function () {
     key: "makeNewConfig",
     value: function makeNewConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
-
-      var _Helper$flagsToObj = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj$is = _Helper$flagsToObj.isForced,
-          isForced = _Helper$flagsToObj$is === void 0 ? false : _Helper$flagsToObj$is,
-          _Helper$flagsToObj$is2 = _Helper$flagsToObj.isSilent,
-          isSilent = _Helper$flagsToObj$is2 === void 0 ? false : _Helper$flagsToObj$is2;
-
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isFor = serviceOptions.isForced,
+          isForced = _serviceOptions$isFor === void 0 ? false : _serviceOptions$isFor,
+          _serviceOptions$isSil = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil === void 0 ? false : _serviceOptions$isSil;
       var id = options.id,
           userConfigs = options.configs,
           userPreset = options.preset,
@@ -92,14 +89,11 @@ var WebpackLoader = /*#__PURE__*/function () {
     key: "addToConfig",
     value: function addToConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
-
-      var _Helper$flagsToObj2 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj2$i = _Helper$flagsToObj2.isForced,
-          isForced = _Helper$flagsToObj2$i === void 0 ? false : _Helper$flagsToObj2$i,
-          _Helper$flagsToObj2$i2 = _Helper$flagsToObj2.isSilent,
-          isSilent = _Helper$flagsToObj2$i2 === void 0 ? false : _Helper$flagsToObj2$i2;
-
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isFor2 = serviceOptions.isForced,
+          isForced = _serviceOptions$isFor2 === void 0 ? false : _serviceOptions$isFor2,
+          _serviceOptions$isSil2 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
       var id = options.id,
           userConfigs = options.configs,
           _options$isService2 = options.isService,
@@ -135,12 +129,9 @@ var WebpackLoader = /*#__PURE__*/function () {
     key: "getConfig",
     value: function getConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
-
-      var _Helper$flagsToObj3 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj3$i = _Helper$flagsToObj3.isSilent,
-          isSilent = _Helper$flagsToObj3$i === void 0 ? false : _Helper$flagsToObj3$i;
-
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil3 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil3 === void 0 ? false : _serviceOptions$isSil3;
       var id = options.id,
           _options$isService3 = options.isService,
           isService = _options$isService3 === void 0 ? false : _options$isService3;
@@ -169,12 +160,9 @@ var WebpackLoader = /*#__PURE__*/function () {
     key: "resetConfig",
     value: function resetConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
-
-      var _Helper$flagsToObj4 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj4$i = _Helper$flagsToObj4.isSilent,
-          isSilent = _Helper$flagsToObj4$i === void 0 ? false : _Helper$flagsToObj4$i;
-
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil4 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil4 === void 0 ? false : _serviceOptions$isSil4;
       var id = options.id,
           _options$isService5 = options.isService,
           isService = _options$isService5 === void 0 ? false : _options$isService5;
@@ -190,12 +178,9 @@ var WebpackLoader = /*#__PURE__*/function () {
     key: "removeConfig",
     value: function removeConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
-
-      var _Helper$flagsToObj5 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj5$i = _Helper$flagsToObj5.isSilent,
-          isSilent = _Helper$flagsToObj5$i === void 0 ? false : _Helper$flagsToObj5$i;
-
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil5 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil5 === void 0 ? false : _serviceOptions$isSil5;
       var id = options.id,
           _options$isService6 = options.isService,
           isService = _options$isService6 === void 0 ? false : _options$isService6;

@@ -22,8 +22,8 @@ class WebpackLoader {
     this._initDefaultConfigs();
   }
 
-  makeNewConfig(options = {}, serviceOptions) {
-    const { isForced = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
+  makeNewConfig(options = {}, serviceOptions = {}) {
+    const { isForced = false, isSilent = false } = serviceOptions;
     const { id, configs: userConfigs, preset: userPreset, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
@@ -44,8 +44,8 @@ class WebpackLoader {
     return branch[id];
   }
 
-  addToConfig(options = {}, serviceOptions) {
-    const { isForced = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
+  addToConfig(options = {}, serviceOptions = {}) {
+    const { isForced = false, isSilent = false } = serviceOptions;
     const { id, configs: userConfigs, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
@@ -71,8 +71,8 @@ class WebpackLoader {
     this.getConfig({ id }, { isService }).addToConfig(userConfigs);
   }
 
-  getConfig(options = {}, serviceOptions) {
-    const { isSilent = false } = Helper.flagsToObj(serviceOptions);
+  getConfig(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
     const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
@@ -94,8 +94,8 @@ class WebpackLoader {
     return this._selectConfigsBranch(isService);
   }
 
-  resetConfig(options = {}, serviceOptions) {
-    const { isSilent = false } = Helper.flagsToObj(serviceOptions);
+  resetConfig(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
     const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
@@ -106,8 +106,8 @@ class WebpackLoader {
     this._selectConfigsBranch(isService)[id].resetToDefaults();
   }
 
-  removeConfig(options = {}, serviceOptions) {
-    const { isSilent = false } = Helper.flagsToObj(serviceOptions);
+  removeConfig(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
     const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
