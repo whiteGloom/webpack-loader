@@ -1,6 +1,6 @@
 {
 	"name": "webpack-loader",
-	"version": "1.4.1",
+	"version": "1.4.2",
 	"description": "Webpack configuration plugin",
 	"main": "./prod/models/webpackLoader.js",
 	"scripts": {

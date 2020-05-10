@@ -27,7 +27,7 @@ class WebpackLoader {
     const { id, configs: userConfigs, preset: userPreset, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+      if (!isSilent) console.error(`makeNewConfig: Wrong ID passed: ${id}`);
       return;
     }
 
@@ -49,7 +49,7 @@ class WebpackLoader {
     const { id, configs: userConfigs, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+      if (!isSilent) console.error(`addToConfig: Wrong ID passed: ${id}`);
       return;
     }
 
@@ -76,7 +76,7 @@ class WebpackLoader {
     const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+      if (!isSilent) console.error(`getConfig: Wrong ID passed: ${id}`);
       return;
     }
 
@@ -99,7 +99,7 @@ class WebpackLoader {
     const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+      if (!isSilent) console.error(`resetConfig: Wrong ID passed: ${id}`);
       return;
     }
 
@@ -111,12 +111,11 @@ class WebpackLoader {
     const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+      if (!isSilent) console.error(`removeConfig: Wrong ID passed: ${id}`);
       return;
     }
 
     if (!this._isUsed(id, isService)) {
-      if (!isSilent) console.error(`removeConfig: There is no config with such ID: ${id}`);
       return;
     }
 
@@ -160,7 +159,7 @@ class WebpackLoader {
   }
 
   getModel(isService) {
-    return this._models[isService ? 'service' : 'simple'];
+    return this._models[isService ? 'Service' : 'Simple'];
   }
 
   _buildConfigs(configs) {
