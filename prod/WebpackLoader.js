@@ -9,9 +9,11 @@ var _webpack = _interopRequireDefault(require("webpack"));
 
 var _Helper = _interopRequireDefault(require("./Helper"));
 
-var _Models = _interopRequireDefault(require("./service/Models"));
-
 var _Defaults = _interopRequireDefault(require("./service/Defaults"));
+
+var _Config = _interopRequireDefault(require("./models/Config"));
+
+var _ServiceConfig = _interopRequireDefault(require("./models/ServiceConfig"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -32,10 +34,13 @@ var WebpackLoader = /*#__PURE__*/function () {
     _classCallCheck(this, WebpackLoader);
 
     this._defaults = new _Defaults["default"]();
-    this._models = new _Models["default"]();
     this._configs = {
       simpleConfigs: {},
       serviceConfigs: {}
+    };
+    this._models = {
+      Simple: _Config["default"],
+      Service: _ServiceConfig["default"]
     };
   }
 
@@ -51,16 +56,16 @@ var WebpackLoader = /*#__PURE__*/function () {
       var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
 
       var _Helper$flagsToObj = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj$is = _Helper$flagsToObj.isService,
-          isService = _Helper$flagsToObj$is === void 0 ? false : _Helper$flagsToObj$is,
-          _Helper$flagsToObj$is2 = _Helper$flagsToObj.isForced,
-          isForced = _Helper$flagsToObj$is2 === void 0 ? false : _Helper$flagsToObj$is2,
-          _Helper$flagsToObj$is3 = _Helper$flagsToObj.isSilent,
-          isSilent = _Helper$flagsToObj$is3 === void 0 ? false : _Helper$flagsToObj$is3;
+          _Helper$flagsToObj$is = _Helper$flagsToObj.isForced,
+          isForced = _Helper$flagsToObj$is === void 0 ? false : _Helper$flagsToObj$is,
+          _Helper$flagsToObj$is2 = _Helper$flagsToObj.isSilent,
+          isSilent = _Helper$flagsToObj$is2 === void 0 ? false : _Helper$flagsToObj$is2;
 
       var id = options.id,
           userConfigs = options.configs,
-          userPreset = options.preset;
+          userPreset = options.preset,
+          _options$isService = options.isService,
+          isService = _options$isService === void 0 ? false : _options$isService;
 
       if (!WebpackLoader._validateId(id)) {
         if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -72,7 +77,7 @@ var WebpackLoader = /*#__PURE__*/function () {
         return;
       }
 
-      var ConfigModel = this._models.getModel(isService);
+      var ConfigModel = this.getModel(isService);
 
       var branch = this._selectConfigsBranch(isService);
 
@@ -90,15 +95,15 @@ var WebpackLoader = /*#__PURE__*/function () {
       var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
 
       var _Helper$flagsToObj2 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj2$i = _Helper$flagsToObj2.isService,
-          isService = _Helper$flagsToObj2$i === void 0 ? false : _Helper$flagsToObj2$i,
-          _Helper$flagsToObj2$i2 = _Helper$flagsToObj2.isForced,
-          isForced = _Helper$flagsToObj2$i2 === void 0 ? false : _Helper$flagsToObj2$i2,
-          _Helper$flagsToObj2$i3 = _Helper$flagsToObj2.isSilent,
-          isSilent = _Helper$flagsToObj2$i3 === void 0 ? false : _Helper$flagsToObj2$i3;
+          _Helper$flagsToObj2$i = _Helper$flagsToObj2.isForced,
+          isForced = _Helper$flagsToObj2$i === void 0 ? false : _Helper$flagsToObj2$i,
+          _Helper$flagsToObj2$i2 = _Helper$flagsToObj2.isSilent,
+          isSilent = _Helper$flagsToObj2$i2 === void 0 ? false : _Helper$flagsToObj2$i2;
 
       var id = options.id,
-          userConfigs = options.configs;
+          userConfigs = options.configs,
+          _options$isService2 = options.isService,
+          isService = _options$isService2 === void 0 ? false : _options$isService2;
 
       if (!WebpackLoader._validateId(id)) {
         if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -128,14 +133,17 @@ var WebpackLoader = /*#__PURE__*/function () {
     }
   }, {
     key: "getConfig",
-    value: function getConfig(options, serviceOptions) {
-      var _Helper$flagsToObj3 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj3$i = _Helper$flagsToObj3.isService,
-          isService = _Helper$flagsToObj3$i === void 0 ? false : _Helper$flagsToObj3$i,
-          _Helper$flagsToObj3$i2 = _Helper$flagsToObj3.isSilent,
-          isSilent = _Helper$flagsToObj3$i2 === void 0 ? false : _Helper$flagsToObj3$i2;
+    value: function getConfig() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
 
-      var id = options.id;
+      var _Helper$flagsToObj3 = _Helper["default"].flagsToObj(serviceOptions),
+          _Helper$flagsToObj3$i = _Helper$flagsToObj3.isSilent,
+          isSilent = _Helper$flagsToObj3$i === void 0 ? false : _Helper$flagsToObj3$i;
+
+      var id = options.id,
+          _options$isService3 = options.isService,
+          isService = _options$isService3 === void 0 ? false : _options$isService3;
 
       if (!WebpackLoader._validateId(id)) {
         if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -151,23 +159,25 @@ var WebpackLoader = /*#__PURE__*/function () {
     }
   }, {
     key: "getConfigs",
-    value: function getConfigs(serviceOptions) {
-      var _Helper$flagsToObj4 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj4$i = _Helper$flagsToObj4.isService,
-          isService = _Helper$flagsToObj4$i === void 0 ? false : _Helper$flagsToObj4$i;
-
+    value: function getConfigs() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var _options$isService4 = options.isService,
+          isService = _options$isService4 === void 0 ? false : _options$isService4;
       return this._selectConfigsBranch(isService);
     }
   }, {
     key: "resetConfig",
-    value: function resetConfig(options, serviceOptions) {
-      var _Helper$flagsToObj5 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj5$i = _Helper$flagsToObj5.isService,
-          isService = _Helper$flagsToObj5$i === void 0 ? false : _Helper$flagsToObj5$i,
-          _Helper$flagsToObj5$i2 = _Helper$flagsToObj5.isSilent,
-          isSilent = _Helper$flagsToObj5$i2 === void 0 ? false : _Helper$flagsToObj5$i2;
+    value: function resetConfig() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
 
-      var id = options.id;
+      var _Helper$flagsToObj4 = _Helper["default"].flagsToObj(serviceOptions),
+          _Helper$flagsToObj4$i = _Helper$flagsToObj4.isSilent,
+          isSilent = _Helper$flagsToObj4$i === void 0 ? false : _Helper$flagsToObj4$i;
+
+      var id = options.id,
+          _options$isService5 = options.isService,
+          isService = _options$isService5 === void 0 ? false : _options$isService5;
 
       if (!WebpackLoader._validateId(id)) {
         if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -178,14 +188,17 @@ var WebpackLoader = /*#__PURE__*/function () {
     }
   }, {
     key: "removeConfig",
-    value: function removeConfig(options, serviceOptions) {
-      var _Helper$flagsToObj6 = _Helper["default"].flagsToObj(serviceOptions),
-          _Helper$flagsToObj6$i = _Helper$flagsToObj6.isSilent,
-          isSilent = _Helper$flagsToObj6$i === void 0 ? false : _Helper$flagsToObj6$i,
-          _Helper$flagsToObj6$i2 = _Helper$flagsToObj6.isService,
-          isService = _Helper$flagsToObj6$i2 === void 0 ? false : _Helper$flagsToObj6$i2;
+    value: function removeConfig() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 ? arguments[1] : undefined;
 
-      var id = options.id;
+      var _Helper$flagsToObj5 = _Helper["default"].flagsToObj(serviceOptions),
+          _Helper$flagsToObj5$i = _Helper$flagsToObj5.isSilent,
+          isSilent = _Helper$flagsToObj5$i === void 0 ? false : _Helper$flagsToObj5$i;
+
+      var id = options.id,
+          _options$isService6 = options.isService,
+          isService = _options$isService6 === void 0 ? false : _options$isService6;
 
       if (!WebpackLoader._validateId(id)) {
         if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -234,11 +247,14 @@ var WebpackLoader = /*#__PURE__*/function () {
     }
   }, {
     key: "stop",
-    value: function stop(options) {
+    value: function stop() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var stopOptions = options.stopOptions;
+
       var serviceTree = this._selectConfigsBranch(true);
 
       Object.values(serviceTree).forEach(function (config) {
-        if (config.isRunning) config.stop(options);
+        if (config.isRunning) config.stop(stopOptions);
       });
     }
   }, {
@@ -247,9 +263,9 @@ var WebpackLoader = /*#__PURE__*/function () {
       return this._defaults;
     }
   }, {
-    key: "getModels",
-    value: function getModels() {
-      return this._models;
+    key: "getModel",
+    value: function getModel(isService) {
+      return this._models[isService ? 'service' : 'simple'];
     }
   }, {
     key: "_buildConfigs",
@@ -268,7 +284,7 @@ var WebpackLoader = /*#__PURE__*/function () {
         _Helper["default"].toArr(configs).forEach(function (config) {
           if (typeof config === 'string' && simpleBranch[config]) {
             results.push(simpleBranch[config].config);
-          } else if (config instanceof _this2._models.getModel(false)) {
+          } else if (config instanceof _this2.getModel(false)) {
             results.push(config.config);
           } else if (config instanceof Object) {
             results.push(config);

@@ -1,16 +1,20 @@
 import webpack from 'webpack';
 
 import Helper from './Helper';
-import Models from './service/Models';
 import Defaults from './service/Defaults';
+import Config from './models/Config';
+import ServiceConfig from './models/ServiceConfig';
 
 class WebpackLoader {
   constructor() {
     this._defaults = new Defaults();
-    this._models = new Models();
     this._configs = {
       simpleConfigs: {},
       serviceConfigs: {}
+    };
+    this._models = {
+      Simple: Config,
+      Service: ServiceConfig
     };
   }
 
@@ -19,8 +23,8 @@ class WebpackLoader {
   }
 
   makeNewConfig(options = {}, serviceOptions) {
-    const { isService = false, isForced = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
-    const { id, configs: userConfigs, preset: userPreset } = options;
+    const { isForced = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
+    const { id, configs: userConfigs, preset: userPreset, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -32,7 +36,7 @@ class WebpackLoader {
       return;
     }
 
-    const ConfigModel = this._models.getModel(isService);
+    const ConfigModel = this.getModel(isService);
     const branch = this._selectConfigsBranch(isService);
     const preset = userPreset || this._defaults.getPreset(id, isService);
 
@@ -41,8 +45,8 @@ class WebpackLoader {
   }
 
   addToConfig(options = {}, serviceOptions) {
-    const { isService = false, isForced = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
-    const { id, configs: userConfigs } = options;
+    const { isForced = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
+    const { id, configs: userConfigs, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -67,9 +71,9 @@ class WebpackLoader {
     this.getConfig({ id }, { isService }).addToConfig(userConfigs);
   }
 
-  getConfig(options, serviceOptions) {
-    const { isService = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
-    const { id } = options;
+  getConfig(options = {}, serviceOptions) {
+    const { isSilent = false } = Helper.flagsToObj(serviceOptions);
+    const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -84,15 +88,15 @@ class WebpackLoader {
     return this._selectConfigsBranch(isService)[id];
   }
 
-  getConfigs(serviceOptions) {
-    const { isService = false } = Helper.flagsToObj(serviceOptions);
+  getConfigs(options = {}) {
+    const { isService = false } = options;
 
     return this._selectConfigsBranch(isService);
   }
 
-  resetConfig(options, serviceOptions) {
-    const { isService = false, isSilent = false } = Helper.flagsToObj(serviceOptions);
-    const { id } = options;
+  resetConfig(options = {}, serviceOptions) {
+    const { isSilent = false } = Helper.flagsToObj(serviceOptions);
+    const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -102,9 +106,9 @@ class WebpackLoader {
     this._selectConfigsBranch(isService)[id].resetToDefaults();
   }
 
-  removeConfig(options, serviceOptions) {
-    const { isSilent = false, isService = false } = Helper.flagsToObj(serviceOptions);
-    const { id } = options;
+  removeConfig(options = {}, serviceOptions) {
+    const { isSilent = false } = Helper.flagsToObj(serviceOptions);
+    const { id, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
@@ -141,11 +145,13 @@ class WebpackLoader {
     }
   }
 
-  stop(options) {
+  stop(options = {}) {
+    const { stopOptions } = options;
+
     const serviceTree = this._selectConfigsBranch(true);
 
     Object.values(serviceTree).forEach((config) => {
-      if (config.isRunning) config.stop(options);
+      if (config.isRunning) config.stop(stopOptions);
     });
   }
 
@@ -153,8 +159,8 @@ class WebpackLoader {
     return this._defaults;
   }
 
-  getModels() {
-    return this._models;
+  getModel(isService) {
+    return this._models[isService ? 'service' : 'simple'];
   }
 
   _buildConfigs(configs) {
@@ -167,7 +173,7 @@ class WebpackLoader {
       Helper.toArr(configs).forEach((config) => {
         if (typeof config === 'string' && simpleBranch[config]) {
           results.push(simpleBranch[config].config);
-        } else if (config instanceof this._models.getModel(false)) {
+        } else if (config instanceof this.getModel(false)) {
           results.push(config.config);
         } else if (config instanceof Object) {
           results.push(config);
