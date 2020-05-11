@@ -14,6 +14,18 @@ class Config {
     if (configs) this.addToConfig({ configs });
   }
 
+  addToConfig(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { configs } = options;
+
+    if (!Helper.isArr(configs) && !Helper.isObj(configs)) {
+      if (!isSilent) console.log(`addToConfig: Wrong type of configs: ${typeof configs}`);
+      return;
+    }
+
+    this.config = merge([this.config, ...Helper.toArr(configs)]);
+  }
+
   setConfigDefaults(options = {}, serviceOptions = {}) {
     const { isSilent = false } = serviceOptions;
     const { configDefaultsGetter } = options;
@@ -28,18 +40,6 @@ class Config {
 
   resetConfig() {
     this.config = this.getConfigDefaults();
-  }
-
-  addToConfig(options = {}, serviceOptions = {}) {
-    const { isSilent = false } = serviceOptions;
-    const { configs } = options;
-
-    if (!Helper.isArr(configs) && !Helper.isObj(configs)) {
-      if (!isSilent) console.log(`addToConfig: Wrong type of configs: ${typeof configs}`);
-      return;
-    }
-
-    this.config = merge([this.config, ...Helper.toArr(configs)]);
   }
 
   resetToDefaults() {

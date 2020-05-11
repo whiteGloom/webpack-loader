@@ -49,12 +49,28 @@ var Config = /*#__PURE__*/function () {
   }
 
   _createClass(Config, [{
-    key: "setConfigDefaults",
-    value: function setConfigDefaults() {
+    key: "addToConfig",
+    value: function addToConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var _serviceOptions$isSil = serviceOptions.isSilent,
           isSilent = _serviceOptions$isSil === void 0 ? false : _serviceOptions$isSil;
+      var configs = options.configs;
+
+      if (!_Helper["default"].isArr(configs) && !_Helper["default"].isObj(configs)) {
+        if (!isSilent) console.log("addToConfig: Wrong type of configs: ".concat(_typeof(configs)));
+        return;
+      }
+
+      this.config = (0, _webpackMerge["default"])([this.config].concat(_toConsumableArray(_Helper["default"].toArr(configs))));
+    }
+  }, {
+    key: "setConfigDefaults",
+    value: function setConfigDefaults() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil2 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
       var configDefaultsGetter = options.configDefaultsGetter;
 
       if (typeof configDefaultsGetter !== 'function') {
@@ -68,22 +84,6 @@ var Config = /*#__PURE__*/function () {
     key: "resetConfig",
     value: function resetConfig() {
       this.config = this.getConfigDefaults();
-    }
-  }, {
-    key: "addToConfig",
-    value: function addToConfig() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var _serviceOptions$isSil2 = serviceOptions.isSilent,
-          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
-      var configs = options.configs;
-
-      if (!_Helper["default"].isArr(configs) && !_Helper["default"].isObj(configs)) {
-        if (!isSilent) console.log("addToConfig: Wrong type of configs: ".concat(_typeof(configs)));
-        return;
-      }
-
-      this.config = (0, _webpackMerge["default"])([this.config].concat(_toConsumableArray(_Helper["default"].toArr(configs))));
     }
   }, {
     key: "resetToDefaults",

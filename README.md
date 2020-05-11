@@ -66,6 +66,12 @@ To create instance of plugin, use commands:
 new WebpackLoader();
 ```
 
+If you had changed defaults, you must init the instance (not required by default):
+
+```
+instance.init();
+```
+
 **[↑ To navigation](#navigation-en '↑ To navigation')** 
 
 ***
@@ -76,28 +82,41 @@ new WebpackLoader();
 const workspace = process.cwd();
 const wl = new WebpackLoader();
 
-wl.makeNewConfig('major', {
-  entry: `${workspace}/index.js`,
-  output: {
-    filename: 'production.js',
-    path: `${workspace}/dist/`
+wl.makeNewConfig({
+  id: 'major',
+  configData: {
+    configs: {
+      entry: `${workspace}/index.js`,
+      output: {
+        filename: 'production.js',
+        path: `${workspace}/dist/`
+      }    
+    }
+  },
+});
+
+wl.makeNewConfig({
+  id: 'minor',
+  configData: {
+    configs: [
+      {
+        entry: `${workspace}/index.js`,
+        output: {
+          filename: 'test.js',
+          path: `${workspace}/tests/` 
+        } 
+      },
+      {
+        entry: `${workspace}/test.js`
+      }
+    ]
   }
 });
 
-wl.makeNewConfig('minor', [
-  {
-    entry: `${workspace}/index.js`,
-    output: {
-      filename: 'test.js',
-      path: `${workspace}/tests/` 
-    } 
-  },
-  {
-    entry: `${workspace}/test.js`
-  }
-]);
-
-wl.start(['major, minor'], ['devServer'])
+wl.start({
+  configs: ['major, minor'],
+  serviceConfig: ['devServer']
+})
 ```
 
 **[↑ To navigation](#navigation-en '↑ To navigation')** 
@@ -168,6 +187,12 @@ import WebpackLoader from 'webpack-loader';
 new WebpackLoader();
 ```
 
+Если вы изменяли defaults, то необходимо инициализировать экземпляр (не требуется по умолчанию):
+
+```
+instance.init();
+```
+
 **[↑ К навигации](#navigation-ru '↑ К навигации')**
 
 ***
@@ -178,28 +203,41 @@ new WebpackLoader();
 const workspace = process.cwd();
 const wl = new WebpackLoader();
 
-wl.makeNewConfig('major', {
-  entry: `${workspace}/index.js`,
-  output: {
-    filename: 'production.js',
-    path: `${workspace}/dist/`
+wl.makeNewConfig({
+  id: 'major',
+  configData: {
+    configs: {
+      entry: `${workspace}/index.js`,
+      output: {
+        filename: 'production.js',
+        path: `${workspace}/dist/`
+      }    
+    }
+  },
+});
+
+wl.makeNewConfig({
+  id: 'minor',
+  configData: {
+    configs: [
+      {
+        entry: `${workspace}/index.js`,
+        output: {
+          filename: 'test.js',
+          path: `${workspace}/tests/` 
+        } 
+      },
+      {
+        entry: `${workspace}/test.js`
+      }
+    ]
   }
 });
 
-wl.makeNewConfig('minor', [
-  {
-    entry: `${workspace}/index.js`,
-    output: {
-      filename: 'test.js',
-      path: `${workspace}/tests/` 
-    } 
-  },
-  {
-    entry: `${workspace}/test.js`
-  }
-]);
-
-wl.start(['major, minor'], ['devServer'])
+wl.start({
+  configs: ['major, minor'],
+  serviceConfig: ['devServer']
+})
 ```
 
 **[↑ К навигации](#navigation-ru '↑ К навигации')**
