@@ -3,7 +3,7 @@ import Config from './Config';
 class ServiceConfig extends Config {
   constructor(options) {
     super(options);
-    const { startDefaults, stopDefaults, start, stop } = options;
+    const { startDefaultsGetter, stopDefaultsGetter, startFunction, stopFunction } = options;
 
     this.isRunning = false;
     this.handler = null;
@@ -12,34 +12,62 @@ class ServiceConfig extends Config {
     this.startDefaults = () => {};
     this.stopDefaults = () => {};
 
-    if (startDefaults) this.setStartDefaults(startDefaults);
-    if (stopDefaults) this.setStopDefaults(stopDefaults);
+    if (startDefaultsGetter) this.setStartDefaults({ startDefaultsGetter });
+    if (stopDefaultsGetter) this.setStopDefaults({ stopDefaultsGetter });
 
     this.resetStartFunction();
     this.resetStopFunction();
 
-    if (start) this.setStartFunction(start);
-    if (stop) this.setStopFunction(stop);
+    if (startFunction) this.setStartFunction({ startFunction });
+    if (stopFunction) this.setStopFunction({ stopFunction });
   }
 
-  setStartFunction(func) {
-    if (typeof func !== 'function') return;
-    this.start = func.bind(this);
+  setStartFunction(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { startFunction } = options;
+
+    if (typeof startFunction !== 'function') {
+      if (!isSilent) console.log(`setStartFunction: Wrong type of startFunction: ${typeof startFunction}`);
+      return;
+    }
+
+    this.start = startFunction.bind(this);
   }
 
-  setStopFunction(func) {
-    if (typeof func !== 'function') return;
-    this.stop = func.bind(this);
+  setStopFunction(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { stopFunction } = options;
+
+    if (typeof stopFunction !== 'function') {
+      if (!isSilent) console.log(`setStopFunction: wrong type of stopFunction: ${typeof stopFunction}`);
+      return;
+    }
+
+    this.stop = stopFunction.bind(this);
   }
 
-  setStartDefaults(func) {
-    if (typeof func !== 'function') return;
-    this.startDefaults = func.bind(this);
+  setStartDefaults(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { startDefaults } = options;
+
+    if (typeof startDefaults !== 'function') {
+      if (!isSilent) console.log(`setStartDefaults: Wrong type of setStartDefaults: ${typeof startDefaults}`);
+      return;
+    }
+
+    this.startDefaults = startDefaults.bind(this);
   }
 
-  setStopDefaults(func) {
-    if (typeof func !== 'function') return;
-    this.stopDefaults = func.bind(this);
+  setStopDefaults(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { stopDefaults } = options;
+
+    if (typeof stopDefaults !== 'function') {
+      if (!isSilent) console.log(`setStopDefaults: Wrong type of stopDefaults: ${typeof stopDefaults}`);
+      return;
+    }
+
+    this.stopDefaults = stopDefaults.bind(this);
   }
 
   resetStartFunction() {

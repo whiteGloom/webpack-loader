@@ -40,10 +40,10 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
     _classCallCheck(this, ServiceConfig);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ServiceConfig).call(this, options));
-    var startDefaults = options.startDefaults,
-        stopDefaults = options.stopDefaults,
-        start = options.start,
-        stop = options.stop;
+    var startDefaultsGetter = options.startDefaultsGetter,
+        stopDefaultsGetter = options.stopDefaultsGetter,
+        startFunction = options.startFunction,
+        stopFunction = options.stopFunction;
     _this.isRunning = false;
     _this.handler = null;
     _this.start = null;
@@ -53,41 +53,89 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
 
     _this.stopDefaults = function () {};
 
-    if (startDefaults) _this.setStartDefaults(startDefaults);
-    if (stopDefaults) _this.setStopDefaults(stopDefaults);
+    if (startDefaultsGetter) _this.setStartDefaults({
+      startDefaultsGetter: startDefaultsGetter
+    });
+    if (stopDefaultsGetter) _this.setStopDefaults({
+      stopDefaultsGetter: stopDefaultsGetter
+    });
 
     _this.resetStartFunction();
 
     _this.resetStopFunction();
 
-    if (start) _this.setStartFunction(start);
-    if (stop) _this.setStopFunction(stop);
+    if (startFunction) _this.setStartFunction({
+      startFunction: startFunction
+    });
+    if (stopFunction) _this.setStopFunction({
+      stopFunction: stopFunction
+    });
     return _this;
   }
 
   _createClass(ServiceConfig, [{
     key: "setStartFunction",
-    value: function setStartFunction(func) {
-      if (typeof func !== 'function') return;
-      this.start = func.bind(this);
+    value: function setStartFunction() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil === void 0 ? false : _serviceOptions$isSil;
+      var startFunction = options.startFunction;
+
+      if (typeof startFunction !== 'function') {
+        if (!isSilent) console.log("setStartFunction: Wrong type of startFunction: ".concat(_typeof(startFunction)));
+        return;
+      }
+
+      this.start = startFunction.bind(this);
     }
   }, {
     key: "setStopFunction",
-    value: function setStopFunction(func) {
-      if (typeof func !== 'function') return;
-      this.stop = func.bind(this);
+    value: function setStopFunction() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil2 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
+      var stopFunction = options.stopFunction;
+
+      if (typeof stopFunction !== 'function') {
+        if (!isSilent) console.log("setStopFunction: wrong type of stopFunction: ".concat(_typeof(stopFunction)));
+        return;
+      }
+
+      this.stop = stopFunction.bind(this);
     }
   }, {
     key: "setStartDefaults",
-    value: function setStartDefaults(func) {
-      if (typeof func !== 'function') return;
-      this.startDefaults = func.bind(this);
+    value: function setStartDefaults() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil3 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil3 === void 0 ? false : _serviceOptions$isSil3;
+      var startDefaults = options.startDefaults;
+
+      if (typeof startDefaults !== 'function') {
+        if (!isSilent) console.log("setStartDefaults: Wrong type of setStartDefaults: ".concat(_typeof(startDefaults)));
+        return;
+      }
+
+      this.startDefaults = startDefaults.bind(this);
     }
   }, {
     key: "setStopDefaults",
-    value: function setStopDefaults(func) {
-      if (typeof func !== 'function') return;
-      this.stopDefaults = func.bind(this);
+    value: function setStopDefaults() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil4 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil4 === void 0 ? false : _serviceOptions$isSil4;
+      var stopDefaults = options.stopDefaults;
+
+      if (typeof stopDefaults !== 'function') {
+        if (!isSilent) console.log("setStopDefaults: Wrong type of stopDefaults: ".concat(_typeof(stopDefaults)));
+        return;
+      }
+
+      this.stopDefaults = stopDefaults.bind(this);
     }
   }, {
     key: "resetStartFunction",

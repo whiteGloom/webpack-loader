@@ -3,29 +3,41 @@ import Helper from '../Helper';
 
 class Config {
   constructor(options) {
-    const { configDefaults, configs } = options;
+    const { configDefaultsGetter, configs } = options;
 
     this.config = null;
     this.getConfigDefaults = () => ({});
 
-    if (configDefaults) this.setConfigDefaults(configDefaults);
+    if (configDefaultsGetter) this.setConfigDefaults({ configDefaultsGetter });
     this.resetConfig();
 
-    if (configs) this.addToConfig(configs);
+    if (configs) this.addToConfig({ configs });
   }
 
-  setConfigDefaults(func) {
-    if (typeof func !== 'function') return;
+  setConfigDefaults(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { configDefaultsGetter } = options;
 
-    this.getConfigDefaults = func.bind(this);
+    if (typeof configDefaultsGetter !== 'function') {
+      if (!isSilent) console.log(`setConfigDefaults: Wrong type of defaults: ${typeof configDefaultsGetter}`);
+      return;
+    }
+
+    this.getConfigDefaults = configDefaultsGetter.bind(this);
   }
 
   resetConfig() {
     this.config = this.getConfigDefaults();
   }
 
-  addToConfig(configs) {
-    if (!Helper.isArr(configs) && !Helper.isObj(configs)) return;
+  addToConfig(options = {}, serviceOptions = {}) {
+    const { isSilent = false } = serviceOptions;
+    const { configs } = options;
+
+    if (!Helper.isArr(configs) && !Helper.isObj(configs)) {
+      if (!isSilent) console.log(`addToConfig: Wrong type of configs: ${typeof configs}`);
+      return;
+    }
 
     this.config = merge([this.config, ...Helper.toArr(configs)]);
   }

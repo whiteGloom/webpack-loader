@@ -40,11 +40,11 @@ wl.makeNewConfig({
   isService: true,
   configData: {
     configs: { stats: 'errors-only' },
-    start() {
+    startFunction() {
       this.handler = { a: 123 };
       this.isRunning = true;
     },
-    stop() {
+    stopFunction() {
       this.handler = null;
       this.isRunning = false;
     }

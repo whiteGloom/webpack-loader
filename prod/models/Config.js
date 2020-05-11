@@ -19,6 +19,8 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -29,7 +31,7 @@ var Config = /*#__PURE__*/function () {
   function Config(options) {
     _classCallCheck(this, Config);
 
-    var configDefaults = options.configDefaults,
+    var configDefaultsGetter = options.configDefaultsGetter,
         configs = options.configs;
     this.config = null;
 
@@ -37,16 +39,30 @@ var Config = /*#__PURE__*/function () {
       return {};
     };
 
-    if (configDefaults) this.setConfigDefaults(configDefaults);
+    if (configDefaultsGetter) this.setConfigDefaults({
+      configDefaultsGetter: configDefaultsGetter
+    });
     this.resetConfig();
-    if (configs) this.addToConfig(configs);
+    if (configs) this.addToConfig({
+      configs: configs
+    });
   }
 
   _createClass(Config, [{
     key: "setConfigDefaults",
-    value: function setConfigDefaults(func) {
-      if (typeof func !== 'function') return;
-      this.getConfigDefaults = func.bind(this);
+    value: function setConfigDefaults() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil === void 0 ? false : _serviceOptions$isSil;
+      var configDefaultsGetter = options.configDefaultsGetter;
+
+      if (typeof configDefaultsGetter !== 'function') {
+        if (!isSilent) console.log("setConfigDefaults: Wrong type of defaults: ".concat(_typeof(configDefaultsGetter)));
+        return;
+      }
+
+      this.getConfigDefaults = configDefaultsGetter.bind(this);
     }
   }, {
     key: "resetConfig",
@@ -55,8 +71,18 @@ var Config = /*#__PURE__*/function () {
     }
   }, {
     key: "addToConfig",
-    value: function addToConfig(configs) {
-      if (!_Helper["default"].isArr(configs) && !_Helper["default"].isObj(configs)) return;
+    value: function addToConfig() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _serviceOptions$isSil2 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
+      var configs = options.configs;
+
+      if (!_Helper["default"].isArr(configs) && !_Helper["default"].isObj(configs)) {
+        if (!isSilent) console.log("addToConfig: Wrong type of configs: ".concat(_typeof(configs)));
+        return;
+      }
+
       this.config = (0, _webpackMerge["default"])([this.config].concat(_toConsumableArray(_Helper["default"].toArr(configs))));
     }
   }, {
