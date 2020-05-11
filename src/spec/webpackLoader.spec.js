@@ -1,5 +1,4 @@
 import WebpackLoader from '../WebpackLoader';
-import defaults from '../service/Defaults';
 
 const gagName = 'gag.js';
 const additionalConfig = {
@@ -44,13 +43,16 @@ describe('makeNewConfig(options, serviceOptions) method.', () => {
     });
 
     it('it takes { ...configs: object config } in options, then creates config with passed config.', () => {
-      const result = wl.makeNewConfig({ id: name, configs: additionalConfig });
+      const result = wl.makeNewConfig({ id: name, configData: { configs: additionalConfig } });
 
       expect(result.config.entry.major).toEqual(gagName);
     });
 
     it('it takes { ...configs: [object config] } in options, then makes config from passed configs.', () => {
-      const result = wl.makeNewConfig({ id: name, configs: [additionalConfig, anotherAdditionalConfig] });
+      const result = wl.makeNewConfig({
+        id: name,
+        configData: { configs: [additionalConfig, anotherAdditionalConfig] }
+      });
 
       expect(result.config.entry.major).toEqual(gagName);
       expect(result.config.entry.minor).toEqual(gagName);
@@ -89,7 +91,7 @@ describe('makeNewConfig(options, serviceOptions) method.', () => {
     });
 
     beforeEach(() => {
-      wl.resetConfig({ id: name });
+      wl.getConfig({ id: name }).resetToDefaults();
     });
 
     afterAll(() => {
@@ -97,115 +99,22 @@ describe('makeNewConfig(options, serviceOptions) method.', () => {
     });
 
     it('it returns undefined.', () => {
-      const result = wl.makeNewConfig({ id: name, configs: additionalConfig }, { isSilent: true });
+      const result = wl.makeNewConfig({
+        id: name,
+        configData: { configs: additionalConfig }
+      }, { isSilent: true });
 
       expect(result).toBeUndefined();
     });
 
     it('if { ...isForced: true } in serviceOptions, it rewrites the config.', () => {
-      const result = wl.makeNewConfig({ id: name, configs: additionalConfig }, { isForced: true });
+      const result = wl.makeNewConfig({
+        id: name,
+        configData: { configs: additionalConfig }
+      }, { isForced: true });
 
       expect(result).toBeDefined();
       expect(result.config.entry.major).toEqual(gagName);
-    });
-  });
-});
-
-describe('addToConfig(options, serviceOptions) method.', () => {
-  describe('Default behavior:', () => {
-    const name = 'main';
-
-    beforeAll(() => {
-      wl.makeNewConfig({ id: name });
-    });
-
-    beforeEach(() => {
-      wl.resetConfig({ id: name });
-    });
-
-    afterAll(() => {
-      wl.removeConfigs();
-    });
-
-    it('it takes { id: "main", configs: object config } as options, then adds them to "main" config.', () => {
-      wl.addToConfig({ id: name, configs: additionalConfig });
-
-      expect(wl.getConfig({ id: name }).config.entry.major).toEqual(gagName);
-    });
-
-    it('it takes { id: "main", configs: [object config] } as options, then adds configs to "main" config.', () => {
-      wl.addToConfig({ id: name, configs: [additionalConfig, anotherAdditionalConfig] });
-
-      const entries = wl.getConfig({ id: name }).config.entry;
-      expect(entries.major).toEqual(gagName);
-      expect(entries.minor).toEqual(gagName);
-    });
-  });
-
-  describe('When you try to pass not number or string as id:', () => {
-    const name = 'main';
-
-    beforeAll(() => {
-      wl.makeNewConfig({ id: name });
-    });
-
-    afterAll(() => {
-      wl.removeConfigs();
-    });
-
-    it('it returns undefined.', () => {
-      expect(wl.addToConfig({ id: NaN, configs: additionalConfig }, { isSilent: true })).toBeUndefined();
-      expect(wl.addToConfig({ id: null, configs: additionalConfig }, { isSilent: true })).toBeUndefined();
-      expect(wl.addToConfig({ id: {}, configs: additionalConfig }, { isSilent: true })).toBeUndefined();
-
-      expect(wl.getConfig({ id: name }).config.entry.major).toBeUndefined();
-    });
-  });
-
-  describe('When you try to pass not object or array as configs to add:', () => {
-    const name = 'main';
-
-    beforeAll(() => {
-      wl.makeNewConfig({ id: name });
-    });
-
-    beforeEach(() => {
-      wl.resetConfig({ id: name });
-    });
-
-    afterAll(() => {
-      wl.removeConfigs();
-    });
-
-    it('it returns undefined.', () => {
-      wl.addToConfig({ id: name, configs: 'someString' }, { isSilent: true });
-      wl.addToConfig({ id: name, configs: 0 }, { isSilent: true });
-
-      expect(wl.getConfig({ id: name }).config.entry.major).toBeUndefined();
-    });
-  });
-
-  describe('When there is no config with such id:', () => {
-    const name = 'main';
-
-    beforeEach(() => {
-      wl.removeConfigs();
-    });
-
-    afterAll(() => {
-      wl.removeConfigs();
-    });
-
-    it('it returns undefined.', () => {
-      wl.addToConfig({ id: name, configs: additionalConfig }, { isSilent: true });
-
-      expect(wl.getConfig({ id: name }, { isSilent: true })).toBeUndefined();
-    });
-
-    it('if { ...isForced: true } passed in serviceConfigs, creates new config.', () => {
-      wl.addToConfig({ id: name, configs: additionalConfig }, { isSilent: true, isForced: true });
-
-      expect(wl.getConfig({ id: name }).config.entry.major).toEqual(gagName);
     });
   });
 });
@@ -216,7 +125,7 @@ describe('getConfig(id, serviceOptions) method.', () => {
     const serviceName = 'some';
 
     beforeAll(() => {
-      wl.makeNewConfig({ id: name, configs: additionalConfig });
+      wl.makeNewConfig({ id: name, configData: { configs: additionalConfig } });
     });
 
     afterAll(() => {
@@ -287,50 +196,6 @@ describe('getConfigs(options) method.', () => {
       const result = wl.getConfigs({ isService: true });
 
       expect(result).toEqual(wl._selectConfigsBranch(true));
-    });
-  });
-});
-
-describe('resetConfig(id, serviceOptions) method.', () => {
-  describe('Default behavior:', () => {
-    const name = 'main';
-
-    beforeAll(() => {
-      wl.makeNewConfig({ id: name });
-    });
-
-    beforeEach(() => {
-      wl.addToConfig({ id: name, configs: additionalConfig });
-    });
-
-    afterAll(() => {
-      wl.removeConfigs();
-    });
-
-    it('it takes { id: "main" } as options, then resets "main" config to default.', () => {
-      wl.resetConfig({ id: name });
-
-      expect(wl.getConfig({ id: name }).config.entry.major).toBeUndefined();
-    });
-  });
-
-  describe('When you try to pass not number or string as id:', () => {
-    const name = 'main';
-
-    beforeAll(() => {
-      wl.makeNewConfig({ id: name });
-      wl.addToConfig({ id: name, configs: additionalConfig });
-    });
-
-    afterAll(() => {
-      wl.removeConfigs();
-    });
-
-    it('it returns.', () => {
-      wl.resetConfig({ id: {} }, { isSilent: true });
-      wl.resetConfig({ id: NaN }, { isSilent: true });
-
-      expect(wl.getConfig({ id: name }).config.entry.major).toEqual(gagName);
     });
   });
 });

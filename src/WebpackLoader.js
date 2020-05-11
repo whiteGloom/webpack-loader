@@ -24,7 +24,7 @@ class WebpackLoader {
 
   makeNewConfig(options = {}, serviceOptions = {}) {
     const { isForced = false, isSilent = false } = serviceOptions;
-    const { id, configs: userConfigs, preset: userPreset, isService = false } = options;
+    const { id, configData, preset: userPreset, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error(`makeNewConfig: Wrong ID passed: ${id}`);
@@ -40,35 +40,8 @@ class WebpackLoader {
     const branch = this._selectConfigsBranch(isService);
     const preset = userPreset || this._defaults.getPreset(id, isService);
 
-    branch[id] = new ConfigModel({ ...preset, ...{ configs: userConfigs } });
+    branch[id] = new ConfigModel({ ...preset, ...configData });
     return branch[id];
-  }
-
-  addToConfig(options = {}, serviceOptions = {}) {
-    const { isForced = false, isSilent = false } = serviceOptions;
-    const { id, configs: userConfigs, isService = false } = options;
-
-    if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error(`addToConfig: Wrong ID passed: ${id}`);
-      return;
-    }
-
-    if (!userConfigs) {
-      if (!isSilent) console.error('addToConfig: No configs passed');
-      return;
-    }
-
-    if (!this._isUsed(id, isService)) {
-      if (!isForced) {
-        if (!isSilent) console.error(`addToConfig: There is no config with such ID: ${id}`);
-        return;
-      }
-
-      this.makeNewConfig(options, serviceOptions);
-      return;
-    }
-
-    this.getConfig({ id }, { isService }).addToConfig(userConfigs);
   }
 
   getConfig(options = {}, serviceOptions = {}) {
@@ -92,18 +65,6 @@ class WebpackLoader {
     const { isService = false } = options;
 
     return this._selectConfigsBranch(isService);
-  }
-
-  resetConfig(options = {}, serviceOptions = {}) {
-    const { isSilent = false } = serviceOptions;
-    const { id, isService = false } = options;
-
-    if (!WebpackLoader._validateId(id)) {
-      if (!isSilent) console.error(`resetConfig: Wrong ID passed: ${id}`);
-      return;
-    }
-
-    this._selectConfigsBranch(isService)[id].resetToDefaults();
   }
 
   removeConfig(options = {}, serviceOptions = {}) {
@@ -135,7 +96,7 @@ class WebpackLoader {
     if (serviceConfigs) {
       serviceConfigs.forEach((config) => {
         if (typeof config === 'string') {
-          config = this.getConfig({ id: config }, { isService: true });
+          config = this.getConfig({ id: config, isService: true });
         }
         config.start(webpackConfigured, startOptions);
       });

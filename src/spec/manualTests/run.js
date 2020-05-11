@@ -6,6 +6,9 @@ const workspace = process.cwd();
 
 const name = 'major';
 const addName = 'minor';
+const servConfName = 'serv';
+
+
 const customConfig = {
   entry: {
     major: `${workspace}/src/spec/manualTests/source.js`
@@ -15,72 +18,59 @@ const customConfig = {
     path: `${workspace}/src/spec/manualTests/testProd/`
   }
 };
+
 const additionalCustomConfig = {
   entry: {
     minor: `${workspace}/src/spec/manualTests/source.js`
   }
 };
 
+
 const wl = new WebpackLoader();
-wl.makeNewConfig(name, { configs: customConfig });
-wl.makeNewConfig(addName, { configs: [customConfig, additionalCustomConfig] });
-wl.addToConfig('devServer', { stats: 'errors-only' }, ['isService']);
+
+wl.makeNewConfig({ id: name, configData: { configs: customConfig } });
+
+wl.makeNewConfig({
+  id: addName,
+  configData: { configs: [customConfig, additionalCustomConfig] }
+});
+
+wl.makeNewConfig({
+  id: servConfName,
+  isService: true,
+  configData: {
+    configs: { stats: 'errors-only' },
+    start() {
+      this.handler = { a: 123 };
+      this.isRunning = true;
+    },
+    stop() {
+      this.handler = null;
+      this.isRunning = false;
+    }
+  }
+});
+
 
 try {
   fs.rmdirSync(`${workspace}/src/spec/manualTests/testProd`, { recursive: true });
 } catch (e) {
-  console.log(e, '\nNo need to clear the folder.');
+  console.log('\nNo need to clear the folder.');
 }
+
 
 // Run method tests
-if (npmArguments.includes('start')) {
-  if (npmArguments.includes('byObject')) {
-    const { config } = wl.getConfig(name);
-    wl.start(config);
-  } else if (npmArguments.includes('byClass')) {
-    const config = wl.getConfig(name);
-    wl.start(config);
-  } else if (npmArguments.includes('multi')) {
-    wl.start([name, addName], [], { callback: () => console.log('Done!') });
-  } else {
-    wl.start([name], [], { callback: () => console.log('Done!') });
-  }
-}
-
-// Watch method tests
-if (npmArguments.includes('watch')) {
-  if (npmArguments.includes('byClass')) {
-    const config = wl.getConfig(name);
-    const serviceConfig = wl.getConfig('watch', ['isService']);
-    wl.start([config], [serviceConfig], { callback: () => console.log('Done!') });
-  } else if (npmArguments.includes('multi')) {
-    wl.start([name, addName], ['watch'], { callback: () => console.log('Done!') });
-  } else {
-    wl.start([name], ['watch'], { callback: () => console.log('Done!') });
-  }
-
-  if (npmArguments.includes('stop')) {
-    setTimeout(() => {
-      wl.stop({ callback: () => console.log('Stopped!') });
-    }, 5000);
-  }
-}
-
-// devServer method tests
-if (npmArguments.includes('devServer')) {
-  if (npmArguments.includes('byClass')) {
-    const config = wl.getConfig(name);
-    const serviceConfig = wl.getConfig('devServer', ['isService']);
-    wl.start([config], [serviceConfig], { callback: () => console.log('Done!') });
-  } else if (npmArguments.includes('multi')) {
-    wl.start([name, addName], ['devServer'], { callback: () => console.log('Done!') });
-  } else {
-    wl.start([name], ['devServer'], { callback: () => console.log('Done!') });
-  }
-
-  if (npmArguments.includes('stop')) {
-    setTimeout(() => {
-      wl.stop({ callback: () => console.log('Stopped!') });
-    }, 5000);
-  }
+if (npmArguments.includes('byObject')) {
+  const { config } = wl.getConfig({ id: name });
+  wl.start({ configs: config });
+} else if (npmArguments.includes('byClass')) {
+  const config = wl.getConfig({ id: name });
+  wl.start({ configs: config });
+} else if (npmArguments.includes('multi')) {
+  wl.start({ configs: [name, addName] });
+} else if (npmArguments.includes('withService')) {
+  wl.start({ configs: [name, addName], serviceConfigs: [servConfName] });
+  setTimeout(() => wl.stop({ configs: [name, addName], serviceConfigs: [servConfName] }), 5000);
+} else {
+  wl.start({ configs: [name] });
 }

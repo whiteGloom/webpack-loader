@@ -59,13 +59,13 @@ var WebpackLoader = /*#__PURE__*/function () {
           _serviceOptions$isSil = serviceOptions.isSilent,
           isSilent = _serviceOptions$isSil === void 0 ? false : _serviceOptions$isSil;
       var id = options.id,
-          userConfigs = options.configs,
+          configData = options.configData,
           userPreset = options.preset,
           _options$isService = options.isService,
           isService = _options$isService === void 0 ? false : _options$isService;
 
       if (!WebpackLoader._validateId(id)) {
-        if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+        if (!isSilent) console.error("makeNewConfig: Wrong ID passed: ".concat(id));
         return;
       }
 
@@ -80,64 +80,22 @@ var WebpackLoader = /*#__PURE__*/function () {
 
       var preset = userPreset || this._defaults.getPreset(id, isService);
 
-      branch[id] = new ConfigModel(_objectSpread({}, preset, {}, {
-        configs: userConfigs
-      }));
+      branch[id] = new ConfigModel(_objectSpread({}, preset, {}, configData));
       return branch[id];
-    }
-  }, {
-    key: "addToConfig",
-    value: function addToConfig() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var _serviceOptions$isFor2 = serviceOptions.isForced,
-          isForced = _serviceOptions$isFor2 === void 0 ? false : _serviceOptions$isFor2,
-          _serviceOptions$isSil2 = serviceOptions.isSilent,
-          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
-      var id = options.id,
-          userConfigs = options.configs,
-          _options$isService2 = options.isService,
-          isService = _options$isService2 === void 0 ? false : _options$isService2;
-
-      if (!WebpackLoader._validateId(id)) {
-        if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
-        return;
-      }
-
-      if (!userConfigs) {
-        if (!isSilent) console.error('addToConfig: No configs passed');
-        return;
-      }
-
-      if (!this._isUsed(id, isService)) {
-        if (!isForced) {
-          if (!isSilent) console.error("addToConfig: There is no config with such ID: ".concat(id));
-          return;
-        }
-
-        this.makeNewConfig(options, serviceOptions);
-        return;
-      }
-
-      this.getConfig({
-        id: id
-      }, {
-        isService: isService
-      }).addToConfig(userConfigs);
     }
   }, {
     key: "getConfig",
     value: function getConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var _serviceOptions$isSil3 = serviceOptions.isSilent,
-          isSilent = _serviceOptions$isSil3 === void 0 ? false : _serviceOptions$isSil3;
+      var _serviceOptions$isSil2 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil2 === void 0 ? false : _serviceOptions$isSil2;
       var id = options.id,
-          _options$isService3 = options.isService,
-          isService = _options$isService3 === void 0 ? false : _options$isService3;
+          _options$isService2 = options.isService,
+          isService = _options$isService2 === void 0 ? false : _options$isService2;
 
       if (!WebpackLoader._validateId(id)) {
-        if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+        if (!isSilent) console.error("getConfig: Wrong ID passed: ".concat(id));
         return;
       }
 
@@ -152,46 +110,27 @@ var WebpackLoader = /*#__PURE__*/function () {
     key: "getConfigs",
     value: function getConfigs() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var _options$isService4 = options.isService,
-          isService = _options$isService4 === void 0 ? false : _options$isService4;
+      var _options$isService3 = options.isService,
+          isService = _options$isService3 === void 0 ? false : _options$isService3;
       return this._selectConfigsBranch(isService);
-    }
-  }, {
-    key: "resetConfig",
-    value: function resetConfig() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var _serviceOptions$isSil4 = serviceOptions.isSilent,
-          isSilent = _serviceOptions$isSil4 === void 0 ? false : _serviceOptions$isSil4;
-      var id = options.id,
-          _options$isService5 = options.isService,
-          isService = _options$isService5 === void 0 ? false : _options$isService5;
-
-      if (!WebpackLoader._validateId(id)) {
-        if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
-        return;
-      }
-
-      this._selectConfigsBranch(isService)[id].resetToDefaults();
     }
   }, {
     key: "removeConfig",
     value: function removeConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var _serviceOptions$isSil5 = serviceOptions.isSilent,
-          isSilent = _serviceOptions$isSil5 === void 0 ? false : _serviceOptions$isSil5;
+      var _serviceOptions$isSil3 = serviceOptions.isSilent,
+          isSilent = _serviceOptions$isSil3 === void 0 ? false : _serviceOptions$isSil3;
       var id = options.id,
-          _options$isService6 = options.isService,
-          isService = _options$isService6 === void 0 ? false : _options$isService6;
+          _options$isService4 = options.isService,
+          isService = _options$isService4 === void 0 ? false : _options$isService4;
 
       if (!WebpackLoader._validateId(id)) {
-        if (!isSilent) console.error('makeNewConfig: Wrong ID passed');
+        if (!isSilent) console.error("removeConfig: Wrong ID passed: ".concat(id));
         return;
       }
 
       if (!this._isUsed(id, isService)) {
-        if (!isSilent) console.error("removeConfig: There is no config with such ID: ".concat(id));
         return;
       }
 
@@ -218,8 +157,7 @@ var WebpackLoader = /*#__PURE__*/function () {
         serviceConfigs.forEach(function (config) {
           if (typeof config === 'string') {
             config = _this.getConfig({
-              id: config
-            }, {
+              id: config,
               isService: true
             });
           }
@@ -250,7 +188,7 @@ var WebpackLoader = /*#__PURE__*/function () {
   }, {
     key: "getModel",
     value: function getModel(isService) {
-      return this._models[isService ? 'service' : 'simple'];
+      return this._models[isService ? 'Service' : 'Simple'];
     }
   }, {
     key: "_buildConfigs",
