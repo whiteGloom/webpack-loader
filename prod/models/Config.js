@@ -37,7 +37,7 @@ var Config = /*#__PURE__*/function () {
         configs = options.configs;
     this.config = null;
 
-    this.getConfigDefaults = function () {
+    this._getConfigDefaults = function () {
       return {};
     };
 
@@ -80,12 +80,12 @@ var Config = /*#__PURE__*/function () {
         return;
       }
 
-      this.getConfigDefaults = configDefaultsGetter.bind(this);
+      this._getConfigDefaults = configDefaultsGetter.bind(this);
     }
   }, {
     key: "resetConfig",
     value: function resetConfig() {
-      this.config = this.getConfigDefaults();
+      this.config = this._getConfigDefaults();
     }
   }, {
     key: "resetToDefaults",

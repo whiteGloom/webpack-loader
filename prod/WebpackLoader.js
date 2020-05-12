@@ -80,7 +80,10 @@ var WebpackLoader = /*#__PURE__*/function () {
 
       var branch = this._selectConfigsBranch(isService);
 
-      var preset = userPreset || this._defaults.getPreset(id, isService);
+      var preset = userPreset || this._defaults.getPreset({
+        id: id,
+        isService: isService
+      });
 
       branch[id] = new ConfigModel(_objectSpread({}, preset, {}, configData));
       return branch[id];

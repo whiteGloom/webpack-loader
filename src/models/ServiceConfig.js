@@ -9,8 +9,8 @@ class ServiceConfig extends Config {
     this.handler = null;
     this.start = null;
     this.stop = null;
-    this.startDefaults = () => {};
-    this.stopDefaults = () => {};
+    this._startDefaults = () => {};
+    this._stopDefaults = () => {};
 
     if (startDefaultsGetter) this.setStartDefaults({ startDefaultsGetter });
     if (stopDefaultsGetter) this.setStopDefaults({ stopDefaultsGetter });
@@ -55,7 +55,7 @@ class ServiceConfig extends Config {
       return;
     }
 
-    this.startDefaults = startDefaults.bind(this);
+    this._startDefaults = startDefaults.bind(this);
   }
 
   setStopDefaults(options = {}, serviceOptions = {}) {
@@ -67,15 +67,15 @@ class ServiceConfig extends Config {
       return;
     }
 
-    this.stopDefaults = stopDefaults.bind(this);
+    this._stopDefaults = stopDefaults.bind(this);
   }
 
   resetStartFunction() {
-    this.start = this.startDefaults;
+    this.start = this._startDefaults;
   }
 
   resetStopFunction() {
-    this.stop = this.stopDefaults;
+    this.stop = this._stopDefaults;
   }
 
   resetToDefaults() {

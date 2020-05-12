@@ -6,7 +6,7 @@ class Config {
     const { configDefaultsGetter, configs } = options;
 
     this.config = null;
-    this.getConfigDefaults = () => ({});
+    this._getConfigDefaults = () => ({});
 
     if (configDefaultsGetter) this.setConfigDefaultsGetter({ configDefaultsGetter });
     this.resetConfig();
@@ -35,11 +35,11 @@ class Config {
       return;
     }
 
-    this.getConfigDefaults = configDefaultsGetter.bind(this);
+    this._getConfigDefaults = configDefaultsGetter.bind(this);
   }
 
   resetConfig() {
-    this.config = this.getConfigDefaults();
+    this.config = this._getConfigDefaults();
   }
 
   resetToDefaults() {

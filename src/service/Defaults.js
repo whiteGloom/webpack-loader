@@ -35,29 +35,32 @@ class Defaults {
     this.defaultConfigs = [];
   }
 
-  setHandler(options) {
-    const { key, func, isDefault = !key } = options;
+  setHandler(options = {}) {
+    const { id, handler, isDefault = !id } = options;
 
     if (isDefault) {
-      this.handlers.default = func;
+      this.handlers.default = handler;
     } else {
-      this.handlers.custom[key] = func;
+      this.handlers.custom[id] = handler;
     }
   }
 
-  getHandler(key) {
-    return this.handlers.custom[key] || this.handlers.default;
+  getHandler(options = {}) {
+    const { id } = options;
+    return this.handlers.custom[id] || this.handlers.default;
   }
 
-  setId(key, value) {
-    this.ids[key] = value;
+  setId(options = {}) {
+    const { id, value } = options;
+    this.ids[id] = value;
   }
 
-  getId(key) {
-    return this.ids[key];
+  getId(options = {}) {
+    const { id } = options;
+    return this.ids[id];
   }
 
-  setPreset(options) {
+  setPreset(options = {}) {
     const { id, preset, isService = false, isDefault = !id } = options;
     const tree = this.presets[isService ? 'service' : 'simple'];
 
@@ -68,12 +71,14 @@ class Defaults {
     }
   }
 
-  getPreset(id, isService = false) {
+  getPreset(options = {}) {
+    const { id, isService = false } = options;
     const tree = this.presets[isService ? 'service' : 'simple'];
+
     return tree.custom[id] || tree.default;
   }
 
-  addDefaultConfig(options) {
+  addDefaultConfig(options = {}) {
     const { id, additionalConfigs, isService = false } = options;
     this.defaultConfigs.push({ id, isService, additionalConfigs });
   }

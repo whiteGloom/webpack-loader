@@ -52,36 +52,45 @@ var Defaults = /*#__PURE__*/function () {
 
   _createClass(Defaults, [{
     key: "setHandler",
-    value: function setHandler(options) {
-      var key = options.key,
-          func = options.func,
+    value: function setHandler() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var id = options.id,
+          handler = options.handler,
           _options$isDefault = options.isDefault,
-          isDefault = _options$isDefault === void 0 ? !key : _options$isDefault;
+          isDefault = _options$isDefault === void 0 ? !id : _options$isDefault;
 
       if (isDefault) {
-        this.handlers["default"] = func;
+        this.handlers["default"] = handler;
       } else {
-        this.handlers.custom[key] = func;
+        this.handlers.custom[id] = handler;
       }
     }
   }, {
     key: "getHandler",
-    value: function getHandler(key) {
-      return this.handlers.custom[key] || this.handlers["default"];
+    value: function getHandler() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var id = options.id;
+      return this.handlers.custom[id] || this.handlers["default"];
     }
   }, {
     key: "setId",
-    value: function setId(key, value) {
-      this.ids[key] = value;
+    value: function setId() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var id = options.id,
+          value = options.value;
+      this.ids[id] = value;
     }
   }, {
     key: "getId",
-    value: function getId(key) {
-      return this.ids[key];
+    value: function getId() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var id = options.id;
+      return this.ids[id];
     }
   }, {
     key: "setPreset",
-    value: function setPreset(options) {
+    value: function setPreset() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var id = options.id,
           preset = options.preset,
           _options$isService = options.isService,
@@ -98,18 +107,22 @@ var Defaults = /*#__PURE__*/function () {
     }
   }, {
     key: "getPreset",
-    value: function getPreset(id) {
-      var isService = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    value: function getPreset() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var id = options.id,
+          _options$isService2 = options.isService,
+          isService = _options$isService2 === void 0 ? false : _options$isService2;
       var tree = this.presets[isService ? 'service' : 'simple'];
       return tree.custom[id] || tree["default"];
     }
   }, {
     key: "addDefaultConfig",
-    value: function addDefaultConfig(options) {
+    value: function addDefaultConfig() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var id = options.id,
           additionalConfigs = options.additionalConfigs,
-          _options$isService2 = options.isService,
-          isService = _options$isService2 === void 0 ? false : _options$isService2;
+          _options$isService3 = options.isService,
+          isService = _options$isService3 === void 0 ? false : _options$isService3;
       this.defaultConfigs.push({
         id: id,
         isService: isService,

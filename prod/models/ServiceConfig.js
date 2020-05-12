@@ -51,9 +51,9 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
     _this.start = null;
     _this.stop = null;
 
-    _this.startDefaults = function () {};
+    _this._startDefaults = function () {};
 
-    _this.stopDefaults = function () {};
+    _this._stopDefaults = function () {};
 
     if (startDefaultsGetter) _this.setStartDefaults({
       startDefaultsGetter: startDefaultsGetter
@@ -121,7 +121,7 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
         return;
       }
 
-      this.startDefaults = startDefaults.bind(this);
+      this._startDefaults = startDefaults.bind(this);
     }
   }, {
     key: "setStopDefaults",
@@ -137,17 +137,17 @@ var ServiceConfig = /*#__PURE__*/function (_Config) {
         return;
       }
 
-      this.stopDefaults = stopDefaults.bind(this);
+      this._stopDefaults = stopDefaults.bind(this);
     }
   }, {
     key: "resetStartFunction",
     value: function resetStartFunction() {
-      this.start = this.startDefaults;
+      this.start = this._startDefaults;
     }
   }, {
     key: "resetStopFunction",
     value: function resetStopFunction() {
-      this.stop = this.stopDefaults;
+      this.stop = this._stopDefaults;
     }
   }, {
     key: "resetToDefaults",

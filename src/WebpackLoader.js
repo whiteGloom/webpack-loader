@@ -38,7 +38,7 @@ class WebpackLoader {
 
     const ConfigModel = this.getModel(isService);
     const branch = this._selectConfigsBranch(isService);
-    const preset = userPreset || this._defaults.getPreset(id, isService);
+    const preset = userPreset || this._defaults.getPreset({ id, isService });
 
     branch[id] = new ConfigModel({ ...preset, ...configData });
     return branch[id];
