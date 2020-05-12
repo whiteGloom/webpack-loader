@@ -135,7 +135,7 @@ class WebpackLoader {
           results.push(simpleBranch[config].config);
         } else if (config instanceof this.getModel(false)) {
           results.push(config.config);
-        } else if (config instanceof Object) {
+        } else if (typeof config === 'object') {
           results.push(config);
         }
       });

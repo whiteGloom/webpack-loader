@@ -1,7 +1,7 @@
 import Config from './Config';
 
 class ServiceConfig extends Config {
-  constructor(options) {
+  constructor(options = {}) {
     super(options);
     const { startDefaultsGetter, stopDefaultsGetter, startFunction, stopFunction } = options;
 

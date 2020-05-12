@@ -1,12 +1,12 @@
 import fs from 'fs';
-import WebpackLoader from '../../WebpackLoader';
+import WebpackLoader from '../../src/WebpackLoader';
 
 const npmArguments = process.argv.slice(2);
 const workspace = process.cwd();
 
 const name = 'major';
 const addName = 'minor';
-const servConfName = 'serv';
+const serviceConfName = 'service';
 
 
 const customConfig = {
@@ -36,7 +36,7 @@ wl.makeNewConfig({
 });
 
 wl.makeNewConfig({
-  id: servConfName,
+  id: serviceConfName,
   isService: true,
   configData: {
     configs: { stats: 'errors-only' },
@@ -69,8 +69,8 @@ if (npmArguments.includes('byObject')) {
 } else if (npmArguments.includes('multi')) {
   wl.start({ configs: [name, addName] });
 } else if (npmArguments.includes('withService')) {
-  wl.start({ configs: [name, addName], serviceConfigs: [servConfName] });
-  setTimeout(() => wl.stop({ configs: [name, addName], serviceConfigs: [servConfName] }), 5000);
+  wl.start({ configs: [name, addName], serviceConfigs: [serviceConfName] });
+  setTimeout(() => wl.stop({ configs: [name, addName], serviceConfigs: [serviceConfName] }), 5000);
 } else {
   wl.start({ configs: [name] });
 }

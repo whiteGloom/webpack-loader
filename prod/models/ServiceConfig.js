@@ -34,8 +34,10 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 var ServiceConfig = /*#__PURE__*/function (_Config) {
   _inherits(ServiceConfig, _Config);
 
-  function ServiceConfig(options) {
+  function ServiceConfig() {
     var _this;
+
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     _classCallCheck(this, ServiceConfig);
 

@@ -28,7 +28,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var Config = /*#__PURE__*/function () {
-  function Config(options) {
+  function Config() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     _classCallCheck(this, Config);
 
     var configDefaultsGetter = options.configDefaultsGetter,
@@ -39,7 +41,7 @@ var Config = /*#__PURE__*/function () {
       return {};
     };
 
-    if (configDefaultsGetter) this.setConfigDefaults({
+    if (configDefaultsGetter) this.setConfigDefaultsGetter({
       configDefaultsGetter: configDefaultsGetter
     });
     this.resetConfig();
@@ -65,8 +67,8 @@ var Config = /*#__PURE__*/function () {
       this.config = (0, _webpackMerge["default"])([this.config].concat(_toConsumableArray(_Helper["default"].toArr(configs))));
     }
   }, {
-    key: "setConfigDefaults",
-    value: function setConfigDefaults() {
+    key: "setConfigDefaultsGetter",
+    value: function setConfigDefaultsGetter() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var serviceOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var _serviceOptions$isSil2 = serviceOptions.isSilent,

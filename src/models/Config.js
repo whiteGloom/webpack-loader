@@ -2,13 +2,13 @@ import merge from 'webpack-merge';
 import Helper from '../Helper';
 
 class Config {
-  constructor(options) {
+  constructor(options = {}) {
     const { configDefaultsGetter, configs } = options;
 
     this.config = null;
     this.getConfigDefaults = () => ({});
 
-    if (configDefaultsGetter) this.setConfigDefaults({ configDefaultsGetter });
+    if (configDefaultsGetter) this.setConfigDefaultsGetter({ configDefaultsGetter });
     this.resetConfig();
 
     if (configs) this.addToConfig({ configs });
@@ -26,7 +26,7 @@ class Config {
     this.config = merge([this.config, ...Helper.toArr(configs)]);
   }
 
-  setConfigDefaults(options = {}, serviceOptions = {}) {
+  setConfigDefaultsGetter(options = {}, serviceOptions = {}) {
     const { isSilent = false } = serviceOptions;
     const { configDefaultsGetter } = options;
 
