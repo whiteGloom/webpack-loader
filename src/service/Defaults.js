@@ -1,11 +1,11 @@
 class Defaults {
   constructor() {
     this.ids = {};
-    this.handlers = {
+    this._handlers = {
       default: () => {},
       custom: {}
     };
-    this.presets = {
+    this._presets = {
       simple: {
         default: {
           configDefaults() {
@@ -32,37 +32,27 @@ class Defaults {
         custom: {}
       }
     };
-    this.defaultConfigs = [];
   }
 
   setHandler(options = {}) {
     const { id, handler, isDefault = !id } = options;
 
     if (isDefault) {
-      this.handlers.default = handler;
+      this._handlers.default = handler;
     } else {
-      this.handlers.custom[id] = handler;
+      this._handlers.custom[id] = handler;
     }
   }
 
   getHandler(options = {}) {
     const { id } = options;
-    return this.handlers.custom[id] || this.handlers.default;
-  }
 
-  setId(options = {}) {
-    const { id, value } = options;
-    this.ids[id] = value;
-  }
-
-  getId(options = {}) {
-    const { id } = options;
-    return this.ids[id];
+    return this._handlers.custom[id] || this._handlers.default;
   }
 
   setPreset(options = {}) {
     const { id, preset, isService = false, isDefault = !id } = options;
-    const tree = this.presets[isService ? 'service' : 'simple'];
+    const tree = this._presets[isService ? 'service' : 'simple'];
 
     if (isDefault) {
       tree.default = preset;
@@ -73,18 +63,9 @@ class Defaults {
 
   getPreset(options = {}) {
     const { id, isService = false } = options;
-    const tree = this.presets[isService ? 'service' : 'simple'];
+    const tree = this._presets[isService ? 'service' : 'simple'];
 
     return tree.custom[id] || tree.default;
-  }
-
-  addDefaultConfig(options = {}) {
-    const { id, additionalConfigs, isService = false } = options;
-    this.defaultConfigs.push({ id, isService, additionalConfigs });
-  }
-
-  getDefaultConfigs() {
-    return this.defaultConfigs;
   }
 }
 

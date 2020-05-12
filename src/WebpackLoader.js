@@ -18,10 +18,6 @@ class WebpackLoader {
     };
   }
 
-  init() {
-    this._initDefaultConfigs();
-  }
-
   makeNewConfig(options = {}, serviceOptions = {}) {
     const { isForced = false, isSilent = false } = serviceOptions;
     const { id, configData, preset: userPreset, isService = false } = options;
@@ -149,18 +145,6 @@ class WebpackLoader {
 
   _selectConfigsBranch(isService = false) {
     return isService ? this._configs.serviceConfigs : this._configs.simpleConfigs;
-  }
-
-  _initDefaultConfigs() {
-    const defaultConfigs = this._defaults.getDefaultConfigs();
-
-    defaultConfigs.forEach((config) => {
-      const { id, isService, additionalConfigs } = config;
-      this.makeNewConfig(
-        { id, configs: additionalConfigs },
-        { isService, isSilent: true }
-      );
-    });
   }
 
   static _validateId(id) {

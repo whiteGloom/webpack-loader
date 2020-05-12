@@ -43,10 +43,12 @@ wl.makeNewConfig({
     startFunction() {
       this.handler = { a: 123 };
       this.isRunning = true;
+      console.log('Start:', this);
     },
     stopFunction() {
       this.handler = null;
       this.isRunning = false;
+      console.log('Stop:', this);
     }
   }
 });

@@ -47,11 +47,6 @@ var WebpackLoader = /*#__PURE__*/function () {
   }
 
   _createClass(WebpackLoader, [{
-    key: "init",
-    value: function init() {
-      this._initDefaultConfigs();
-    }
-  }, {
     key: "makeNewConfig",
     value: function makeNewConfig() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -233,27 +228,6 @@ var WebpackLoader = /*#__PURE__*/function () {
     value: function _selectConfigsBranch() {
       var isService = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       return isService ? this._configs.serviceConfigs : this._configs.simpleConfigs;
-    }
-  }, {
-    key: "_initDefaultConfigs",
-    value: function _initDefaultConfigs() {
-      var _this3 = this;
-
-      var defaultConfigs = this._defaults.getDefaultConfigs();
-
-      defaultConfigs.forEach(function (config) {
-        var id = config.id,
-            isService = config.isService,
-            additionalConfigs = config.additionalConfigs;
-
-        _this3.makeNewConfig({
-          id: id,
-          configs: additionalConfigs
-        }, {
-          isService: isService,
-          isSilent: true
-        });
-      });
     }
   }], [{
     key: "_validateId",

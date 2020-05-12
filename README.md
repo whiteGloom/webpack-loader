@@ -13,12 +13,12 @@
 
 **Webpack-loader** — the plugin for organizing work with [Webpack &#10150;](https://webpack.js.org/ 'Webpack').
 
-**Note:** For more information check the **[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**.
+**Note:** For more information check the **[Wiki &#10150;](./webpack-loader/wiki 'Wiki')**.
 
 <h2 id='navigation-en'>Navigation</h2>
 
 * **[What is it? [EN]](#what-is-it-en 'What is it? [EN]')**
-    * _**[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**_
+    * _**[Wiki &#10150;](./webpack-loader/wiki 'Wiki')**_
     * **Navigation**
     * **Short instruction:**
         * **[Installation](#installation-en 'Installation')**
@@ -30,7 +30,7 @@
 
 <h3 id='installation-en'>Installation</h3>
 
-To install plugin, use command:
+To install the plugin, use command:
 
 ```
 npm i -D whiteGloom/webpack-loader
@@ -60,16 +60,10 @@ import WebpackLoader from 'webpack-loader';
 
 <h3 id='usage-en'>Usage</h3>
 
-To create instance of plugin, use commands:
+To create an instance of plugin, use commands:
 
 ```
 new WebpackLoader();
-```
-
-If you had changed defaults, you must init the instance (not required by default):
-
-```
-instance.init();
 ```
 
 **[↑ To navigation](#navigation-en '↑ To navigation')** 
@@ -134,12 +128,12 @@ wl.start({
 
 **Webpack-loader** — это плагин для организации работы с [Webpack &#10150;](https://webpack.js.org/ 'Webpack').
 
-**Note:** более подробная информация находится на **[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki')**<sup>[eng]</sup>.
+**Note:** более подробная информация находится на **[Wiki &#10150;](./webpack-loader/wiki 'Wiki')**<sup>[eng]</sup>.
 
 <h2 id='navigation-ru'>Навигация</h2>
 
 * **[Шо ита? [RU]](#what-is-it-ru 'Шо ита? [RU]')**
-    * _**[Wiki &#10150;](https://github.com/whiteGloom/webpack-loader/wiki 'Wiki [EN]')<sup>[eng]</sup>**_
+    * _**[Wiki &#10150;](./webpack-loader/wiki 'Wiki [EN]')<sup>[eng]</sup>**_
     * **Навигация**
     * **Краткая инструкция:**
         * **[Установка](#installation-ru 'Установка')**
@@ -185,12 +179,6 @@ import WebpackLoader from 'webpack-loader';
 
 ```
 new WebpackLoader();
-```
-
-Если вы изменяли defaults, то необходимо инициализировать экземпляр (не требуется по умолчанию):
-
-```
-instance.init();
 ```
 
 **[↑ К навигации](#navigation-ru '↑ К навигации')**

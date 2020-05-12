@@ -14,7 +14,6 @@ const anotherAdditionalConfig = {
 };
 
 const wl = new WebpackLoader();
-wl.init();
 
 describe('makeNewConfig(options, serviceOptions) method.', () => {
   describe('Default behavior: ', () => {
