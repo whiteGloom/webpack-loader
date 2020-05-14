@@ -56,7 +56,8 @@ var WebpackLoader = /*#__PURE__*/function () {
           _serviceOptions$isSil = serviceOptions.isSilent,
           isSilent = _serviceOptions$isSil === void 0 ? false : _serviceOptions$isSil;
       var id = options.id,
-          configData = options.configData,
+          _options$configData = options.configData,
+          configData = _options$configData === void 0 ? {} : _options$configData,
           userPreset = options.preset,
           _options$isService = options.isService,
           isService = _options$isService === void 0 ? false : _options$isService;
@@ -80,7 +81,7 @@ var WebpackLoader = /*#__PURE__*/function () {
         isService: isService
       });
 
-      branch[id] = new ConfigModel(_objectSpread({}, preset, {}, configData));
+      branch[id] = new ConfigModel(_objectSpread(_objectSpread({}, preset), configData));
       return branch[id];
     }
   }, {

@@ -1,3 +1,5 @@
+import Helper from '../Helper';
+
 class Defaults {
   constructor() {
     this._handlers = {
@@ -36,6 +38,8 @@ class Defaults {
   setHandler(options = {}) {
     const { id, handler, isDefault = !id } = options;
 
+    if (typeof handler !== 'function') return;
+
     if (isDefault) {
       this._handlers.default = handler;
     } else {
@@ -52,6 +56,8 @@ class Defaults {
   setPreset(options = {}) {
     const { id, preset, isService = false, isDefault = !id } = options;
     const tree = this._presets[isService ? 'service' : 'simple'];
+
+    if (!Helper.isObj(preset)) return;
 
     if (isDefault) {
       tree.default = preset;

@@ -20,7 +20,7 @@ class WebpackLoader {
 
   makeNewConfig(options = {}, serviceOptions = {}) {
     const { isForced = false, isSilent = false } = serviceOptions;
-    const { id, configData, preset: userPreset, isService = false } = options;
+    const { id, configData = {}, preset: userPreset, isService = false } = options;
 
     if (!WebpackLoader._validateId(id)) {
       if (!isSilent) console.error(`makeNewConfig: Wrong ID passed: ${id}`);

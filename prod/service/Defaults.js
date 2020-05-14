@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _Helper = _interopRequireDefault(require("../Helper"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -56,6 +60,7 @@ var Defaults = /*#__PURE__*/function () {
           handler = options.handler,
           _options$isDefault = options.isDefault,
           isDefault = _options$isDefault === void 0 ? !id : _options$isDefault;
+      if (typeof handler !== 'function') return;
 
       if (isDefault) {
         this._handlers["default"] = handler;
@@ -81,6 +86,7 @@ var Defaults = /*#__PURE__*/function () {
           _options$isDefault2 = options.isDefault,
           isDefault = _options$isDefault2 === void 0 ? !id : _options$isDefault2;
       var tree = this._presets[isService ? 'service' : 'simple'];
+      if (!_Helper["default"].isObj(preset)) return;
 
       if (isDefault) {
         tree["default"] = preset;
