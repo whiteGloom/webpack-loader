@@ -135,12 +135,16 @@ var WebpackLoader = /*#__PURE__*/function () {
         return;
       }
 
-      delete this._selectConfigsBranch(isService)[id];
+      var branch = this._selectConfigsBranch(isService);
+
+      if (isService && branch[id].isRunning) branch[id].stop();
+      delete branch[id];
     }
   }, {
     key: "removeConfigs",
     value: function removeConfigs() {
       this._configs.simpleConfigs = {};
+      this.stop();
       this._configs.serviceConfigs = {};
     }
   }, {

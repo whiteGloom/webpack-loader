@@ -76,11 +76,17 @@ class WebpackLoader {
       return;
     }
 
-    delete this._selectConfigsBranch(isService)[id];
+    const branch = this._selectConfigsBranch(isService);
+
+    if (isService && branch[id].isRunning) branch[id].stop();
+
+    delete branch[id];
   }
 
   removeConfigs() {
     this._configs.simpleConfigs = {};
+
+    this.stop();
     this._configs.serviceConfigs = {};
   }
 
