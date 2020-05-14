@@ -15,7 +15,6 @@ var Defaults = /*#__PURE__*/function () {
   function Defaults() {
     _classCallCheck(this, Defaults);
 
-    this.ids = {};
     this._handlers = {
       "default": function _default() {},
       custom: {}

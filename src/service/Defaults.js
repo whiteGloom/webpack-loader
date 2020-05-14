@@ -1,6 +1,5 @@
 class Defaults {
   constructor() {
-    this.ids = {};
     this._handlers = {
       default: () => {},
       custom: {}
