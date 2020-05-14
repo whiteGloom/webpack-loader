@@ -7,7 +7,7 @@ class Defaults {
     this._presets = {
       simple: {
         default: {
-          configDefaults() {
+          configDefaultsGetter() {
             return {
               mode: 'development',
               entry: {},

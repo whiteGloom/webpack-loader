@@ -22,7 +22,7 @@ var Defaults = /*#__PURE__*/function () {
     this._presets = {
       simple: {
         "default": {
-          configDefaults: function configDefaults() {
+          configDefaultsGetter: function configDefaultsGetter() {
             return {
               mode: 'development',
               entry: {},
