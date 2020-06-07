@@ -55,7 +55,7 @@ class Defaults {
 
   setPreset(options = {}) {
     const { id, preset, isService = false, isDefault = !id } = options;
-    const tree = this._presets[isService ? 'service' : 'simple'];
+    const tree = this._selectPresetTree(isService);
 
     if (!Helper.isObj(preset)) return;
 
@@ -68,9 +68,17 @@ class Defaults {
 
   getPreset(options = {}) {
     const { id, isService = false } = options;
-    const tree = this._presets[isService ? 'service' : 'simple'];
+    const tree = this._selectPresetTree(isService);
 
     return tree.custom[id] || tree.default;
+  }
+
+  _selectPresetTree(isService = false) {
+    if (isService) {
+      return this._presets.service;
+    }
+
+    return this._presets.simple;
   }
 }
 

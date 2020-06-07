@@ -1,6 +1,6 @@
 {
 	"name": "webpack-loader",
-	"version": "1.8.4",
+	"version": "1.9.0",
 	"description": "Webpack configuration plugin",
 	"main": "./prod/models/webpackLoader.js",
 	"scripts": {
@@ -25,10 +25,10 @@
 	},
 	"homepage": "https://github.com/whiteGloom/webpack-loader#readme",
 	"devDependencies": {
-		"@babel/cli": "^7.8.4",
-		"@babel/core": "^7.9.6",
-		"@babel/node": "^7.8.7",
-		"@babel/preset-env": "^7.9.6",
+		"@babel/cli": "^7.10.1",
+		"@babel/core": "^7.10.2",
+		"@babel/node": "^7.10.1",
+		"@babel/preset-env": "^7.10.2",
 		"babel-eslint": "^10.1.0",
 		"eslint": "^6.8.0",
 		"eslint-config-airbnb": "^18.1.0",

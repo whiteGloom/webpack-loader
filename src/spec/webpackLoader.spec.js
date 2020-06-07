@@ -31,14 +31,14 @@ describe('makeNewConfig(options, serviceOptions) method.', () => {
     it('it takes { id: "main" } as options, then creates new config with id "main".', () => {
       const result = wl.makeNewConfig({ id: name });
 
-      expect(result instanceof wl.getModel(false)).toBeTruthy();
+      expect(result instanceof wl._selectConfigModel(false)).toBeTruthy();
       expect(wl.getConfig({ id: name })).toEqual(result);
     });
 
     it('it takes { ...isService: true } in options, then creates new service config.', () => {
       const result = wl.makeNewConfig({ id: serviceName, isService: true });
 
-      expect(result instanceof wl.getModel(true)).toBeTruthy();
+      expect(result instanceof wl._selectConfigModel(true)).toBeTruthy();
     });
 
     it('it takes { ...configs: object config } in options, then creates config with passed config.', () => {

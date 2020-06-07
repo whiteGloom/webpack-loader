@@ -32,7 +32,7 @@ class WebpackLoader {
       return;
     }
 
-    const ConfigModel = this.getModel(isService);
+    const ConfigModel = this._selectConfigModel(isService);
     const branch = this._selectConfigsBranch(isService);
     const preset = userPreset || this._defaults.getPreset({ id, isService });
 
@@ -121,8 +121,12 @@ class WebpackLoader {
     return this._defaults;
   }
 
-  getModel(isService) {
-    return this._models[isService ? 'Service' : 'Simple'];
+  getSimpleConfigModel() {
+    return this._models.Simple;
+  }
+
+  getServiceConfigModel() {
+    return this._models.Service;
   }
 
   _buildConfigs(configs) {
@@ -135,7 +139,7 @@ class WebpackLoader {
       Helper.toArr(configs).forEach((config) => {
         if (typeof config === 'string' && simpleBranch[config]) {
           results.push(simpleBranch[config].config);
-        } else if (config instanceof this.getModel(false)) {
+        } else if (config instanceof this._selectConfigModel()) {
           results.push(config.config);
         } else if (typeof config === 'object') {
           results.push(config);
@@ -151,6 +155,14 @@ class WebpackLoader {
 
   _selectConfigsBranch(isService = false) {
     return isService ? this._configs.serviceConfigs : this._configs.simpleConfigs;
+  }
+
+  _selectConfigModel(isService = false) {
+    if (isService) {
+      return this.getServiceConfigModel();
+    }
+
+    return this.getSimpleConfigModel();
   }
 
   static _validateId(id) {

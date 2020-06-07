@@ -85,7 +85,9 @@ var Defaults = /*#__PURE__*/function () {
           isService = _options$isService === void 0 ? false : _options$isService,
           _options$isDefault2 = options.isDefault,
           isDefault = _options$isDefault2 === void 0 ? !id : _options$isDefault2;
-      var tree = this._presets[isService ? 'service' : 'simple'];
+
+      var tree = this._selectPresetTree(isService);
+
       if (!_Helper["default"].isObj(preset)) return;
 
       if (isDefault) {
@@ -101,8 +103,21 @@ var Defaults = /*#__PURE__*/function () {
       var id = options.id,
           _options$isService2 = options.isService,
           isService = _options$isService2 === void 0 ? false : _options$isService2;
-      var tree = this._presets[isService ? 'service' : 'simple'];
+
+      var tree = this._selectPresetTree(isService);
+
       return tree.custom[id] || tree["default"];
+    }
+  }, {
+    key: "_selectPresetTree",
+    value: function _selectPresetTree() {
+      var isService = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      if (isService) {
+        return this._presets.service;
+      }
+
+      return this._presets.simple;
     }
   }]);
 

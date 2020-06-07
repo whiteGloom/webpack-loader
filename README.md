@@ -73,6 +73,8 @@ new WebpackLoader();
 <h2 id='examples-en'>Examples</h2>
 
 ```js
+import WebpackLoader from 'webpack-loader';
+
 const workspace = process.cwd();
 const wl = new WebpackLoader();
 
@@ -86,7 +88,7 @@ wl.makeNewConfig({
         path: `${workspace}/dist/`
       }    
     }
-  },
+  }
 });
 
 wl.makeNewConfig({
@@ -110,7 +112,7 @@ wl.makeNewConfig({
 wl.start({
   configs: ['major, minor'],
   serviceConfig: ['devServer']
-})
+});
 ```
 
 **[↑ To navigation](#navigation-en '↑ To navigation')** 
@@ -188,6 +190,8 @@ new WebpackLoader();
 <h2 id='examples-ru'>Примеры</h2>
 
 ```js
+import WebpackLoader from 'webpack-loader';
+
 const workspace = process.cwd();
 const wl = new WebpackLoader();
 
@@ -201,7 +205,7 @@ wl.makeNewConfig({
         path: `${workspace}/dist/`
       }    
     }
-  },
+  }
 });
 
 wl.makeNewConfig({
@@ -225,7 +229,7 @@ wl.makeNewConfig({
 wl.start({
   configs: ['major, minor'],
   serviceConfig: ['devServer']
-})
+});
 ```
 
 **[↑ К навигации](#navigation-ru '↑ К навигации')**

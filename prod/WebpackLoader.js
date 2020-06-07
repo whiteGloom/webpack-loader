@@ -72,7 +72,7 @@ var WebpackLoader = /*#__PURE__*/function () {
         return;
       }
 
-      var ConfigModel = this.getModel(isService);
+      var ConfigModel = this._selectConfigModel(isService);
 
       var branch = this._selectConfigsBranch(isService);
 
@@ -191,9 +191,14 @@ var WebpackLoader = /*#__PURE__*/function () {
       return this._defaults;
     }
   }, {
-    key: "getModel",
-    value: function getModel(isService) {
-      return this._models[isService ? 'Service' : 'Simple'];
+    key: "getSimpleConfigModel",
+    value: function getSimpleConfigModel() {
+      return this._models.Simple;
+    }
+  }, {
+    key: "getServiceConfigModel",
+    value: function getServiceConfigModel() {
+      return this._models.Service;
     }
   }, {
     key: "_buildConfigs",
@@ -212,7 +217,7 @@ var WebpackLoader = /*#__PURE__*/function () {
         _Helper["default"].toArr(configs).forEach(function (config) {
           if (typeof config === 'string' && simpleBranch[config]) {
             results.push(simpleBranch[config].config);
-          } else if (config instanceof _this2.getModel(false)) {
+          } else if (config instanceof _this2._selectConfigModel()) {
             results.push(config.config);
           } else if (_typeof(config) === 'object') {
             results.push(config);
@@ -233,6 +238,17 @@ var WebpackLoader = /*#__PURE__*/function () {
     value: function _selectConfigsBranch() {
       var isService = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       return isService ? this._configs.serviceConfigs : this._configs.simpleConfigs;
+    }
+  }, {
+    key: "_selectConfigModel",
+    value: function _selectConfigModel() {
+      var isService = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      if (isService) {
+        return this.getServiceConfigModel();
+      }
+
+      return this.getSimpleConfigModel();
     }
   }], [{
     key: "_validateId",
